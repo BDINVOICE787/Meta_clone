@@ -1,571 +1,573 @@
-<!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ওয়াকি-টকি · গ্রুপ কল (দূরত্ব ঠিক)</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0f0f1a">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        :root {
-            --bg: #0a0a14;
-            --card: rgba(20,20,40,0.7);
-            --accent: #7c3aed;
-            --danger: #ef4444;
-            --success: #10b981;
-            --text: #f1f5f9;
-            --muted: #94a3b8;
-            --radius: 28px;
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
-        html, body {
-            height: 100dvh; overflow: hidden;
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-            background: var(--bg); color: var(--text);
-            -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-        }
-        body::before {
-            content:''; position:fixed; inset:0;
-            background: radial-gradient(ellipse at 20% 50%, rgba(124,58,237,0.15) 0%, transparent 60%),
-                        radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 60%),
-                        radial-gradient(ellipse at 50% 80%, rgba(16,185,129,0.08) 0%, transparent 60%);
-            z-index:0; animation: bgShift 12s ease-in-out infinite alternate;
-        }
-        @keyframes bgShift { 0%{opacity:0.8; transform:scale(1)} 100%{opacity:1; transform:scale(1.05)} }
-        .app {
-            position:relative; z-index:1; width:100%; height:100dvh;
-            display:flex; flex-direction:column;
-            padding: var(--safe-top) 16px var(--safe-bottom);
-            max-width:520px; margin:0 auto;
-        }
-        .glass-panel {
-            background: var(--card);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border:1px solid rgba(255,255,255,0.1);
-            border-radius:var(--radius); padding:24px 20px;
-            box-shadow:0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-            flex:1; display:flex; flex-direction:column; gap:18px;
-            overflow-y:auto; -webkit-overflow-scrolling:touch;
-        }
-        .header { display:flex; align-items:center; justify-content:space-between; }
-        .logo {
-            font-size:1.8rem; font-weight:800;
-            background: linear-gradient(135deg, #a78bfa, #60a5fa);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-            background-clip:text;
-        }
-        .fullscreen-btn {
-            background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15);
-            color:#fff; width:40px; height:40px; border-radius:50%;
-            display:flex; align-items:center; justify-content:center;
-            font-size:1.2rem; cursor:pointer; transition:0.2s; backdrop-filter:blur(10px);
-        }
-        .fullscreen-btn:active { background:rgba(255,255,255,0.2); transform:scale(0.9); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>『𝐗𝐇𝐔𝐕𝐎』 𝗧𝗘𝗔𝗠</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    #site-frame {
+      width: 100%; height: 100%;
+      border: none; display: block;
+    }
+    #overlay-wrapper {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      width: 215px;
+    }
+    #overlay-box {
+      position: relative;
+      z-index: 1;
+      width: 215px;
+      background: radial-gradient(ellipse at 50% 50%, #1c1535 0%, #0d0b1a 70%, #080610 100%);
+      border-radius: 14px;
+      padding: 13px 13px 12px;
+      cursor: grab;
+      user-select: none;
+      border: 1.5px solid rgba(255,255,255,0.06);
+      box-shadow:
+        inset 0 0 30px rgba(100,0,255,0.10),
+        inset 0 0 12px rgba(0,200,255,0.07),
+        0 0 20px rgba(0,0,0,0.8);
+    }
+    #overlay-box:active { cursor: grabbing; }
+    .title-main {
+      text-align: center;
+      font-size: 14.5px; font-weight: 800;
+      letter-spacing: 1px;
+      color: #00ffe0;
+      text-shadow: 0 0 7px #00ffe066;
+      margin-bottom: 2px;
+    }
+    .title-sub {
+      text-align: center;
+      font-size: 11px; font-weight: 700;
+      color: #ff00cc;
+      text-shadow: 0 0 5px #ff00cc66;
+      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+    }
+    .period-line {
+      text-align: center;
+      font-size: 11px;
+      color: #ffe600;
+      font-weight: 700;
+      margin-bottom: 7px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 8px rgba(255,230,0,0.55);
+      background: rgba(255,230,0,0.07);
+      border-radius: 5px;
+      padding: 2px 5px;
+    }
+    #login-section {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .password-input {
+      width: 75%;
+      background: #2a2a3e;
+      border: 1.5px solid #3a3a5e;
+      border-radius: 8px;
+      padding: 7px 10px;
+      color: #ccc; font-size: 12px;
+      outline: none; margin-bottom: 7px;
+      transition: border-color 0.2s;
+      text-align: center;
+    }
+    .password-input:focus { border-color: #00ffe055; }
+    .password-input::placeholder { color: #555; }
+    .error-msg {
+      text-align: center; color: #ff4466;
+      font-size: 11px; margin-bottom: 6px; font-weight: 600;
+    }
+    .btn-login {
+      width: 75%;
+      background: linear-gradient(135deg, #00e5cc, #00bfff);
+      color: #000; font-weight: 800; font-size: 12.5px;
+      border: none; border-radius: 8px; padding: 7px;
+      cursor: pointer; margin-bottom: 9px;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0,200,255,0.18);
+    }
+    .btn-login:hover { opacity: 0.88; }
+    .btn-login:active { transform: scale(0.97); }
+    #pred-section { display: none; }
+    .next-signal {
+      text-align: center;
+      font-size: 12px; font-weight: 700;
+      color: #ffe600; margin-bottom: 7px;
+    }
+    .next-signal span { color: #fff; }
+    .prediction-label {
+      text-align: center;
+      font-size: 13px; font-weight: 600;
+      color: #ccc; margin-bottom: 7px;
+    }
+    .pred-value { font-weight: 800; font-size: 15px; }
+    .pred-small { color: #00bfff; }
+    .pred-big   { color: #ff4444; }
+    .pred-number-wrap {
+      display: flex; justify-content: center;
+      margin-bottom: 10px;
+    }
+    .pred-number-box {
+      width: 32%;
+      border-radius: 7px;
+      padding: 5px 0;
+      text-align: center;
+      font-size: 16px; font-weight: 900;
+      color: #fff;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    .pred-number-box.green {
+      background: linear-gradient(135deg, #1db954, #0f9b3e);
+      box-shadow: 0 0 8px rgba(0,255,80,0.2);
+    }
+    .pred-number-box.red {
+      background: linear-gradient(135deg, #e63946, #9b1b1b);
+      box-shadow: 0 0 8px rgba(255,50,50,0.2);
+    }
+    .btn-telegram {
+      width: 100%;
+      background: linear-gradient(135deg, #1a8cff, #0055cc);
+      color: #fff; font-weight: 700; font-size: 12px;
+      border: none; border-radius: 8px; padding: 8px;
+      cursor: pointer; text-decoration: none;
+      display: block; text-align: center;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 2px 8px rgba(0,100,255,0.18);
+    }
+    .btn-telegram:hover { opacity: 0.88; }
+    .btn-telegram:active { transform: scale(0.97); }
 
-        .id-section {
-            background:rgba(0,0,0,0.3); border-radius:18px; padding:12px;
-            display:flex; align-items:center; gap:8px;
-            border:1px solid rgba(255,255,255,0.08); flex-wrap:wrap;
-        }
-        .id-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
-        .id-input {
-            flex:1; min-width:120px; background:rgba(255,255,255,0.05);
-            border:1px solid rgba(255,255,255,0.1); border-radius:12px;
-            padding:10px 12px; color:#fff; font-weight:600; font-size:0.95rem;
-            text-align:center; outline:none; font-family:inherit;
-        }
-        .id-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.2); }
-        .btn {
-            border:none; font-weight:600; font-size:0.85rem; padding:10px 16px;
-            border-radius:14px; cursor:pointer; transition:all 0.2s;
-            display:inline-flex; align-items:center; justify-content:center;
-            gap:6px; letter-spacing:0.3px; background:rgba(255,255,255,0.08);
-            color:#fff; border:1px solid rgba(255,255,255,0.1);
-            backdrop-filter:blur(10px); white-space:nowrap;
-        }
-        .btn:active { transform:scale(0.95); background:rgba(255,255,255,0.15); }
-        .btn-accent { background:var(--accent); border:none; box-shadow:0 10px 20px -5px rgba(124,58,237,0.4); }
-        .btn-danger { background:var(--danger); box-shadow:0 10px 20px -5px rgba(239,68,68,0.5); }
-        .btn-sm { padding:8px 12px; font-size:0.8rem; border-radius:10px; }
-
-        .status-badge {
-            display:flex; align-items:center; justify-content:center; gap:10px;
-            padding:10px; border-radius:16px; background:rgba(255,255,255,0.03);
-            font-size:0.9rem; font-weight:500; transition:0.3s;
-        }
-        .status-dot { width:12px; height:12px; border-radius:50%; background:#64748b; transition:0.3s; }
-        .status-connecting .status-dot { background:#f59e0b; animation:pulse 0.8s infinite; }
-        .status-connected .status-dot { background:#10b981; box-shadow:0 0 12px #10b981; }
-        .status-idle { color:#94a3b8; }
-        .status-connected { color:#6ee7b7; }
-        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.6); opacity:0.7} }
-
-        .group-input-area { display:flex; gap:8px; }
-        .group-input-area input {
-            flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);
-            border-radius:18px; padding:14px 18px; color:#fff; font-size:1rem;
-            outline:none; text-align:center; transition:0.2s;
-        }
-        .group-input-area input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.3); }
-
-        .group-list {
-            display:flex; flex-direction:column; gap:8px;
-            max-height: 150px; overflow-y:auto; margin-top:4px;
-        }
-        .peer-card {
-            background:rgba(255,255,255,0.05); border-radius:12px;
-            padding:10px 14px; display:flex; align-items:center;
-            justify-content:space-between; border:1px solid rgba(255,255,255,0.08);
-        }
-        .peer-id { font-weight:600; font-size:0.9rem; word-break:break-all; flex:1; }
-        .peer-status { font-size:0.7rem; color:var(--muted); margin-left:8px; }
-        .remove-btn {
-            background:transparent; border:1px solid var(--danger); color:var(--danger);
-            border-radius:8px; padding:4px 12px; font-weight:600; cursor:pointer; transition:0.2s;
-            margin-left:8px;
-        }
-        .remove-btn:active { background:var(--danger); color:#fff; }
-
-        .talk-btn-container {
-            flex:1; display:flex; flex-direction:column; align-items:center;
-            justify-content:center; gap:12px;
-        }
-        .talk-btn {
-            width:140px; height:140px; border-radius:50%;
-            background:var(--danger); border:none; font-size:1.2rem; font-weight:700;
-            color:#fff; position:relative; cursor:pointer; transition:0.2s;
-            box-shadow:0 20px 40px rgba(239,68,68,0.5), inset 0 -4px 0 rgba(0,0,0,0.2);
-            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-        }
-        .talk-btn.unmuted {
-            background:var(--success);
-            box-shadow:0 0 50px rgba(16,185,129,0.7), 0 20px 40px rgba(16,185,129,0.4);
-            animation:none;
-        }
-        .talk-btn.unmuted::after {
-            content:''; position:absolute; inset:-8px; border-radius:50%;
-            border:2px solid rgba(16,185,129,0.6); animation:ripple 1.2s ease-out infinite;
-        }
-        @keyframes ripple { 0%{transform:scale(1); opacity:0.8} 100%{transform:scale(1.4); opacity:0} }
-        .sound-wave { display:flex; align-items:flex-end; gap:3px; height:24px; }
-        .sound-wave span { width:4px; background:currentColor; border-radius:2px; animation:wave 0.8s ease-in-out infinite; }
-        .sound-wave span:nth-child(1){height:12px; animation-delay:0s}
-        .sound-wave span:nth-child(2){height:20px; animation-delay:0.1s}
-        .sound-wave span:nth-child(3){height:16px; animation-delay:0.2s}
-        .sound-wave span:nth-child(4){height:24px; animation-delay:0.3s}
-        .sound-wave span:nth-child(5){height:14px; animation-delay:0.4s}
-        @keyframes wave { 0%,100%{transform:scaleY(0.6)} 50%{transform:scaleY(1.2)} }
-
-        .hidden { display:none !important; }
-        .text-muted { color:var(--muted); font-size:0.8rem; }
-        .audio-container { display:none; }
-    </style>
+    #expired-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #expired-overlay.show {
+      display: flex;
+    }
+    .expired-box {
+      background: #1c1535;
+      border: 1.5px solid #ff00cc55;
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255,0,200,0.15);
+    }
+    .expired-icon { font-size: 36px; margin-bottom: 12px; }
+    .expired-title {
+      color: #ff4466;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-shadow: 0 0 10px #ff446655;
+    }
+    .expired-msg {
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .btn-reload {
+      background: linear-gradient(135deg, #00e5cc, #00bfff);
+      color: #000; font-weight: 800; font-size: 13px;
+      border: none; border-radius: 8px; padding: 9px 20px;
+      cursor: pointer;
+    }
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-    <div class="glass-panel">
-        <div class="header">
-            <span class="logo">📡 গ্রুপ টকি (দূরত্ব)</span>
-            <button class="fullscreen-btn" id="fs-btn" title="ফুলস্ক্রিন">⛶</button>
-        </div>
+  <iframe id="site-frame" src="https://dkwin0.com/#/register?invitationCode=26485102269"></iframe>
 
-        <div class="id-section">
-            <div style="display:flex; flex-direction:column; flex:1; min-width:0;">
-                <span class="id-label">আপনার পিয়ার আইডি</span>
-                <input type="text" class="id-input" id="my-id-input" placeholder="wt-username" autocomplete="off">
-            </div>
-            <button class="btn btn-sm" id="set-id-btn">✅ সেট</button>
-            <button class="btn btn-sm" id="regen-btn">🔄</button>
-            <button class="btn btn-sm" id="copy-btn">📋</button>
-        </div>
-
-        <div class="status-badge status-idle" id="status-badge">
-            <span class="status-dot"></span>
-            <span id="status-text">সংযোগ বিচ্ছিন্ন</span>
-        </div>
-
-        <div id="connect-area">
-            <div class="group-input-area">
-                <input type="text" id="remote-id-input" placeholder="সদস্যের আইডি লিখুন" autocomplete="off">
-                <button class="btn btn-accent" id="add-btn">➕ যোগ করুন</button>
-            </div>
-            <div class="group-list" id="group-list"></div>
-        </div>
-
-        <div id="talk-area" class="talk-btn-container hidden">
-            <button class="talk-btn" id="talk-btn">
-                <span class="sound-wave">
-                    <span></span><span></span><span></span><span></span><span></span>
-                </span>
-                <span id="talk-label">মাইক বন্ধ</span>
-            </button>
-            <span class="text-muted">মাইক টগল করতে ট্যাপ</span>
-            <button class="btn btn-danger" id="hangup-btn">❌ সব সংযোগ কাটুন</button>
-        </div>
+  <div id="expired-overlay">
+    <div class="expired-box">
+      <div class="expired-icon">🔒</div>
+      <div class="expired-title">Session Expired!</div>
+      <div class="expired-msg">
+        আপনার পাসওয়ার্ড Admin দ্বারা মুছে ফেলা হয়েছে।
+        <br>নতুন পাসওয়ার্ডের জন্য যোগাযোগ করুন।
+      </div>
+      <button class="btn-reload" onclick="forceLogout()">🔄 নতুন করে Login করুন</button>
     </div>
-    <div class="audio-container" id="audio-container"></div>
-</div>
+  </div>
 
-<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-<script>
-    (() => {
-        // DOM
-        const myIdInput = document.getElementById('my-id-input');
-        const setBtn = document.getElementById('set-id-btn');
-        const regenBtn = document.getElementById('regen-btn');
-        const copyBtn = document.getElementById('copy-btn');
-        const statusBadge = document.getElementById('status-badge');
-        const statusText = document.getElementById('status-text');
-        const remoteInput = document.getElementById('remote-id-input');
-        const addBtn = document.getElementById('add-btn');
-        const groupListDiv = document.getElementById('group-list');
-        const talkArea = document.getElementById('talk-area');
-        const talkBtn = document.getElementById('talk-btn');
-        const talkLabel = document.getElementById('talk-label');
-        const hangupBtn = document.getElementById('hangup-btn');
-        const fsBtn = document.getElementById('fs-btn');
-        const audioContainer = document.getElementById('audio-container');
+  <div id="overlay-wrapper">
+    <canvas id="neon-canvas" style="position:absolute;inset:-3px;border-radius:17px;pointer-events:none;z-index:2;"></canvas>
+    <div id="overlay-box">
+      <div class="title-main">Ak Cyber Team</div>
+      <div class="title-sub">DRJ_BOSS</div>
 
-        let localStream = null;
-        let peer = null;
-        let isMuted = true;
-        const activeCalls = new Map();
+      <div id="login-section">
+        <input class="password-input" type="password" id="pw-input" placeholder="Enter Password" autocomplete="off">
+        <div class="error-msg" id="error-msg" style="display:none;">Wrong Password!</div>
+        <button class="btn-login" id="login-btn" onclick="doLogin()">Login</button>
+      </div>
 
-        const ID_KEY = 'wt_peer_id';
+      <div id="pred-section">
+        <div class="period-line" id="period-display">-</div>
+        <div class="next-signal">Next Signal: <span id="countdown">30s</span></div>
+        <div class="prediction-label">
+          Prediction: <span class="pred-value pred-small" id="pred-label">SMALL</span>
+        </div>
+        <div class="pred-number-wrap" style="position:relative;">
+          <canvas id="num-canvas" style="position:absolute;inset:-3px;border-radius:10px;pointer-events:none;z-index:2;width:calc(100% + 6px);height:calc(100% + 6px);"></canvas>
+          <div class="pred-number-box green" id="pred-box">1</div>
+        </div>
+      </div>
 
-        // ---- CUSTOM STUN/TURN (দূরবর্তী সংযোগের জন্য) ----
-        const PEER_CONFIG = {
-            config: {
-                iceServers: [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' },
-                    {
-                        urls: 'turn:openrelay.metered.ca:80',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
-                    },
-                    {
-                        urls: 'turn:openrelay.metered.ca:443',
-                        username: 'openrelayproject',
-                        credential: 'openrelayproject'
-                    }
-                ],
-                iceTransportPolicy: 'all',
-                iceCandidatePoolSize: 10
-            }
-        };
+      <a class="btn-telegram" href="https://t.me/DRJ_JSN1" target="_blank">📢 পাসওয়ার্ড নিতে চায়</a>
+    </div>
+  </div>
 
-        // ID Management
-        function getStoredId() { return localStorage.getItem(ID_KEY) || ''; }
-        function randomId() { return 'wt-' + Math.random().toString(36).substring(2, 10); }
-        function setAndSaveId(id) { localStorage.setItem(ID_KEY, id); myIdInput.value = id; }
-        function loadIdToInput() {
-            let stored = getStoredId();
-            if (!stored) { stored = randomId(); setAndSaveId(stored); }
-            else myIdInput.value = stored;
+  <script>
+    // ── সঠিক পাসওয়ার্ড ──
+    const CORRECT_PASSWORD = "DRJ_JSN";
+
+    // ── Auto-restore session on page load ──
+    window.addEventListener('load', () => {
+      const saved = localStorage.getItem('xhuvo_logged_in');
+      if (saved === 'true') {
+        showPrediction();
+      }
+    });
+
+    // ── Login ──
+    function doLogin() {
+      const pw = document.getElementById('pw-input').value.trim();
+      if (!pw) { shake(); return; }
+
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.textContent = 'Checking...';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Login';
+
+        if (pw === CORRECT_PASSWORD) {
+          localStorage.setItem('xhuvo_logged_in', 'true');
+          showPrediction();
+        } else {
+          showError();
         }
+      }, 500);
+    }
 
-        function setStatus(status, msg) {
-            statusBadge.className = 'status-badge status-' + status;
-            statusText.textContent = msg;
+    document.getElementById('pw-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+
+    function showError() {
+      document.getElementById('error-msg').style.display = 'block';
+      shake();
+      setTimeout(() => document.getElementById('error-msg').style.display = 'none', 2000);
+    }
+
+    function shake() {
+      const inp = document.getElementById('pw-input');
+      inp.style.borderColor = '#ff4466';
+      setTimeout(() => inp.style.borderColor = '#3a3a5e', 1500);
+    }
+
+    function forceLogout() {
+      localStorage.removeItem('xhuvo_logged_in');
+      document.getElementById('expired-overlay').classList.remove('show');
+      document.getElementById('pred-section').style.display = 'none';
+      document.getElementById('login-section').style.display = 'flex';
+      document.getElementById('pw-input').value = '';
+      clearInterval(window._predInterval);
+    }
+
+    // ── Show prediction panel ──
+    function showPrediction() {
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('pred-section').style.display = 'block';
+      startPrediction();
+    }
+
+    // ── Prediction + Period ──
+    let currentWin = -1;
+    let lastIssuePeriod = null;
+
+    async function fetchRealPeriod() {
+      try {
+        const ts = Date.now();
+        const res = await fetch(`https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?ts=${ts}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (data?.data?.list && data.data.list.length > 0) {
+          const latest = data.data.list[0];
+          const issueNum = latest.issueNumber || latest.issue || latest.period;
+          const nextPeriod = (BigInt(issueNum) + 1n).toString();
+          return nextPeriod;
         }
+      } catch(e) {}
+      return null;
+    }
 
-        function createAudioElement(peerId, stream) {
-            removeAudioElement(peerId);
-            const audio = document.createElement('audio');
-            audio.id = 'audio-' + peerId;
-            audio.autoplay = true;
-            audio.playsinline = true;
-            audio.srcObject = stream;
-            // ভলিউম সর্বোচ্চ
-            audio.volume = 1.0;
-            audio.play().catch(e => {
-                console.warn('Autoplay blocked for', peerId, e.message);
-                // ইউজার ইন্টারঅ্যাকশনে আবার চেষ্টা
-                document.addEventListener('click', function resume() {
-                    audio.play().catch(()=>{});
-                    document.removeEventListener('click', resume);
-                }, { once: true });
-            });
-            audioContainer.appendChild(audio);
-            return audio;
-        }
+    function startPrediction() {
+      async function tick() {
+        const now = new Date();
+        const totalSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+        const winIdx = Math.floor(totalSec / 30);
+        const remaining = 30 - (totalSec % 30);
+        document.getElementById('countdown').textContent = remaining + 's';
 
-        function removeAudioElement(peerId) {
-            const existing = document.getElementById('audio-' + peerId);
-            if (existing) {
-                existing.srcObject = null;
-                existing.remove();
-            }
-        }
-
-        function resumeAllAudio() {
-            document.querySelectorAll('#audio-container audio').forEach(audio => {
-                if (audio.paused) audio.play().catch(() => {});
-            });
-        }
-
-        function updateGroupUI() {
-            groupListDiv.innerHTML = '';
-            if (activeCalls.size === 0) {
-                groupListDiv.innerHTML = '<div class="text-muted" style="padding:8px;">এখনো কেউ যুক্ত হয়নি</div>';
-                talkArea.classList.add('hidden');
-                setStatus('idle', 'সংযোগ বিচ্ছিন্ন');
-            } else {
-                talkArea.classList.remove('hidden');
-                setStatus('connected', `গ্রুপে ${activeCalls.size} জন`);
-            }
-            for (let [remoteId, data] of activeCalls) {
-                const card = document.createElement('div');
-                card.className = 'peer-card';
-                card.innerHTML = `
-                    <span class="peer-id">${remoteId}</span>
-                    <span class="peer-status">${data.audioEl ? '🔊' : '⏳'}</span>
-                    <button class="remove-btn" data-remote="${remoteId}">✕</button>
-                `;
-                groupListDiv.appendChild(card);
-            }
-        }
-
-        function disconnectPeer(remoteId) {
-            const data = activeCalls.get(remoteId);
-            if (data) {
-                if (data.call) data.call.close();
-                removeAudioElement(remoteId);
-                activeCalls.delete(remoteId);
-            }
-            updateGroupUI();
-        }
-
-        function disconnectAll() {
-            for (let remoteId of activeCalls.keys()) {
-                const data = activeCalls.get(remoteId);
-                if (data?.call) data.call.close();
-                removeAudioElement(remoteId);
-            }
-            activeCalls.clear();
-            updateGroupUI();
-        }
-
-        hangupBtn.addEventListener('click', disconnectAll);
-
-        function setupCallEvents(call, remoteId) {
-            call.on('stream', (remoteStream) => {
-                console.log('✅ Audio stream received from', remoteId);
-                const data = activeCalls.get(remoteId);
-                if (data) {
-                    data.audioEl = createAudioElement(remoteId, remoteStream);
-                    updateGroupUI();
-                }
-            });
-            call.on('close', () => {
-                console.log('Call closed:', remoteId);
-                if (activeCalls.has(remoteId)) {
-                    removeAudioElement(remoteId);
-                    activeCalls.delete(remoteId);
-                }
-                updateGroupUI();
-            });
-            call.on('error', (err) => {
-                console.error('Call error:', remoteId, err);
-                disconnectPeer(remoteId);
-            });
-        }
-
-        function handleIncomingCall(call) {
-            if (!localStream) {
-                alert('মাইক্রোফোন প্রস্তুত নয়');
-                return;
-            }
-            const remoteId = call.peer;
-            if (activeCalls.has(remoteId)) {
-                call.close();
-                return;
-            }
-            call.answer(localStream);
-            activeCalls.set(remoteId, { call, audioEl: null });
-            setupCallEvents(call, remoteId);
-            updateGroupUI();
-        }
-
-        function createOutgoingCall(remoteId) {
-            if (!localStream) {
-                alert('মাইক্রোফোন প্রস্তুত নয়');
-                return;
-            }
-            if (remoteId === myIdInput.value) {
-                alert('নিজের আইডি দেওয়া যাবে না');
-                return;
-            }
-            if (activeCalls.has(remoteId)) {
-                alert('ইতিমধ্যে এই সদস্য সংযুক্ত আছে');
-                return;
-            }
-            
-            // কাস্টম কনফিগ সহ কল করুন
-            const call = peer.call(remoteId, localStream, {
-                metadata: { type: 'audio' }
-            });
-            
-            if (call) {
-                activeCalls.set(remoteId, { call, audioEl: null });
-                setupCallEvents(call, remoteId);
-                updateGroupUI();
-                setStatus('connecting', `${remoteId} এর সাথে সংযোগ হচ্ছে...`);
-            } else {
-                alert('কল ব্যর্থ');
-            }
-        }
-
-        function setMicMute(mute) {
-            if (!localStream) return;
-            const track = localStream.getAudioTracks()[0];
-            if (track) {
-                track.enabled = !mute;
-                isMuted = mute;
-                updateTalkButton();
-            }
-        }
-        function toggleMic() {
-            setMicMute(!isMuted);
-            resumeAllAudio();
-        }
-        function updateTalkButton() {
-            if (isMuted) {
-                talkBtn.classList.remove('unmuted');
-                talkLabel.textContent = 'মাইক বন্ধ';
-            } else {
-                talkBtn.classList.add('unmuted');
-                talkLabel.textContent = 'কথা বলছেন...';
-            }
-        }
-        talkBtn.addEventListener('click', toggleMic);
-
-        addBtn.addEventListener('click', () => {
-            const remoteId = remoteInput.value.trim();
-            if (!remoteId) return;
-            createOutgoingCall(remoteId);
-            remoteInput.value = '';
-        });
-        remoteInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addBtn.click();
-        });
-
-        groupListDiv.addEventListener('click', (e) => {
-            if (e.target.classList.contains('remove-btn')) {
-                const remoteId = e.target.dataset.remote;
-                disconnectPeer(remoteId);
-            }
-        });
-
-        // Peer Init with custom config
-        async function initPeer(customId) {
-            const id = customId || getStoredId();
-            if (peer) {
-                peer.destroy();
-                peer = null;
-            }
-            disconnectAll();
-            
-            peer = new Peer(id, {
-                host: '0.peerjs.com',
-                port: 443,
-                secure: true,
-                debug: 2, // ডিবাগ অন (কনসোলে দেখবেন)
-                config: PEER_CONFIG.config
-            });
-
-            peer.on('open', () => {
-                setAndSaveId(id);
-                myIdInput.value = id;
-                setStatus('idle', 'প্রস্তুত (STUN/TURN সক্রিয়)');
-                console.log('✅ PeerJS Open with STUN/TURN');
-            });
-
-            peer.on('error', err => {
-                console.error('❌ PeerJS Error:', err);
-                if (err.type === 'unavailable-id') {
-                    alert('এই আইডি আগেই নেওয়া, ভিন্ন আইডি দিন');
-                }
-                setStatus('idle', 'আইডি ত্রুটি');
-            });
-
-            peer.on('call', handleIncomingCall);
-            
-            // সংযোগ স্থাপনের পর
-            peer.on('connection', (conn) => {
-                console.log('🔗 Connection established:', conn.peer);
-            });
-        }
-
-        async function getMedia() {
+        if (winIdx !== currentWin) {
+          currentWin = winIdx;
+          const realPeriod = await fetchRealPeriod();
+          if (realPeriod) {
+            document.getElementById('period-display').textContent = realPeriod;
+            lastIssuePeriod = realPeriod;
+          } else if (lastIssuePeriod) {
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: {
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        autoGainControl: true
-                    }, 
-                    video: false 
-                });
-                setMicMute(true);
-                console.log('🎤 Microphone acquired');
-            } catch (e) {
-                alert('মাইক্রোফোন অনুমতি ব্যর্থ: ' + e.message);
-            }
+              const next = (BigInt(lastIssuePeriod) + 1n).toString();
+              document.getElementById('period-display').textContent = next;
+              lastIssuePeriod = next;
+            } catch(e) {}
+          }
+
+          const isSmall = Math.random() < 0.5;
+          const num = isSmall
+            ? Math.floor(Math.random() * 5)
+            : Math.floor(Math.random() * 5) + 5;
+
+          const lbl = document.getElementById('pred-label');
+          const box = document.getElementById('pred-box');
+          box.textContent = num;
+
+          if (isSmall) {
+            lbl.textContent = 'SMALL'; lbl.className = 'pred-value pred-small';
+            box.className = 'pred-number-box green';
+            if (window.setNumColor) window.setNumColor(true);
+          } else {
+            lbl.textContent = 'BIG'; lbl.className = 'pred-value pred-big';
+            box.className = 'pred-number-box red';
+            if (window.setNumColor) window.setNumColor(false);
+          }
+        }
+      }
+
+      tick();
+      window._predInterval = setInterval(tick, 1000);
+    }
+
+    // ── Neon border canvas ──
+    (function() {
+      function initCanvas() {
+        const wrapper = document.getElementById('overlay-wrapper');
+        const canvas = document.getElementById('neon-canvas');
+        if (!wrapper || !canvas) return;
+
+        function resize() {
+          const r = wrapper.getBoundingClientRect();
+          canvas.width = r.width + 10;
+          canvas.height = r.height + 10;
+          canvas.style.left = '-5px';
+          canvas.style.top = '-5px';
+          canvas.style.width = canvas.width + 'px';
+          canvas.style.height = canvas.height + 'px';
+        }
+        resize();
+        new ResizeObserver(resize).observe(wrapper);
+
+        const ctx = canvas.getContext('2d');
+        const R = 18;
+
+        function drawRing(w, h, offset, lineW, color, blur) {
+          const o = offset;
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(o + R, o);
+          ctx.lineTo(w - o - R, o);
+          ctx.arcTo(w-o, o, w-o, o+R, R);
+          ctx.lineTo(w-o, h-o-R);
+          ctx.arcTo(w-o, h-o, w-o-R, h-o, R);
+          ctx.lineTo(o+R, h-o);
+          ctx.arcTo(o, h-o, o, h-o-R, R);
+          ctx.lineTo(o, o+R);
+          ctx.arcTo(o, o, o+R, o, R);
+          ctx.closePath();
+          ctx.setLineDash([]);
+          ctx.lineWidth = lineW;
+          ctx.strokeStyle = color;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = blur;
+          ctx.stroke();
+          ctx.restore();
         }
 
-        // ID buttons
-        setBtn.addEventListener('click', () => {
-            const newId = myIdInput.value.trim();
-            if (!newId) { alert('আইডি খালি রাখা যাবে না'); return; }
-            if (!/^[a-zA-Z0-9_-]{3,30}$/.test(newId)) {
-                alert('ইংরেজি অক্ষর, সংখ্যা, হাইফেন বা আন্ডারস্কোর (৩-৩০)');
-                return;
-            }
-            setAndSaveId(newId);
-            initPeer(newId);
-        });
-        regenBtn.addEventListener('click', () => {
-            const newId = randomId();
-            setAndSaveId(newId);
-            initPeer(newId);
-        });
-        copyBtn.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(myIdInput.value);
-                copyBtn.textContent = '✅';
-                setTimeout(() => copyBtn.textContent = '📋', 1500);
-            } catch { prompt('কপি করুন:', myIdInput.value); }
-        });
-        fsBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
-            else document.exitFullscreen();
-        });
+        const cols = ['#00ffe0','#00bfff','#7b2fff','#ff00cc','#ffe600','#ff8800','#00ff80','#ff4444','#ff0080','#ffffff'];
+        function randCol() { return cols[Math.floor(Math.random()*cols.length)]; }
 
-        document.addEventListener('click', resumeAllAudio, { once: false });
+        function lerpHex(a, b, t) {
+          const ah=parseInt(a.slice(1),16), bh=parseInt(b.slice(1),16);
+          const [ar,ag,ab2]=[(ah>>16)&255,(ah>>8)&255,ah&255];
+          const [br,bg,bb] =[(bh>>16)&255,(bh>>8)&255,bh&255];
+          return '#'+[
+            Math.round(ar+(br-ar)*t),
+            Math.round(ag+(bg-ag)*t),
+            Math.round(ab2+(bb-ab2)*t)
+          ].map(v=>v.toString(16).padStart(2,'0')).join('');
+        }
 
-        window.addEventListener('beforeunload', () => {
-            disconnectAll();
-            if (peer) peer.destroy();
-        });
+        let t1cur=randCol(), t1nxt=randCol();
+        let t2cur=randCol(), t2nxt=randCol();
+        let phase=0, cycleLen=80;
 
-        // Start
-        window.addEventListener('load', async () => {
-            await getMedia();
-            loadIdToInput();
-            initPeer(getStoredId());
-        });
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const w=canvas.width, h=canvas.height;
+          phase = (phase+1) % cycleLen;
+          const blend = phase / cycleLen;
+          if (phase === 0) {
+            t1cur=t1nxt; t1nxt=randCol();
+            t2cur=t2nxt; t2nxt=randCol();
+          }
+          const c1 = lerpHex(t1cur, t1nxt, blend);
+          drawRing(w, h, 2, 12, c1+'18', 0);
+          drawRing(w, h, 2, 7, c1+'55', 18);
+          drawRing(w, h, 2, 3, c1, 30);
+          requestAnimationFrame(animate);
+        }
+        animate();
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCanvas);
+      } else {
+        initCanvas();
+      }
     })();
-</script>
+
+    // ── Number box border streak ──
+    (function() {
+      let numColor = '#00ff80';
+      let numT = 0;
+      let numCanvas, numCtx, numR = 10;
+
+      function initNumCanvas() {
+        numCanvas = document.getElementById('num-canvas');
+        if (!numCanvas) return;
+        const box = document.getElementById('pred-box');
+        if (!box) return;
+        function resize() {
+          const r = box.getBoundingClientRect();
+          numCanvas.width = r.width + 6;
+          numCanvas.height = r.height + 6;
+        }
+        resize();
+        numCtx = numCanvas.getContext('2d');
+        new ResizeObserver(resize).observe(box);
+        animNum();
+      }
+
+      function getPerim(w, h, r) { return 2*(w - 2*r) + 2*(h - 2*r) + 2*Math.PI*r; }
+
+      function drawNumStreak(progress, color, length) {
+        const w = numCanvas.width, h = numCanvas.height;
+        const perim = getPerim(w, h, numR);
+        const dist = (progress * perim) % perim;
+        numCtx.save();
+        numCtx.beginPath();
+        numCtx.moveTo(numR, 0);
+        numCtx.lineTo(w - numR, 0);
+        numCtx.arcTo(w, 0, w, numR, numR);
+        numCtx.lineTo(w, h - numR);
+        numCtx.arcTo(w, h, w - numR, h, numR);
+        numCtx.lineTo(numR, h);
+        numCtx.arcTo(0, h, 0, h - numR, numR);
+        numCtx.lineTo(0, numR);
+        numCtx.arcTo(0, 0, numR, 0, numR);
+        numCtx.closePath();
+        numCtx.lineWidth = 7;
+        numCtx.lineDashOffset = -dist;
+        numCtx.setLineDash([length, perim]);
+        numCtx.strokeStyle = color + '44';
+        numCtx.shadowColor = color;
+        numCtx.shadowBlur = 14;
+        numCtx.stroke();
+        numCtx.lineWidth = 2.5;
+        numCtx.strokeStyle = color;
+        numCtx.shadowBlur = 18;
+        numCtx.stroke();
+        numCtx.restore();
+      }
+
+      function animNum() {
+        if (!numCanvas || !numCtx) return;
+        numCtx.clearRect(0, 0, numCanvas.width, numCanvas.height);
+        numT += 0.022;
+        drawNumStreak(numT % 1, numColor, 50);
+        drawNumStreak((numT + 0.5) % 1, numColor, 50);
+        requestAnimationFrame(animNum);
+      }
+
+      window.setNumColor = function(isGreen) {
+        numColor = isGreen ? '#00ff80' : '#ff4444';
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNumCanvas);
+      } else {
+        setTimeout(initNumCanvas, 100);
+      }
+    })();
+
+    // ── Draggable ──
+    const boxEl = document.getElementById('overlay-box');
+    const dragEl = document.getElementById('overlay-wrapper');
+    let isDragging = false, startX, startY, startLeft, startTop;
+
+    boxEl.addEventListener('mousedown', startDrag);
+    boxEl.addEventListener('touchstart', startDrag, { passive: true });
+
+    function startDrag(e) {
+      if (['INPUT','BUTTON','A'].includes(e.target.tagName)) return;
+      isDragging = true;
+      const rect = dragEl.getBoundingClientRect();
+      dragEl.style.transform = 'none';
+      dragEl.style.left = rect.left + 'px'; dragEl.style.top = rect.top + 'px';
+      startLeft = rect.left; startTop = rect.top;
+      startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+      startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('touchmove', onDrag, { passive: false });
+      document.addEventListener('mouseup', stopDrag);
+      document.addEventListener('touchend', stopDrag);
+    }
+
+    function onDrag(e) {
+      if (!isDragging) return;
+      if (e.type === 'touchmove') e.preventDefault();
+      const cx = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+      const cy = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+      dragEl.style.left = Math.max(0, Math.min(startLeft + cx - startX, window.innerWidth - dragEl.offsetWidth)) + 'px';
+      dragEl.style.top = Math.max(0, Math.min(startTop + cy - startY, window.innerHeight - dragEl.offsetHeight)) + 'px';
+    }
+
+    function stopDrag() {
+      isDragging = false;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('touchmove', onDrag);
+      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('touchend', stopDrag);
+    }
+  </script>
 </body>
     </html>
