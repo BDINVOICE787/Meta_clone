@@ -1,573 +1,245 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>『𝐗𝐇𝐔𝐕𝐎』 𝗧𝗘𝗔𝗠</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      width: 100vw; height: 100vh;
-      overflow: hidden;
-      background: #000;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    #site-frame {
-      width: 100%; height: 100%;
-      border: none; display: block;
-    }
-    #overlay-wrapper {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1000;
-      width: 215px;
-    }
-    #overlay-box {
-      position: relative;
-      z-index: 1;
-      width: 215px;
-      background: radial-gradient(ellipse at 50% 50%, #1c1535 0%, #0d0b1a 70%, #080610 100%);
-      border-radius: 14px;
-      padding: 13px 13px 12px;
-      cursor: grab;
-      user-select: none;
-      border: 1.5px solid rgba(255,255,255,0.06);
-      box-shadow:
-        inset 0 0 30px rgba(100,0,255,0.10),
-        inset 0 0 12px rgba(0,200,255,0.07),
-        0 0 20px rgba(0,0,0,0.8);
-    }
-    #overlay-box:active { cursor: grabbing; }
-    .title-main {
-      text-align: center;
-      font-size: 14.5px; font-weight: 800;
-      letter-spacing: 1px;
-      color: #00ffe0;
-      text-shadow: 0 0 7px #00ffe066;
-      margin-bottom: 2px;
-    }
-    .title-sub {
-      text-align: center;
-      font-size: 11px; font-weight: 700;
-      color: #ff00cc;
-      text-shadow: 0 0 5px #ff00cc66;
-      margin-bottom: 5px;
-      letter-spacing: 0.5px;
-    }
-    .period-line {
-      text-align: center;
-      font-size: 11px;
-      color: #ffe600;
-      font-weight: 700;
-      margin-bottom: 7px;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 8px rgba(255,230,0,0.55);
-      background: rgba(255,230,0,0.07);
-      border-radius: 5px;
-      padding: 2px 5px;
-    }
-    #login-section {
-      display: flex; flex-direction: column; align-items: center;
-    }
-    .password-input {
-      width: 75%;
-      background: #2a2a3e;
-      border: 1.5px solid #3a3a5e;
-      border-radius: 8px;
-      padding: 7px 10px;
-      color: #ccc; font-size: 12px;
-      outline: none; margin-bottom: 7px;
-      transition: border-color 0.2s;
-      text-align: center;
-    }
-    .password-input:focus { border-color: #00ffe055; }
-    .password-input::placeholder { color: #555; }
-    .error-msg {
-      text-align: center; color: #ff4466;
-      font-size: 11px; margin-bottom: 6px; font-weight: 600;
-    }
-    .btn-login {
-      width: 75%;
-      background: linear-gradient(135deg, #00e5cc, #00bfff);
-      color: #000; font-weight: 800; font-size: 12.5px;
-      border: none; border-radius: 8px; padding: 7px;
-      cursor: pointer; margin-bottom: 9px;
-      transition: opacity 0.2s, transform 0.1s;
-      box-shadow: 0 2px 8px rgba(0,200,255,0.18);
-    }
-    .btn-login:hover { opacity: 0.88; }
-    .btn-login:active { transform: scale(0.97); }
-    #pred-section { display: none; }
-    .next-signal {
-      text-align: center;
-      font-size: 12px; font-weight: 700;
-      color: #ffe600; margin-bottom: 7px;
-    }
-    .next-signal span { color: #fff; }
-    .prediction-label {
-      text-align: center;
-      font-size: 13px; font-weight: 600;
-      color: #ccc; margin-bottom: 7px;
-    }
-    .pred-value { font-weight: 800; font-size: 15px; }
-    .pred-small { color: #00bfff; }
-    .pred-big   { color: #ff4444; }
-    .pred-number-wrap {
-      display: flex; justify-content: center;
-      margin-bottom: 10px;
-    }
-    .pred-number-box {
-      width: 32%;
-      border-radius: 7px;
-      padding: 5px 0;
-      text-align: center;
-      font-size: 16px; font-weight: 900;
-      color: #fff;
-      transition: background 0.4s, box-shadow 0.4s;
-    }
-    .pred-number-box.green {
-      background: linear-gradient(135deg, #1db954, #0f9b3e);
-      box-shadow: 0 0 8px rgba(0,255,80,0.2);
-    }
-    .pred-number-box.red {
-      background: linear-gradient(135deg, #e63946, #9b1b1b);
-      box-shadow: 0 0 8px rgba(255,50,50,0.2);
-    }
-    .btn-telegram {
-      width: 100%;
-      background: linear-gradient(135deg, #1a8cff, #0055cc);
-      color: #fff; font-weight: 700; font-size: 12px;
-      border: none; border-radius: 8px; padding: 8px;
-      cursor: pointer; text-decoration: none;
-      display: block; text-align: center;
-      transition: opacity 0.2s, transform 0.1s;
-      box-shadow: 0 2px 8px rgba(0,100,255,0.18);
-    }
-    .btn-telegram:hover { opacity: 0.88; }
-    .btn-telegram:active { transform: scale(0.97); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    #expired-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.92);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+<title>Website Temporarily Suspended</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+        radial-gradient(circle at top left,#243b72 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#5b214f 0%,transparent 35%),
+        #070b16;
+    color:#fff;
+    padding:20px;
+    overflow:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:650px;
+    position:relative;
+}
+
+.card{
+    position:relative;
+    padding:45px 30px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:28px;
+    background:rgba(15,20,35,.82);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.55),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.icon{
+    width:90px;
+    height:90px;
+    margin:0 auto 25px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+    background:linear-gradient(135deg,#ff3b3b,#ff7a18);
+    box-shadow:0 0 45px rgba(255,70,50,.35);
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 16px;
+    margin-bottom:18px;
+    border-radius:50px;
+    font-size:13px;
+    font-weight:bold;
+    letter-spacing:1px;
+    color:#ffb5b5;
+    background:rgba(255,60,60,.10);
+    border:1px solid rgba(255,80,80,.25);
+}
+
+h1{
+    font-size:clamp(28px,6vw,42px);
+    line-height:1.2;
+    margin-bottom:15px;
+}
+
+h1 span{
+    background:linear-gradient(90deg,#ff5858,#ff9f43);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.description{
+    color:#b8c0d4;
+    font-size:16px;
+    line-height:1.8;
+    max-width:520px;
+    margin:0 auto 28px;
+}
+
+.notice{
+    padding:18px;
+    margin:20px 0 28px;
+    border-radius:16px;
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+    color:#dce2f0;
+    line-height:1.7;
+}
+
+.notice strong{
+    color:#fff;
+}
+
+.contact-title{
+    font-size:14px;
+    color:#8e99b2;
+    margin-bottom:12px;
+}
+
+.telegram{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    min-width:230px;
+    padding:15px 24px;
+    border-radius:14px;
+    text-decoration:none;
+    color:#fff;
+    font-weight:bold;
+    font-size:16px;
+    background:linear-gradient(135deg,#168cff,#006bd6);
+    box-shadow:0 12px 30px rgba(0,130,255,.25);
+    transition:.25s ease;
+}
+
+.telegram:hover{
+    transform:translateY(-3px);
+    box-shadow:0 16px 35px rgba(0,130,255,.4);
+}
+
+.footer{
+    margin-top:25px;
+    color:#66718b;
+    font-size:12px;
+}
+
+.circle{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(1px);
+    opacity:.25;
+}
+
+.c1{
+    width:180px;
+    height:180px;
+    background:#ff3b3b;
+    top:-90px;
+    right:-90px;
+}
+
+.c2{
+    width:150px;
+    height:150px;
+    background:#287cff;
+    bottom:-75px;
+    left:-75px;
+}
+
+@media(max-width:500px){
+    body{
+        padding:14px;
     }
-    #expired-overlay.show {
-      display: flex;
+
+    .card{
+        padding:35px 20px;
+        border-radius:22px;
     }
-    .expired-box {
-      background: #1c1535;
-      border: 1.5px solid #ff00cc55;
-      border-radius: 14px;
-      padding: 28px 24px;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(255,0,200,0.15);
+
+    .icon{
+        width:75px;
+        height:75px;
+        font-size:34px;
     }
-    .expired-icon { font-size: 36px; margin-bottom: 12px; }
-    .expired-title {
-      color: #ff4466;
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 8px;
-      text-shadow: 0 0 10px #ff446655;
+
+    .description{
+        font-size:15px;
     }
-    .expired-msg {
-      color: #aaa;
-      font-size: 12px;
-      margin-bottom: 16px;
-      line-height: 1.5;
+
+    .telegram{
+        width:100%;
     }
-    .btn-reload {
-      background: linear-gradient(135deg, #00e5cc, #00bfff);
-      color: #000; font-weight: 800; font-size: 13px;
-      border: none; border-radius: 8px; padding: 9px 20px;
-      cursor: pointer;
-    }
-    .btn-login:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  </style>
+}
+</style>
 </head>
+
 <body>
-  <iframe id="site-frame" src="https://dkwin0.com/#/register?invitationCode=26485102269"></iframe>
 
-  <div id="expired-overlay">
-    <div class="expired-box">
-      <div class="expired-icon">🔒</div>
-      <div class="expired-title">Session Expired!</div>
-      <div class="expired-msg">
-        আপনার পাসওয়ার্ড Admin দ্বারা মুছে ফেলা হয়েছে।
-        <br>নতুন পাসওয়ার্ডের জন্য যোগাযোগ করুন।
-      </div>
-      <button class="btn-reload" onclick="forceLogout()">🔄 নতুন করে Login করুন</button>
-    </div>
-  </div>
+<div class="container">
 
-  <div id="overlay-wrapper">
-    <canvas id="neon-canvas" style="position:absolute;inset:-3px;border-radius:17px;pointer-events:none;z-index:2;"></canvas>
-    <div id="overlay-box">
-      <div class="title-main">Ak Cyber Team</div>
-      <div class="title-sub">DRJ_BOSS</div>
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
 
-      <div id="login-section">
-        <input class="password-input" type="password" id="pw-input" placeholder="Enter Password" autocomplete="off">
-        <div class="error-msg" id="error-msg" style="display:none;">Wrong Password!</div>
-        <button class="btn-login" id="login-btn" onclick="doLogin()">Login</button>
-      </div>
+    <div class="card">
 
-      <div id="pred-section">
-        <div class="period-line" id="period-display">-</div>
-        <div class="next-signal">Next Signal: <span id="countdown">30s</span></div>
-        <div class="prediction-label">
-          Prediction: <span class="pred-value pred-small" id="pred-label">SMALL</span>
+        <div class="icon">⚠️</div>
+
+        <div class="badge">WEBSITE TEMPORARILY SUSPENDED</div>
+
+        <h1>
+            Website <span>বন্ধ করা হয়েছে</span>
+        </h1>
+
+        <p class="description">
+            Payment সম্পন্ন না হওয়ার কারণে এই Website-এর
+            service সাময়িকভাবে বন্ধ করা হয়েছে।
+        </p>
+
+        <div class="notice">
+            Website পুনরায় চালু করতে অনুগ্রহ করে
+            <strong>Payment সম্পন্ন করার জন্য যোগাযোগ করুন।</strong>
+            <br>
+            Payment সম্পন্ন হওয়ার পর Website পুনরায় Active করা হবে।
         </div>
-        <div class="pred-number-wrap" style="position:relative;">
-          <canvas id="num-canvas" style="position:absolute;inset:-3px;border-radius:10px;pointer-events:none;z-index:2;width:calc(100% + 6px);height:calc(100% + 6px);"></canvas>
-          <div class="pred-number-box green" id="pred-box">1</div>
+
+        <div class="contact-title">
+            Payment / Support এর জন্য যোগাযোগ করুন
         </div>
-      </div>
 
-      <a class="btn-telegram" href="https://t.me/DRJ_JSN1" target="_blank">📢 পাসওয়ার্ড নিতে চায়</a>
+        <a
+            class="telegram"
+            href="https://t.me/DRJ_JSN1"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            ✈️ যোগাযোগ করুন — Telegram
+        </a>
+
+        <div class="footer">
+            © 2026 • Website Administration
+        </div>
+
     </div>
-  </div>
+</div>
 
-  <script>
-    // ── সঠিক পাসওয়ার্ড ──
-    const CORRECT_PASSWORD = "DRJ_JSN";
-
-    // ── Auto-restore session on page load ──
-    window.addEventListener('load', () => {
-      const saved = localStorage.getItem('xhuvo_logged_in');
-      if (saved === 'true') {
-        showPrediction();
-      }
-    });
-
-    // ── Login ──
-    function doLogin() {
-      const pw = document.getElementById('pw-input').value.trim();
-      if (!pw) { shake(); return; }
-
-      const btn = document.getElementById('login-btn');
-      btn.disabled = true;
-      btn.textContent = 'Checking...';
-
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.textContent = 'Login';
-
-        if (pw === CORRECT_PASSWORD) {
-          localStorage.setItem('xhuvo_logged_in', 'true');
-          showPrediction();
-        } else {
-          showError();
-        }
-      }, 500);
-    }
-
-    document.getElementById('pw-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') doLogin();
-    });
-
-    function showError() {
-      document.getElementById('error-msg').style.display = 'block';
-      shake();
-      setTimeout(() => document.getElementById('error-msg').style.display = 'none', 2000);
-    }
-
-    function shake() {
-      const inp = document.getElementById('pw-input');
-      inp.style.borderColor = '#ff4466';
-      setTimeout(() => inp.style.borderColor = '#3a3a5e', 1500);
-    }
-
-    function forceLogout() {
-      localStorage.removeItem('xhuvo_logged_in');
-      document.getElementById('expired-overlay').classList.remove('show');
-      document.getElementById('pred-section').style.display = 'none';
-      document.getElementById('login-section').style.display = 'flex';
-      document.getElementById('pw-input').value = '';
-      clearInterval(window._predInterval);
-    }
-
-    // ── Show prediction panel ──
-    function showPrediction() {
-      document.getElementById('login-section').style.display = 'none';
-      document.getElementById('pred-section').style.display = 'block';
-      startPrediction();
-    }
-
-    // ── Prediction + Period ──
-    let currentWin = -1;
-    let lastIssuePeriod = null;
-
-    async function fetchRealPeriod() {
-      try {
-        const ts = Date.now();
-        const res = await fetch(`https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?ts=${ts}`);
-        if (!res.ok) return null;
-        const data = await res.json();
-        if (data?.data?.list && data.data.list.length > 0) {
-          const latest = data.data.list[0];
-          const issueNum = latest.issueNumber || latest.issue || latest.period;
-          const nextPeriod = (BigInt(issueNum) + 1n).toString();
-          return nextPeriod;
-        }
-      } catch(e) {}
-      return null;
-    }
-
-    function startPrediction() {
-      async function tick() {
-        const now = new Date();
-        const totalSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-        const winIdx = Math.floor(totalSec / 30);
-        const remaining = 30 - (totalSec % 30);
-        document.getElementById('countdown').textContent = remaining + 's';
-
-        if (winIdx !== currentWin) {
-          currentWin = winIdx;
-          const realPeriod = await fetchRealPeriod();
-          if (realPeriod) {
-            document.getElementById('period-display').textContent = realPeriod;
-            lastIssuePeriod = realPeriod;
-          } else if (lastIssuePeriod) {
-            try {
-              const next = (BigInt(lastIssuePeriod) + 1n).toString();
-              document.getElementById('period-display').textContent = next;
-              lastIssuePeriod = next;
-            } catch(e) {}
-          }
-
-          const isSmall = Math.random() < 0.5;
-          const num = isSmall
-            ? Math.floor(Math.random() * 5)
-            : Math.floor(Math.random() * 5) + 5;
-
-          const lbl = document.getElementById('pred-label');
-          const box = document.getElementById('pred-box');
-          box.textContent = num;
-
-          if (isSmall) {
-            lbl.textContent = 'SMALL'; lbl.className = 'pred-value pred-small';
-            box.className = 'pred-number-box green';
-            if (window.setNumColor) window.setNumColor(true);
-          } else {
-            lbl.textContent = 'BIG'; lbl.className = 'pred-value pred-big';
-            box.className = 'pred-number-box red';
-            if (window.setNumColor) window.setNumColor(false);
-          }
-        }
-      }
-
-      tick();
-      window._predInterval = setInterval(tick, 1000);
-    }
-
-    // ── Neon border canvas ──
-    (function() {
-      function initCanvas() {
-        const wrapper = document.getElementById('overlay-wrapper');
-        const canvas = document.getElementById('neon-canvas');
-        if (!wrapper || !canvas) return;
-
-        function resize() {
-          const r = wrapper.getBoundingClientRect();
-          canvas.width = r.width + 10;
-          canvas.height = r.height + 10;
-          canvas.style.left = '-5px';
-          canvas.style.top = '-5px';
-          canvas.style.width = canvas.width + 'px';
-          canvas.style.height = canvas.height + 'px';
-        }
-        resize();
-        new ResizeObserver(resize).observe(wrapper);
-
-        const ctx = canvas.getContext('2d');
-        const R = 18;
-
-        function drawRing(w, h, offset, lineW, color, blur) {
-          const o = offset;
-          ctx.save();
-          ctx.beginPath();
-          ctx.moveTo(o + R, o);
-          ctx.lineTo(w - o - R, o);
-          ctx.arcTo(w-o, o, w-o, o+R, R);
-          ctx.lineTo(w-o, h-o-R);
-          ctx.arcTo(w-o, h-o, w-o-R, h-o, R);
-          ctx.lineTo(o+R, h-o);
-          ctx.arcTo(o, h-o, o, h-o-R, R);
-          ctx.lineTo(o, o+R);
-          ctx.arcTo(o, o, o+R, o, R);
-          ctx.closePath();
-          ctx.setLineDash([]);
-          ctx.lineWidth = lineW;
-          ctx.strokeStyle = color;
-          ctx.shadowColor = color;
-          ctx.shadowBlur = blur;
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        const cols = ['#00ffe0','#00bfff','#7b2fff','#ff00cc','#ffe600','#ff8800','#00ff80','#ff4444','#ff0080','#ffffff'];
-        function randCol() { return cols[Math.floor(Math.random()*cols.length)]; }
-
-        function lerpHex(a, b, t) {
-          const ah=parseInt(a.slice(1),16), bh=parseInt(b.slice(1),16);
-          const [ar,ag,ab2]=[(ah>>16)&255,(ah>>8)&255,ah&255];
-          const [br,bg,bb] =[(bh>>16)&255,(bh>>8)&255,bh&255];
-          return '#'+[
-            Math.round(ar+(br-ar)*t),
-            Math.round(ag+(bg-ag)*t),
-            Math.round(ab2+(bb-ab2)*t)
-          ].map(v=>v.toString(16).padStart(2,'0')).join('');
-        }
-
-        let t1cur=randCol(), t1nxt=randCol();
-        let t2cur=randCol(), t2nxt=randCol();
-        let phase=0, cycleLen=80;
-
-        function animate() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const w=canvas.width, h=canvas.height;
-          phase = (phase+1) % cycleLen;
-          const blend = phase / cycleLen;
-          if (phase === 0) {
-            t1cur=t1nxt; t1nxt=randCol();
-            t2cur=t2nxt; t2nxt=randCol();
-          }
-          const c1 = lerpHex(t1cur, t1nxt, blend);
-          drawRing(w, h, 2, 12, c1+'18', 0);
-          drawRing(w, h, 2, 7, c1+'55', 18);
-          drawRing(w, h, 2, 3, c1, 30);
-          requestAnimationFrame(animate);
-        }
-        animate();
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCanvas);
-      } else {
-        initCanvas();
-      }
-    })();
-
-    // ── Number box border streak ──
-    (function() {
-      let numColor = '#00ff80';
-      let numT = 0;
-      let numCanvas, numCtx, numR = 10;
-
-      function initNumCanvas() {
-        numCanvas = document.getElementById('num-canvas');
-        if (!numCanvas) return;
-        const box = document.getElementById('pred-box');
-        if (!box) return;
-        function resize() {
-          const r = box.getBoundingClientRect();
-          numCanvas.width = r.width + 6;
-          numCanvas.height = r.height + 6;
-        }
-        resize();
-        numCtx = numCanvas.getContext('2d');
-        new ResizeObserver(resize).observe(box);
-        animNum();
-      }
-
-      function getPerim(w, h, r) { return 2*(w - 2*r) + 2*(h - 2*r) + 2*Math.PI*r; }
-
-      function drawNumStreak(progress, color, length) {
-        const w = numCanvas.width, h = numCanvas.height;
-        const perim = getPerim(w, h, numR);
-        const dist = (progress * perim) % perim;
-        numCtx.save();
-        numCtx.beginPath();
-        numCtx.moveTo(numR, 0);
-        numCtx.lineTo(w - numR, 0);
-        numCtx.arcTo(w, 0, w, numR, numR);
-        numCtx.lineTo(w, h - numR);
-        numCtx.arcTo(w, h, w - numR, h, numR);
-        numCtx.lineTo(numR, h);
-        numCtx.arcTo(0, h, 0, h - numR, numR);
-        numCtx.lineTo(0, numR);
-        numCtx.arcTo(0, 0, numR, 0, numR);
-        numCtx.closePath();
-        numCtx.lineWidth = 7;
-        numCtx.lineDashOffset = -dist;
-        numCtx.setLineDash([length, perim]);
-        numCtx.strokeStyle = color + '44';
-        numCtx.shadowColor = color;
-        numCtx.shadowBlur = 14;
-        numCtx.stroke();
-        numCtx.lineWidth = 2.5;
-        numCtx.strokeStyle = color;
-        numCtx.shadowBlur = 18;
-        numCtx.stroke();
-        numCtx.restore();
-      }
-
-      function animNum() {
-        if (!numCanvas || !numCtx) return;
-        numCtx.clearRect(0, 0, numCanvas.width, numCanvas.height);
-        numT += 0.022;
-        drawNumStreak(numT % 1, numColor, 50);
-        drawNumStreak((numT + 0.5) % 1, numColor, 50);
-        requestAnimationFrame(animNum);
-      }
-
-      window.setNumColor = function(isGreen) {
-        numColor = isGreen ? '#00ff80' : '#ff4444';
-      };
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initNumCanvas);
-      } else {
-        setTimeout(initNumCanvas, 100);
-      }
-    })();
-
-    // ── Draggable ──
-    const boxEl = document.getElementById('overlay-box');
-    const dragEl = document.getElementById('overlay-wrapper');
-    let isDragging = false, startX, startY, startLeft, startTop;
-
-    boxEl.addEventListener('mousedown', startDrag);
-    boxEl.addEventListener('touchstart', startDrag, { passive: true });
-
-    function startDrag(e) {
-      if (['INPUT','BUTTON','A'].includes(e.target.tagName)) return;
-      isDragging = true;
-      const rect = dragEl.getBoundingClientRect();
-      dragEl.style.transform = 'none';
-      dragEl.style.left = rect.left + 'px'; dragEl.style.top = rect.top + 'px';
-      startLeft = rect.left; startTop = rect.top;
-      startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-      startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-      document.addEventListener('mousemove', onDrag);
-      document.addEventListener('touchmove', onDrag, { passive: false });
-      document.addEventListener('mouseup', stopDrag);
-      document.addEventListener('touchend', stopDrag);
-    }
-
-    function onDrag(e) {
-      if (!isDragging) return;
-      if (e.type === 'touchmove') e.preventDefault();
-      const cx = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-      const cy = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-      dragEl.style.left = Math.max(0, Math.min(startLeft + cx - startX, window.innerWidth - dragEl.offsetWidth)) + 'px';
-      dragEl.style.top = Math.max(0, Math.min(startTop + cy - startY, window.innerHeight - dragEl.offsetHeight)) + 'px';
-    }
-
-    function stopDrag() {
-      isDragging = false;
-      document.removeEventListener('mousemove', onDrag);
-      document.removeEventListener('touchmove', onDrag);
-      document.removeEventListener('mouseup', stopDrag);
-      document.removeEventListener('touchend', stopDrag);
-    }
-  </script>
 </body>
-    </html>
+</html>
