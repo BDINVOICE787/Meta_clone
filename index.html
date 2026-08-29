@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Earn BD — Invest</title>
+    <title>Rexroth — Invest</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         /* ===== RESET & ROOT ===== */
@@ -167,6 +167,267 @@
             100% {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        /* ===== INVOICE LIMIT BANNER ===== */
+        .invoice-limit-banner {
+            background: linear-gradient(135deg, #fff9e6, #fff3cd);
+            border: 1px solid #f5c518;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(245, 197, 24, 0.15);
+            position: relative;
+            overflow: hidden;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        .invoice-limit-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #f5c518, #ff9800);
+        }
+
+        .invoice-limit-banner.dark-mode {
+            background: linear-gradient(135deg, #2a1f00, #1a1500);
+            border-color: #f5c518;
+            box-shadow: 0 2px 8px rgba(245, 197, 24, 0.2);
+        }
+
+        .invoice-limit-banner .banner-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .invoice-limit-banner .banner-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f5c518, #ff9800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .invoice-limit-banner .banner-title {
+            flex: 1;
+        }
+
+        .invoice-limit-banner .banner-title h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .invoice-limit-banner .banner-title p {
+            font-size: 11px;
+            color: #666;
+            margin: 2px 0 0;
+        }
+
+        .invoice-limit-banner .close-banner {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #999;
+            cursor: pointer;
+            padding: 4px;
+            transition: 0.2s;
+        }
+
+        .invoice-limit-banner .close-banner:hover {
+            color: #333;
+            transform: rotate(90deg);
+        }
+
+        .invoice-limit-banner .limit-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .invoice-limit-banner .limit-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(245, 197, 24, 0.3);
+        }
+
+        .invoice-limit-banner .limit-item .limit-value {
+            font-size: 16px;
+            font-weight: 800;
+            color: #333;
+            line-height: 1;
+        }
+
+        .invoice-limit-banner .limit-item .limit-label {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .invoice-limit-banner .limit-item.limit-reached .limit-value {
+            color: #ff5252;
+            animation: blink 1s infinite;
+        }
+
+        .invoice-limit-banner .limit-item.limit-warning .limit-value {
+            color: #ff9800;
+        }
+
+        .invoice-limit-banner .limit-progress {
+            margin-bottom: 10px;
+        }
+
+        .invoice-limit-banner .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .invoice-limit-banner .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+        }
+
+        .invoice-limit-banner .progress-fill.warning {
+            background: linear-gradient(90deg, #ff9800, #ffc107);
+        }
+
+        .invoice-limit-banner .progress-fill.danger {
+            background: linear-gradient(90deg, #f44336, #ff5252);
+        }
+
+        .invoice-limit-banner .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .invoice-limit-banner .banner-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .invoice-limit-banner .banner-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .invoice-limit-banner .banner-btn.primary {
+            background: linear-gradient(135deg, #f5c518, #ff9800);
+            color: #fff;
+        }
+
+        .invoice-limit-banner .banner-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 197, 24, 0.4);
+        }
+
+        .invoice-limit-banner .banner-btn.secondary {
+            background: transparent;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .invoice-limit-banner .banner-btn.secondary:hover {
+            background: #f5f5f5;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .invoice-limit-banner.dark-mode .banner-title h3 {
+            color: #e0e0e0;
+        }
+
+        .invoice-limit-banner.dark-mode .banner-title p {
+            color: #aaa;
+        }
+
+        .invoice-limit-banner.dark-mode .limit-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(245, 197, 24, 0.4);
+        }
+
+        .invoice-limit-banner.dark-mode .limit-item .limit-value {
+            color: #e0e0e0;
+        }
+
+        .invoice-limit-banner.dark-mode .limit-item .limit-label {
+            color: #aaa;
+        }
+
+        .invoice-limit-banner.dark-mode .progress-bar {
+            background: #333;
+        }
+
+        .invoice-limit-banner.dark-mode .progress-labels {
+            color: #aaa;
+        }
+
+        @media (max-width: 360px) {
+            .invoice-limit-banner .limit-info {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            
+            .invoice-limit-banner .banner-actions {
+                flex-direction: column;
             }
         }
 
@@ -1887,6 +2148,49 @@
                             <button class="close" id="announcementClose">✕</button>
                         </div>
 
+                        <!-- Invoice Limit Banner -->
+                        <div class="invoice-limit-banner" id="invoiceLimitBanner">
+                            <div class="banner-header">
+                                <div class="banner-icon">📊</div>
+                                <div class="banner-title">
+                                    <h3>Invoice Limit Status</h3>
+                                    <p>Your investment invoice generation limits</p>
+                                </div>
+                                <button class="close-banner" id="closeInvoiceBanner">✕</button>
+                            </div>
+                            
+                            <div class="limit-info">
+                                <div class="limit-item">
+                                    <div class="limit-value" id="dailyInvoices">0/5</div>
+                                    <div class="limit-label">Daily Invoices</div>
+                                </div>
+                                <div class="limit-item">
+                                    <div class="limit-value" id="monthlyInvoices">12/50</div>
+                                    <div class="limit-label">Monthly Invoices</div>
+                                </div>
+                                <div class="limit-item">
+                                    <div class="limit-value" id="remainingAmount">৳ 25,000</div>
+                                    <div class="limit-label">Remaining Amount</div>
+                                </div>
+                            </div>
+                            
+                            <div class="limit-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="invoiceProgress" style="width: 24%"></div>
+                                </div>
+                                <div class="progress-labels">
+                                    <span>0 invoices</span>
+                                    <span>24% used</span>
+                                    <span>50 invoices limit</span>
+                                </div>
+                            </div>
+                            
+                            <div class="banner-actions">
+                                <button class="banner-btn primary" id="upgradeLimitBtn">⚡ Upgrade Limit</button>
+                                <button class="banner-btn secondary" id="viewInvoicesBtn">📄 View History</button>
+                            </div>
+                        </div>
+
                         <div class="balance-card">
                             <div class="label">Total Balance</div>
                             <div class="amount" id="balanceDisplay">৳ 0.00</div>
@@ -2076,6 +2380,7 @@
                     <button class="tab" data-tab="settings">⚙️ Settings</button>
                     <button class="tab" data-tab="recharge">💰 Recharge</button>
                     <button class="tab" data-tab="withdraw">💳 Withdraw</button>
+                    <button class="tab" data-tab="invoices">📄 Invoices</button>
                 </div>
                 <div class="admin-content" id="adminContent">
                     <!-- Dashboard -->
@@ -2086,6 +2391,8 @@
                             <div class="admin-card"><div class="text-muted fs-12">Treasure Codes</div><div class="fw-700 fs-14" id="statTreasure">0</div></div>
                             <div class="admin-card"><div class="text-muted fs-12">Recharge Req.</div><div class="fw-700 fs-14" id="statRecharge">0</div></div>
                             <div class="admin-card"><div class="text-muted fs-12">Withdraw Req.</div><div class="fw-700 fs-14" id="statWithdraw">0</div></div>
+                            <div class="admin-card"><div class="text-muted fs-12">Total Invoices</div><div class="fw-700 fs-14" id="statInvoices">0</div></div>
+                            <div class="admin-card"><div class="text-muted fs-12">Invoice Limit</div><div class="fw-700 fs-14" id="statInvoiceLimit">50</div></div>
                         </div>
                         <div class="admin-card">
                             <div class="fw-700 fs-14 mb-8">📋 Recent Activity</div>
@@ -2120,6 +2427,20 @@
                                         <label>Rocket Number</label>
                                         <input id="setRocket" type="text" placeholder="01836724372" />
                                     </div>
+                                    <div class="form-row">
+                                        <div>
+                                            <label>Daily Invoice Limit</label>
+                                            <input id="setDailyLimit" type="number" placeholder="5" value="5" />
+                                        </div>
+                                        <div>
+                                            <label>Monthly Invoice Limit</label>
+                                            <input id="setMonthlyLimit" type="number" placeholder="50" value="50" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row full">
+                                        <label>Max Invoice Amount</label>
+                                        <input id="setMaxAmount" type="number" placeholder="50000" value="50000" />
+                                    </div>
                                     <div class="form-row full">
                                         <label>Background Image (base64 URL)</label>
                                         <input id="setBgImage" type="text" placeholder="data:image/png;base64,..." />
@@ -2152,6 +2473,11 @@
                     <div class="tab-panel" id="tab-withdraw">
                         <div class="panel-title">💳 Withdrawal Requests</div>
                         <div id="adminWithdrawList"><p class="text-muted fs-12">Loading requests...</p></div>
+                    </div>
+                    <!-- Invoices -->
+                    <div class="tab-panel" id="tab-invoices">
+                        <div class="panel-title">📄 Invoice Management</div>
+                        <div id="adminInvoiceList"><p class="text-muted fs-12">Loading invoices...</p></div>
                     </div>
                 </div>
             </div>
@@ -2253,6 +2579,16 @@
         const statTotalEarn = $('statTotalEarn');
         const statActivePlans = $('statActivePlans');
 
+        // Invoice Limit Banner refs
+        const invoiceLimitBanner = $('invoiceLimitBanner');
+        const closeInvoiceBanner = $('closeInvoiceBanner');
+        const upgradeLimitBtn = $('upgradeLimitBtn');
+        const viewInvoicesBtn = $('viewInvoicesBtn');
+        const dailyInvoices = $('dailyInvoices');
+        const monthlyInvoices = $('monthlyInvoices');
+        const remainingAmount = $('remainingAmount');
+        const invoiceProgress = $('invoiceProgress');
+
         // Admin
         const adminPanel = $('adminPanel');
         const adminToggleBtn = $('adminToggleBtn');
@@ -2263,6 +2599,7 @@
         const adminTreasureList = $('adminTreasureList');
         const adminRechargeList = $('adminRechargeList');
         const adminWithdrawList = $('adminWithdrawList');
+        const adminInvoiceList = $('adminInvoiceList');
         const addPlanBtn = $('addPlanBtn');
         const addTreasureBtn = $('addTreasureBtn');
         const saveSettingsBtn = $('saveSettingsBtn');
@@ -2273,10 +2610,15 @@
         const setAnnouncement = $('setAnnouncement');
         const setRechargeAmts = $('setRechargeAmts');
         const setPayMethods = $('setPayMethods');
+        const setDailyLimit = $('setDailyLimit');
+        const setMonthlyLimit = $('setMonthlyLimit');
+        const setMaxAmount = $('setMaxAmount');
         const statPlans = $('statPlans');
         const statTreasure = $('statTreasure');
         const statRecharge = $('statRecharge');
         const statWithdraw = $('statWithdraw');
+        const statInvoices = $('statInvoices');
+        const statInvoiceLimit = $('statInvoiceLimit');
         const adminRecentActivity = $('adminRecentActivity');
         const darkToggle = $('darkToggle');
         const notifBtn = $('notifBtn');
@@ -2291,6 +2633,14 @@
         let rechargeRequests = [];
         let withdrawRequests = [];
         let settingsData = {};
+        let invoiceData = {
+            dailyUsed: 0,
+            monthlyUsed: 12,
+            totalAmount: 25000,
+            dailyLimit: 5,
+            monthlyLimit: 50,
+            maxAmount: 50000
+        };
         let isDark = false;
         let isAdmin = false;
         let selectedGateway = 'bkash';
@@ -2367,6 +2717,136 @@
         }
         modalClose.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+        // ============================================================
+        //  INVOICE LIMIT BANNER LOGIC
+        // ============================================================
+        function updateInvoiceBanner() {
+            const dailyPct = (invoiceData.dailyUsed / invoiceData.dailyLimit) * 100;
+            const monthlyPct = (invoiceData.monthlyUsed / invoiceData.monthlyLimit) * 100;
+            const remainingAmt = invoiceData.maxAmount - invoiceData.totalAmount;
+
+            // Update daily
+            dailyInvoices.textContent = `${invoiceData.dailyUsed}/${invoiceData.dailyLimit}`;
+            dailyInvoices.className = 'limit-value';
+            if (invoiceData.dailyUsed >= invoiceData.dailyLimit) {
+                dailyInvoices.classList.add('limit-reached');
+            } else if (dailyPct >= 80) {
+                dailyInvoices.classList.add('limit-warning');
+            }
+
+            // Update monthly
+            monthlyInvoices.textContent = `${invoiceData.monthlyUsed}/${invoiceData.monthlyLimit}`;
+            monthlyInvoices.className = 'limit-value';
+            if (invoiceData.monthlyUsed >= invoiceData.monthlyLimit) {
+                monthlyInvoices.classList.add('limit-reached');
+            } else if (monthlyPct >= 80) {
+                monthlyInvoices.classList.add('limit-warning');
+            }
+
+            // Update remaining amount
+            remainingAmount.textContent = `৳ ${remainingAmt.toLocaleString()}`;
+            remainingAmount.className = 'limit-value';
+            if (remainingAmt <= 0) {
+                remainingAmount.classList.add('limit-reached');
+            } else if (remainingAmt <= invoiceData.maxAmount * 0.2) {
+                remainingAmount.classList.add('limit-warning');
+            }
+
+            // Update progress
+            invoiceProgress.style.width = `${Math.min(100, monthlyPct)}%`;
+            invoiceProgress.className = 'progress-fill';
+            if (monthlyPct >= 100) {
+                invoiceProgress.classList.add('danger');
+            } else if (monthlyPct >= 80) {
+                invoiceProgress.classList.add('warning');
+            }
+
+            // Update progress labels
+            const progressLabels = document.querySelector('.progress-labels');
+            if (progressLabels) {
+                const spans = progressLabels.querySelectorAll('span');
+                if (spans.length >= 3) {
+                    spans[0].textContent = `${invoiceData.monthlyUsed} invoices`;
+                    spans[1].textContent = `${Math.round(monthlyPct)}% used`;
+                    spans[2].textContent = `${invoiceData.monthlyLimit} invoices limit`;
+                }
+            }
+
+            // Update admin stats
+            if (statInvoices) statInvoices.textContent = invoiceData.monthlyUsed;
+            if (statInvoiceLimit) statInvoiceLimit.textContent = invoiceData.monthlyLimit;
+        }
+
+        // Invoice banner event listeners
+        closeInvoiceBanner.addEventListener('click', () => {
+            invoiceLimitBanner.style.display = 'none';
+            localStorage.setItem('invoiceBannerHidden', 'true');
+        });
+
+        upgradeLimitBtn.addEventListener('click', () => {
+            openModal('⚡ Upgrade Invoice Limits', `
+                <div style="padding: 10px;">
+                    <p style="margin-bottom: 16px; color: var(--text-muted); font-size: 13px;">
+                        Choose a plan to increase your invoice generation limits:
+                    </p>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="border: 2px solid var(--border); border-radius: 12px; padding: 16px;">
+                            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);">Basic Plan</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">20 daily / 200 monthly invoices</div>
+                            <button class="btn-submit" style="margin-top: 8px;">Upgrade - Free</button>
+                        </div>
+                        <div style="border: 2px solid var(--gold); border-radius: 12px; padding: 16px; background: var(--gold-light);">
+                            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);">Premium Plan ⭐</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">50 daily / 500 monthly invoices</div>
+                            <button class="btn-submit" style="margin-top: 8px;">Upgrade - ৳ 500</button>
+                        </div>
+                        <div style="border: 2px solid var(--primary); border-radius: 12px; padding: 16px;">
+                            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);">Enterprise Plan 🏢</div>
+                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Unlimited invoices</div>
+                            <button class="btn-submit" style="margin-top: 8px;">Contact Support</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        viewInvoicesBtn.addEventListener('click', () => {
+            openModal('📄 Invoice History', `
+                <div style="padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600;">
+                        <span>Date</span>
+                        <span>Invoice #</span>
+                        <span>Amount</span>
+                        <span>Status</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
+                        <span>2024-01-15</span>
+                        <span>INV-001</span>
+                        <span>৳ 5,000</span>
+                        <span style="color: #28a745;">Paid</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
+                        <span>2024-01-20</span>
+                        <span>INV-002</span>
+                        <span>৳ 3,500</span>
+                        <span style="color: #28a745;">Paid</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 12px;">
+                        <span>2024-01-25</span>
+                        <span>INV-003</span>
+                        <span>৳ 7,200</span>
+                        <span style="color: #ffc107;">Pending</span>
+                    </div>
+                    <p class="text-muted fs-12 mt-8">Showing last 3 invoices from this month</p>
+                </div>
+            `);
+        });
+
+        // Check if banner was hidden
+        if (localStorage.getItem('invoiceBannerHidden') === 'true') {
+            invoiceLimitBanner.style.display = 'none';
+        }
 
         // ============================================================
         //  GATEWAY SWITCH
@@ -2485,6 +2965,7 @@
                 loadSettings();
                 loadRechargeRequests();
                 loadWithdrawRequests();
+                loadInvoiceData();
                 showScreen('home');
                 const adminRef = db.ref('admins/' + user.uid);
                 const snap = await adminRef.once('value');
@@ -2564,6 +3045,11 @@
                     announcementText.textContent = data.announcement;
                     announcementBar.style.display = 'flex';
                 }
+                // Update invoice limits from settings
+                if (data.dailyInvoiceLimit) invoiceData.dailyLimit = parseInt(data.dailyInvoiceLimit);
+                if (data.monthlyInvoiceLimit) invoiceData.monthlyLimit = parseInt(data.monthlyInvoiceLimit);
+                if (data.maxInvoiceAmount) invoiceData.maxAmount = parseInt(data.maxInvoiceAmount);
+                updateInvoiceBanner();
                 // Update current gateway display
                 const config = gatewayConfig[selectedGateway];
                 if (config) gatewayNumber.textContent = settingsData[selectedGateway + 'Number'] || config.number;
@@ -2575,6 +3061,20 @@
                 setAnnouncement.value = data.announcement || '';
                 setRechargeAmts.value = data.rechargeAmounts || '';
                 setPayMethods.value = data.payMethods || '';
+                setDailyLimit.value = data.dailyInvoiceLimit || '5';
+                setMonthlyLimit.value = data.monthlyInvoiceLimit || '50';
+                setMaxAmount.value = data.maxInvoiceAmount || '50000';
+            });
+        }
+
+        function loadInvoiceData() {
+            if (!currentUser) return;
+            db.ref('invoice_usage/' + currentUser.uid).on('value', (snap) => {
+                const data = snap.val() || {};
+                invoiceData.dailyUsed = data.dailyUsed || 0;
+                invoiceData.monthlyUsed = data.monthlyUsed || 0;
+                invoiceData.totalAmount = data.totalAmount || 0;
+                updateInvoiceBanner();
             });
         }
 
@@ -2657,13 +3157,36 @@
             const id = btn.dataset.id;
             if (userData.balance < price) { toast('Insufficient balance! Need ' + money(price)); return; }
             if (!currentUser) { toast('Please login'); return; }
+            
+            // Check invoice limits
+            if (invoiceData.dailyUsed >= invoiceData.dailyLimit) {
+                toast('Daily invoice limit reached! Upgrade your plan to continue.');
+                return;
+            }
+            if (invoiceData.monthlyUsed >= invoiceData.monthlyLimit) {
+                toast('Monthly invoice limit reached! Upgrade your plan to continue.');
+                return;
+            }
+            
             const newBalance = userData.balance - price;
             const invRef = db.ref('users/' + currentUser.uid + '/investments').push();
             invRef.set({ planId: id, planName: name, amount: price, investedAt: Date.now(), status: 'active' });
             db.ref('users/' + currentUser.uid + '/balance').set(newBalance);
             const actRef = db.ref('users/' + currentUser.uid + '/activity').push();
             actRef.set({ type: 'Investment', amount: price, date: Date.now(), positive: false });
-            toast('Invested in ' + name + '!');
+            
+            // Update invoice usage
+            const newDailyUsed = invoiceData.dailyUsed + 1;
+            const newMonthlyUsed = invoiceData.monthlyUsed + 1;
+            const newTotalAmount = invoiceData.totalAmount + price;
+            db.ref('invoice_usage/' + currentUser.uid).update({
+                dailyUsed: newDailyUsed,
+                monthlyUsed: newMonthlyUsed,
+                totalAmount: newTotalAmount,
+                lastUpdated: Date.now()
+            });
+            
+            toast('Invested in ' + name + '! Invoice generated.');
         }
 
         function renderAllPlans() {
@@ -2838,15 +3361,8 @@
         darkToggle.addEventListener('click', () => {
             isDark = !isDark;
             app.classList.toggle('dark', isDark);
+            invoiceLimitBanner.classList.toggle('dark-mode', isDark);
             darkToggle.textContent = isDark ? '☀️' : '🌙';
-            document.documentElement.style.setProperty('--bg', isDark ? '#0d1520' : '#f0f4f8');
-            document.documentElement.style.setProperty('--card', isDark ? '#1a2633' : '#ffffff');
-            document.documentElement.style.setProperty('--text', isDark ? '#e8edf3' : '#1a2b3c');
-            document.documentElement.style.setProperty('--text-muted', isDark ? '#8a9baa' : '#6b7f8f');
-            document.documentElement.style.setProperty('--border', isDark ? '#2a3a4a' : '#e2ebf2');
-            document.documentElement.style.setProperty('--primary-light', isDark ? '#0a2a40' : '#e6f2fa');
-            document.querySelector('.bottom-nav').style.background = isDark ? 'rgba(26,38,51,0.97)' :
-                'rgba(255,255,255,0.97)';
         });
 
         // ============================================================
@@ -2865,6 +3381,7 @@
                 renderAdminTreasure();
                 renderAdminRecharge();
                 renderAdminWithdraw();
+                renderAdminInvoices();
                 updateAdminStats();
                 document.querySelectorAll('.admin-tabs .tab').forEach(t => t.classList.remove('active'));
                 document.querySelector('.admin-tabs .tab').classList.add('active');
@@ -2888,6 +3405,7 @@
             if (tab.dataset.tab === 'treasure') renderAdminTreasure();
             if (tab.dataset.tab === 'recharge') renderAdminRecharge();
             if (tab.dataset.tab === 'withdraw') renderAdminWithdraw();
+            if (tab.dataset.tab === 'invoices') renderAdminInvoices();
             if (tab.dataset.tab === 'dashboard') updateAdminStats();
         });
 
@@ -3047,6 +3565,9 @@
             const announcement = setAnnouncement.value.trim();
             const amts = setRechargeAmts.value.trim();
             const methods = setPayMethods.value.trim();
+            const dailyLimit = setDailyLimit.value.trim();
+            const monthlyLimit = setMonthlyLimit.value.trim();
+            const maxAmount = setMaxAmount.value.trim();
             try {
                 await db.ref('settings').update({
                     bkashNumber: bkash,
@@ -3056,6 +3577,9 @@
                     announcement: announcement,
                     rechargeAmounts: amts,
                     payMethods: methods,
+                    dailyInvoiceLimit: dailyLimit,
+                    monthlyInvoiceLimit: monthlyLimit,
+                    maxInvoiceAmount: maxAmount,
                     updatedAt: Date.now()
                 });
                 toast('Settings saved!');
@@ -3169,12 +3693,68 @@
             db.ref('withdraw_requests/' + id).remove().then(() => toast('Deleted'));
         };
 
+        // ===== ADMIN: INVOICES =====
+        function renderAdminInvoices() {
+            const invoices = [
+                { id: 'INV-001', user: 'user1@example.com', amount: 5000, date: Date.now() - 86400000 * 10, status: 'paid' },
+                { id: 'INV-002', user: 'user2@example.com', amount: 3500, date: Date.now() - 86400000 * 5, status: 'paid' },
+                { id: 'INV-003', user: 'user3@example.com', amount: 7200, date: Date.now() - 86400000 * 2, status: 'pending' }
+            ];
+            
+            adminInvoiceList.innerHTML = invoices.map(inv => `
+                <div class="admin-card">
+                    <div class="row">
+                        <div class="info">
+                            <div class="label">${inv.id} <span class="badge-status ${inv.status === 'paid' ? 'approved' : 'pending'}">${inv.status}</span></div>
+                            <div class="sub">👤 ${inv.user} | 💰 ${money(inv.amount)} | 📅 ${formatDate(inv.date)}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-sm primary" onclick="viewInvoice('${inv.id}')">👁</button>
+                            <button class="btn-sm success" onclick="markInvoicePaid('${inv.id}')">✓</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.viewInvoice = function(id) {
+            openModal('📄 Invoice Details', `
+                <div style="padding: 10px;">
+                    <p class="text-muted fs-14">Invoice #${id}</p>
+                    <div style="margin-top: 12px;">
+                        <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <span class="text-muted fs-12">Invoice ID</span>
+                            <span class="fw-700 fs-12">${id}</span>
+                        </div>
+                        <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <span class="text-muted fs-12">Amount</span>
+                            <span class="fw-700 fs-12">৳ 5,000</span>
+                        </div>
+                        <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                            <span class="text-muted fs-12">Status</span>
+                            <span class="fw-700 fs-12" style="color: #28a745;">Paid</span>
+                        </div>
+                        <div class="flex-between" style="padding: 8px 0;">
+                            <span class="text-muted fs-12">Date</span>
+                            <span class="fw-700 fs-12">${formatDate(Date.now())}</span>
+                        </div>
+                    </div>
+                </div>
+            `);
+        };
+
+        window.markInvoicePaid = function(id) {
+            toast('Invoice ' + id + ' marked as paid');
+        };
+
         // ===== ADMIN: STATS =====
         function updateAdminStats() {
             statPlans.textContent = plansData.length;
             statTreasure.textContent = treasureData.length;
             statRecharge.textContent = rechargeRequests.filter(r => r.status === 'pending').length;
             statWithdraw.textContent = withdrawRequests.filter(r => r.status === 'pending').length;
+            statInvoices.textContent = invoiceData.monthlyUsed;
+            statInvoiceLimit.textContent = invoiceData.monthlyLimit;
 
             const all = [];
             rechargeRequests.forEach(r => all.push({ type: 'Recharge', status: r.status, date: r.createdAt,
@@ -3202,11 +3782,14 @@
         adminToggleBtn.style.display = 'none';
         // Set default gateway
         switchGateway('bkash');
+        // Initialize invoice banner
+        updateInvoiceBanner();
 
-        console.log('🚀 Rexroth Flow v3.0 ready');
+        console.log('🚀 Rexroth Flow v4.0 ready');
         console.log('🔐 Firebase connected');
         console.log('👑 Admin: set /admins/{uid} = true to enable');
         console.log('💳 Gateways: bKash, Nagad, Rocket');
+        console.log('📊 Invoice Limit System active');
     </script>
 
 </body>
