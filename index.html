@@ -3052,6 +3052,102 @@
             font-weight: 700;
         }
 
+        /* ===== APP DOWNLOAD SECTION (NEW) ===== */
+        .app-download-section {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 14px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .app-download-section:hover {
+            box-shadow: 0 8px 32px rgba(0, 50, 90, 0.12);
+            transform: translateY(-2px);
+        }
+        .app-download-section .app-download-inner {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .app-download-section .app-icon-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--primary-light);
+            display: grid;
+            place-items: center;
+            font-size: 32px;
+            color: var(--primary);
+            border: 2px solid var(--border);
+            transition: 0.3s;
+        }
+        .app-download-section .app-icon-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .app-download-section .app-info {
+            flex: 1;
+        }
+        .app-download-section .app-info .app-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text);
+        }
+        .app-download-section .app-info .app-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .app-download-section .app-info .app-version {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            opacity: 0.7;
+        }
+        .app-download-section .btn-download-app {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-gradient);
+            color: #fff;
+            font-weight: 700;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 16px rgba(0, 114, 176, 0.30);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .app-download-section .btn-download-app:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 114, 176, 0.40);
+        }
+        .app-download-section .btn-download-app:active {
+            transform: scale(0.95);
+        }
+        @media (max-width: 380px) {
+            .app-download-section .app-download-inner {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+            .app-download-section .btn-download-app {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         /* ===== RESPONSIVE TWEAKS ===== */
         @media (max-width: 380px) {
             .balance-card .amount {
@@ -3210,6 +3306,20 @@
                             <div class="q-item ripple" data-nav="withdraw"><div class="icon gold"><i class="fas fa-arrow-up"></i></div><div class="label">Withdraw</div></div>
                             <div class="q-item ripple" data-nav="treasure"><div class="icon green"><i class="fas fa-gift"></i></div><div class="label">Treasure</div></div>
                             <div class="q-item ripple" data-nav="leaderboard"><div class="icon purple"><i class="fas fa-trophy"></i></div><div class="label">Top</div></div>
+                        </div>
+                        <!-- ===== NEW APP DOWNLOAD SECTION ===== -->
+                        <div class="app-download-section" id="appDownloadSection">
+                            <div class="app-download-inner">
+                                <div class="app-icon-wrap" id="appIconWrap">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="app-info">
+                                    <div class="app-name" id="appDownloadName">Rexroth Flow App</div>
+                                    <div class="app-desc" id="appDownloadDesc">Download our official app for better experience</div>
+                                    <div class="app-version" id="appDownloadVersion">v2.1.0</div>
+                                </div>
+                                <button class="btn-download-app" id="appDownloadBtn"><i class="fas fa-download"></i> Download</button>
+                            </div>
                         </div>
                         <div class="stats-mini">
                             <div class="stat-box hover-lift"><div class="num"><i class="fas fa-briefcase"></i> <span id="statInvestments">0</span></div><div class="lbl">Investments</div></div>
@@ -3402,6 +3512,7 @@
                     <button class="tab active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
                     <button class="tab" data-tab="plans"><i class="fas fa-chart-line"></i> Plans</button>
                     <button class="tab" data-tab="treasure"><i class="fas fa-gift"></i> Treasure</button>
+                    <button class="tab" data-tab="app"><i class="fas fa-mobile-alt"></i> App Download</button>
                     <button class="tab" data-tab="settings"><i class="fas fa-cog"></i> Settings</button>
                     <button class="tab" data-tab="recharge"><i class="fas fa-wallet"></i> Recharge</button>
                     <button class="tab" data-tab="withdraw"><i class="fas fa-credit-card"></i> Withdraw</button>
@@ -3430,6 +3541,64 @@
                     <div class="tab-panel" id="tab-treasure">
                         <div class="flex-between mb-8"><span class="panel-title"><i class="fas fa-gift"></i> Treasure Codes</span><button class="btn-sm primary" id="addTreasureBtn"><i class="fas fa-plus"></i> Add Code</button></div>
                         <div id="adminTreasureList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading codes...</p></div>
+                    </div>
+                    <!-- ===== NEW ADMIN TAB: APP DOWNLOAD ===== -->
+                    <div class="tab-panel" id="tab-app">
+                        <div class="panel-title"><i class="fas fa-mobile-alt"></i> App Download Management</div>
+                        <div class="admin-card">
+                            <form id="appSettingsForm" onsubmit="return false;">
+                                <div class="admin-form">
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-tag"></i> App Name</label>
+                                        <input id="setAppName" type="text" placeholder="Rexroth Flow App" />
+                                    </div>
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-link"></i> Download URL</label>
+                                        <input id="setAppDownloadLink" type="url" placeholder="https://example.com/app.apk" />
+                                    </div>
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-image"></i> App Icon (Base64)</label>
+                                        <div class="image-upload-container" id="appIconUpload">
+                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                            <div class="upload-text">Click to upload app icon</div>
+                                            <input type="file" id="appIconFile" accept="image/*" style="display:none;" />
+                                        </div>
+                                        <input id="setAppIcon" type="hidden" placeholder="data:image/png;base64,..." />
+                                    </div>
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-code-branch"></i> Version</label>
+                                        <input id="setAppVersion" type="text" placeholder="v2.1.0" value="v2.1.0" />
+                                    </div>
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-info-circle"></i> Description (optional)</label>
+                                        <input id="setAppDesc" type="text" placeholder="Download our official app for better experience" />
+                                    </div>
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-toggle-on"></i> Show Download Section</label>
+                                        <select id="setAppShow">
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn-submit" id="saveAppSettingsBtn"><i class="fas fa-save"></i> Save App Settings</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="admin-card" style="margin-top:10px;">
+                            <div style="font-weight:600;font-size:13px;margin-bottom:8px;"><i class="fas fa-eye"></i> Preview</div>
+                            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);">
+                                <div style="width:48px;height:48px;border-radius:12px;background:var(--primary-light);display:grid;place-items:center;font-size:24px;color:var(--primary);flex-shrink:0;" id="appPreviewIcon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:700;font-size:14px;" id="appPreviewName">Rexroth Flow App</div>
+                                    <div style="font-size:11px;color:var(--text-muted);" id="appPreviewDesc">Download our official app</div>
+                                    <div style="font-size:10px;color:var(--text-muted);opacity:0.6;" id="appPreviewVersion">v2.1.0</div>
+                                </div>
+                                <button style="padding:8px 16px;border-radius:8px;background:var(--primary-gradient);color:#fff;font-weight:600;font-size:12px;border:none;cursor:pointer;"><i class="fas fa-download"></i> Download</button>
+                            </div>
+                            <p style="font-size:11px;color:var(--text-muted);margin-top:8px;"><i class="fas fa-info-circle"></i> This preview shows how the download section will appear to users on the home screen.</p>
+                        </div>
                     </div>
                     <div class="tab-panel" id="tab-settings">
                         <div class="panel-title"><i class="fas fa-cog"></i> Settings</div>
@@ -3640,6 +3809,27 @@
         const notificationList = $('notificationList');
         const leaderboardList = $('leaderboardList');
 
+        // ===== NEW APP DOWNLOAD DOM REFS =====
+        const appDownloadSection = $('appDownloadSection');
+        const appIconWrap = $('appIconWrap');
+        const appDownloadName = $('appDownloadName');
+        const appDownloadDesc = $('appDownloadDesc');
+        const appDownloadVersion = $('appDownloadVersion');
+        const appDownloadBtn = $('appDownloadBtn');
+        const appIconUpload = $('appIconUpload');
+        const appIconFile = $('appIconFile');
+        const setAppName = $('setAppName');
+        const setAppDownloadLink = $('setAppDownloadLink');
+        const setAppIcon = $('setAppIcon');
+        const setAppVersion = $('setAppVersion');
+        const setAppDesc = $('setAppDesc');
+        const setAppShow = $('setAppShow');
+        const saveAppSettingsBtn = $('saveAppSettingsBtn');
+        const appPreviewIcon = $('appPreviewIcon');
+        const appPreviewName = $('appPreviewName');
+        const appPreviewDesc = $('appPreviewDesc');
+        const appPreviewVersion = $('appPreviewVersion');
+
         // ============================================================
         //  STATE
         // ============================================================
@@ -3700,6 +3890,12 @@
             const dt = new Date(d);
             return dt.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit',
                 minute: '2-digit' });
+        }
+
+        function formatTime(d) {
+            if (!d) return '';
+            const dt = new Date(d);
+            return dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
         }
 
         function showAlert(msg, type = 'success') {
@@ -3838,7 +4034,6 @@
         }
 
         function openMyTeam() {
-            // Show team members from referrals
             const referrals = userData.referrals || [];
             if (referrals.length === 0) {
                 openModal('<i class="fas fa-users"></i> My Team', '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No team members yet</p>');
@@ -3943,7 +4138,6 @@
             }
         });
 
-        // Back button listeners
         document.getElementById('withdrawBack')?.addEventListener('click', handleBackButton);
         document.getElementById('treasureBack')?.addEventListener('click', handleBackButton);
         document.getElementById('leaderboardBack')?.addEventListener('click', handleBackButton);
@@ -3964,7 +4158,6 @@
             if (nav) pushScreen(nav);
         }));
 
-        // FAB
         fabBtn.addEventListener('click', () => {
             quickActionsMenu.classList.toggle('hidden');
         });
@@ -4024,7 +4217,6 @@
             reader.readAsDataURL(file);
         });
 
-        // Auth Background Image Upload
         authBgImageUpload.addEventListener('click', () => authBgImageFile.click());
         authBgImageFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -4039,6 +4231,27 @@
                     `;
                 toast('Login background image uploaded!', 'success');
                 authBgLayer.style.backgroundImage = `url('${base64}')`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // ============================================================
+        //  APP ICON UPLOAD (NEW)
+        // ============================================================
+        appIconUpload.addEventListener('click', () => appIconFile.click());
+        appIconFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const base64 = ev.target.result;
+                setAppIcon.value = base64;
+                appIconUpload.innerHTML = `
+                        <img src="${base64}" alt="App Icon Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                        <div class="upload-text" style="margin-top:8px;">✅ Icon uploaded! Click to change</div>
+                    `;
+                appPreviewIcon.innerHTML = `<img src="${base64}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" />`;
+                toast('App icon uploaded!', 'success');
             };
             reader.readAsDataURL(file);
         });
@@ -4262,6 +4475,7 @@
                 loadWithdrawRequests();
                 loadInvoiceData();
                 loadAllUsers();
+                loadAppSettings();
                 screenHistory = ['home'];
                 history.replaceState({ screen: 'home' }, '', '#home');
                 showScreen('home');
@@ -4374,7 +4588,6 @@
                 vipLevel.textContent = userData.vipLevel;
                 if (data.avatar) avatarPreview.innerHTML = `<img src="${data.avatar}" alt="avatar" />`;
 
-                // Update profile name
                 displayName.textContent = userData.displayName;
                 profileName.innerHTML =
                     `<i class="fas fa-user-circle"></i> <span id="displayName">${userData.displayName}</span> <i class="fas fa-pen" style="font-size:14px;color:var(--text-muted);"></i>`;
@@ -4385,7 +4598,6 @@
                 statTotalEarn.textContent = money(totalEarn);
                 statActivePlans.textContent = plansData.length;
 
-                // Update notification count
                 const unread = userData.notifications.filter(n => !n.read);
                 notifCount.textContent = unread.length;
                 notifCount.style.display = unread.length > 0 ? 'block' : 'none';
@@ -4463,7 +4675,6 @@
                 setMaxAmount.value = data.maxInvoiceAmount || '50000';
                 setDailyIncomeRate.value = data.dailyIncomeRate || '0.5';
 
-                // Show auth bg preview
                 if (data.authBackgroundImage) {
                     authBgImageUpload.innerHTML = `
                             <img src="${data.authBackgroundImage}" alt="Auth Background Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
@@ -4513,6 +4724,86 @@
                 if (adminPanel.classList.contains('active') && document.querySelector('#tab-users .active'))
                     renderAdminUsers();
                 updateAdminStats();
+            });
+        }
+
+        // ============================================================
+        //  LOAD APP SETTINGS (NEW)
+        // ============================================================
+        function loadAppSettings() {
+            db.ref('app_settings').on('value', (snap) => {
+                const data = snap.val() || {};
+                const appName = data.appName || 'Rexroth Flow App';
+                const downloadLink = data.downloadLink || '';
+                const iconBase64 = data.iconBase64 || '';
+                const version = data.version || 'v2.1.0';
+                const desc = data.desc || 'Download our official app for better experience';
+                const show = data.show !== false;
+
+                // Update user-facing section
+                if (show) {
+                    appDownloadSection.style.display = 'block';
+                } else {
+                    appDownloadSection.style.display = 'none';
+                }
+
+                appDownloadName.textContent = appName;
+                appDownloadDesc.textContent = desc;
+                appDownloadVersion.textContent = version;
+
+                if (iconBase64) {
+                    appIconWrap.innerHTML = `<img src="${iconBase64}" alt="App Icon" style="width:100%;height:100%;object-fit:cover;" />`;
+                } else {
+                    appIconWrap.innerHTML = `<i class="fas fa-mobile-alt"></i>`;
+                }
+
+                // Set download button
+                if (downloadLink) {
+                    appDownloadBtn.onclick = () => {
+                        window.open(downloadLink, '_blank');
+                    };
+                    appDownloadBtn.style.display = 'flex';
+                } else {
+                    appDownloadBtn.onclick = () => {
+                        toast('Download link not configured by admin yet.', 'info');
+                    };
+                    appDownloadBtn.style.display = 'flex';
+                }
+
+                // Update admin form fields
+                setAppName.value = appName;
+                setAppDownloadLink.value = downloadLink;
+                setAppIcon.value = iconBase64;
+                setAppVersion.value = version;
+                setAppDesc.value = desc;
+                setAppShow.value = show ? 'true' : 'false';
+
+                // Update admin preview
+                appPreviewName.textContent = appName;
+                appPreviewDesc.textContent = desc;
+                appPreviewVersion.textContent = version;
+                if (iconBase64) {
+                    appPreviewIcon.innerHTML =
+                    `<img src="${iconBase64}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" />`;
+                } else {
+                    appPreviewIcon.innerHTML = `<i class="fas fa-mobile-alt"></i>`;
+                }
+
+                // Update upload preview if icon exists
+                if (iconBase64) {
+                    appIconUpload.innerHTML = `
+                            <img src="${iconBase64}" alt="App Icon Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                            <div class="upload-text" style="margin-top:8px;">✅ Icon uploaded! Click to change</div>
+                        `;
+                }
+
+                if (!downloadLink) {
+                    appDownloadBtn.textContent = '⚠️ No Link';
+                    appDownloadBtn.style.opacity = '0.6';
+                } else {
+                    appDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Download';
+                    appDownloadBtn.style.opacity = '1';
+                }
             });
         }
 
@@ -4568,6 +4859,16 @@
                 btn.addEventListener('click', handleInvest);
             });
             statActivePlans.textContent = plansData.length;
+
+            // Re-apply app settings visibility after render
+            db.ref('app_settings').once('value', (snap) => {
+                const data = snap.val() || {};
+                if (data.show === false) {
+                    appDownloadSection.style.display = 'none';
+                } else {
+                    appDownloadSection.style.display = 'block';
+                }
+            });
         }
 
         function handleInvest(e) {
@@ -4974,6 +5275,9 @@
             if (tab.dataset.tab === 'invoices') renderAdminInvoices();
             if (tab.dataset.tab === 'users') renderAdminUsers();
             if (tab.dataset.tab === 'dashboard') updateAdminStats();
+            if (tab.dataset.tab === 'app') {
+                loadAppSettings();
+            }
         });
 
         // ===== ADMIN: PLANS =====
@@ -5178,6 +5482,37 @@
             db.ref('treasure/' + id).remove().then(() => toast('Code deleted', 'success')).catch(e => toast('Error: ' + e
                 .message, 'error'));
         };
+
+        // ===== ADMIN: APP DOWNLOAD SETTINGS (NEW) =====
+        saveAppSettingsBtn.addEventListener('click', async () => {
+            const appName = setAppName.value.trim() || 'Rexroth Flow App';
+            const downloadLink = setAppDownloadLink.value.trim();
+            const iconBase64 = setAppIcon.value.trim();
+            const version = setAppVersion.value.trim() || 'v2.1.0';
+            const desc = setAppDesc.value.trim() || 'Download our official app for better experience';
+            const show = setAppShow.value === 'true';
+
+            if (!downloadLink) {
+                toast('Please enter a download URL', 'error');
+                return;
+            }
+
+            try {
+                await db.ref('app_settings').update({
+                    appName: appName,
+                    downloadLink: downloadLink,
+                    iconBase64: iconBase64,
+                    version: version,
+                    desc: desc,
+                    show: show,
+                    updatedAt: Date.now()
+                });
+                toast('App settings saved!', 'success');
+                loadAppSettings();
+            } catch (e) {
+                toast('Error: ' + e.message, 'error');
+            }
+        });
 
         // ===== ADMIN: SETTINGS =====
         saveSettingsBtn.addEventListener('click', async () => {
@@ -5472,7 +5807,10 @@
 
         history.replaceState({ screen: 'home' }, '', '#home');
 
-        console.log('🚀 Rexroth Flow v4.0 - Full Profile Management');
+        console.log('🚀 Rexroth Flow v4.0 - Full Profile Management + App Download');
+        console.log('✅ App Download section for users with admin-configurable link and icon');
+        console.log('✅ Admin tab: "App Download" with URL, icon upload, name, version, description');
+        console.log('✅ All users see download section on home screen');
         console.log('✅ Personal info editing (name, phone)');
         console.log('✅ Balance Record - full transaction history');
         console.log('✅ Recharge Record - all recharge requests');
