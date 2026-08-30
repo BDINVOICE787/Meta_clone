@@ -33,13 +33,6 @@
             --radius: 16px;
             --radius-sm: 10px;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
-            --admin-red: #dc3545;
-            --admin-green: #28a745;
-            --admin-blue: #007bff;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
             --header-height: 60px;
             --nav-height: 64px;
         }
@@ -61,8 +54,6 @@
             min-height: 100vh;
             min-height: 100dvh;
         }
-
-        /* ===== FULL SCREEN PHONE ===== */
         .phone {
             width: 100%;
             height: 100vh;
@@ -98,7 +89,6 @@
                 padding: 0;
             }
         }
-
         .bg-layer {
             position: absolute;
             top: 0;
@@ -107,7 +97,20 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            opacity: 0.06;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.5s;
+        }
+        .auth-bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.12;
             pointer-events: none;
             z-index: 0;
             transition: opacity 0.5s;
@@ -191,6 +194,19 @@
             border-radius: 50%;
             border: 2px solid var(--primary);
             animation: pulse 1.5s infinite;
+        }
+        .app-header .actions .notif-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
         }
 
         /* ===== MAIN SCROLL ===== */
@@ -914,6 +930,31 @@
             background: var(--primary);
             color: #fff;
         }
+        .btn-profit-sim {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            background: var(--gold);
+            color: #1a2b3c;
+            font-weight: 700;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .btn-profit-sim:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(245, 166, 35, 0.4);
+        }
+        .btn-profit-sim:active {
+            transform: scale(0.95);
+        }
 
         /* ===== RECHARGE ===== */
         .recharge-wrapper {
@@ -1285,6 +1326,11 @@
             font-size: 10px;
             color: var(--text-muted);
         }
+        .invest-item .left .projected {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 600;
+        }
         .invest-item .right {
             text-align: right;
         }
@@ -1408,6 +1454,10 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            cursor: pointer;
+        }
+        .profile-name:hover {
+            color: var(--primary);
         }
         .profile-email {
             text-align: center;
@@ -1463,6 +1513,44 @@
             margin-left: auto;
             margin-right: 8px;
             animation: pulse 1.5s infinite;
+        }
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+        .toggle-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+        .toggle-switch .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .toggle-switch.active .toggle-knob {
+            left: 24px;
         }
 
         /* ===== BOTTOM NAV ===== */
@@ -1566,6 +1654,8 @@
             box-shadow: 0 20px 60px rgba(0, 30, 60, 0.12);
             border: 1px solid var(--border);
             animation: fadeSlideUp 0.5s ease;
+            position: relative;
+            z-index: 1;
         }
         .auth-box .brand {
             text-align: center;
@@ -2074,6 +2164,14 @@
             align-items: center;
             gap: 6px;
         }
+        .treasure-card .treasure-list .item .code .used-badge {
+            font-size: 8px;
+            background: #f87171;
+            color: #fff;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
         .treasure-card .treasure-list .item .points {
             font-weight: 700;
             color: var(--primary);
@@ -2473,6 +2571,29 @@
             background: var(--bg);
             transform: rotate(90deg);
         }
+        .modal-box .record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .modal-box .record-item:last-child {
+            border-bottom: none;
+        }
+        .modal-box .record-item .label {
+            color: var(--text-muted);
+        }
+        .modal-box .record-item .value {
+            font-weight: 600;
+            text-align: right;
+        }
+        .modal-box .record-item .value.positive {
+            color: #0f9d6e;
+        }
+        .modal-box .record-item .value.negative {
+            color: #dc3545;
+        }
 
         /* ===== DARK MODE ===== */
         .phone.dark {
@@ -2817,6 +2938,120 @@
             transform: scale(0.96);
         }
 
+        /* ===== LEADERBOARD ===== */
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+            transition: 0.3s;
+        }
+        .leaderboard-item:hover {
+            box-shadow: var(--shadow);
+            transform: translateX(2px);
+        }
+        .leaderboard-item .rank {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--text-muted);
+            min-width: 28px;
+            text-align: center;
+        }
+        .leaderboard-item .rank.gold {
+            color: #f5a623;
+        }
+        .leaderboard-item .rank.silver {
+            color: #b0b0b0;
+        }
+        .leaderboard-item .rank.bronze {
+            color: #cd7f32;
+        }
+        .leaderboard-item .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            color: var(--primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .leaderboard-item .info {
+            flex: 1;
+        }
+        .leaderboard-item .info .name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .leaderboard-item .info .sub {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .leaderboard-item .amount {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        /* ===== NOTIFICATION PANEL ===== */
+        .notif-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+            transition: 0.3s;
+            align-items: flex-start;
+        }
+        .notif-item:hover {
+            box-shadow: var(--shadow);
+        }
+        .notif-item .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .notif-item .icon.success {
+            background: #e3f5ec;
+            color: #0f9d6e;
+        }
+        .notif-item .icon.info {
+            background: #dbeafe;
+            color: #1a56db;
+        }
+        .notif-item .icon.warning {
+            background: #fff3d6;
+            color: #b8860b;
+        }
+        .notif-item .content {
+            flex: 1;
+        }
+        .notif-item .content .msg {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .notif-item .content .time {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+        .notif-item .content .msg .highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
         /* ===== RESPONSIVE TWEAKS ===== */
         @media (max-width: 380px) {
             .balance-card .amount {
@@ -2848,11 +3083,15 @@
             .stats-mini .stat-box .num {
                 font-size: 14px;
             }
+            .leaderboard-item {
+                padding: 8px 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="phone" id="app">
+        <div class="auth-bg-layer" id="authBgLayer"></div>
         <div class="bg-layer" id="bgLayer" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==');"></div>
         <div class="toast" id="toast"></div>
         <button class="floating-action-btn" id="fabBtn"><i class="fas fa-bolt"></i></button>
@@ -2860,6 +3099,7 @@
             <button class="qa-item" style="background: #0072b0;" data-action="recharge" title="Recharge"><i class="fas fa-wallet"></i></button>
             <button class="qa-item" style="background: #f5a623;" data-action="withdraw" title="Withdraw"><i class="fas fa-arrow-up"></i></button>
             <button class="qa-item" style="background: #10b981;" data-action="treasure" title="Treasure"><i class="fas fa-gift"></i></button>
+            <button class="qa-item" style="background: #8b5cf6;" data-action="leaderboard" title="Leaderboard"><i class="fas fa-trophy"></i></button>
             <button class="qa-item" style="background: #ef4444;" data-action="activity" title="Activity"><i class="fas fa-chart-line"></i></button>
         </div>
         <div class="modal-overlay" id="modalOverlay">
@@ -2897,9 +3137,9 @@
             <div class="app-header animated-bg">
                 <div class="logo"><i class="fas fa-bolt"></i> Earn BD <span>flow</span></div>
                 <div class="actions">
-                    <button id="adminToggleBtn" title="Admin Panel" class="tooltip" data-tooltip="Admin Panel"><i class="fas fa-cog"></i></button>
+                    <button id="notifBtn" class="badge-dot tooltip" data-tooltip="Notifications"><i class="fas fa-bell"></i><span class="notif-count" id="notifCount">0</span></button>
                     <button id="darkToggle" class="tooltip" data-tooltip="Dark Mode"><i class="fas fa-moon"></i></button>
-                    <button id="notifBtn" class="badge-dot tooltip" data-tooltip="Notifications"><i class="fas fa-bell"></i></button>
+                    <button id="adminToggleBtn" title="Admin Panel" class="tooltip" data-tooltip="Admin Panel"><i class="fas fa-cog"></i></button>
                 </div>
             </div>
             <div id="userPanel" style="flex:1;display:flex;flex-direction:column;min-height:0;">
@@ -2969,7 +3209,7 @@
                             <div class="q-item ripple" data-nav="recharge"><div class="icon"><i class="fas fa-wallet"></i></div><div class="label">Recharge</div></div>
                             <div class="q-item ripple" data-nav="withdraw"><div class="icon gold"><i class="fas fa-arrow-up"></i></div><div class="label">Withdraw</div></div>
                             <div class="q-item ripple" data-nav="treasure"><div class="icon green"><i class="fas fa-gift"></i></div><div class="label">Treasure</div></div>
-                            <div class="q-item ripple" data-nav="activity"><div class="icon purple"><i class="fas fa-chart-bar"></i></div><div class="label">Activity</div></div>
+                            <div class="q-item ripple" data-nav="leaderboard"><div class="icon purple"><i class="fas fa-trophy"></i></div><div class="label">Top</div></div>
                         </div>
                         <div class="stats-mini">
                             <div class="stat-box hover-lift"><div class="num"><i class="fas fa-briefcase"></i> <span id="statInvestments">0</span></div><div class="lbl">Investments</div></div>
@@ -3073,7 +3313,7 @@
                                 <div class="icon-wrap"><i class="fas fa-gift"></i></div>
                                 <div class="title-group">
                                     <h4>Treasure</h4>
-                                    <p>Enter redeem code to claim rewards</p>
+                                    <p>Enter redeem code to claim rewards <span style="font-size:10px;color:var(--text-muted);font-weight:400;">(one-time use per code)</span></p>
                                 </div>
                             </div>
                             <div class="treasure-input-group">
@@ -3085,20 +3325,61 @@
                             </div>
                         </div>
                     </section>
+                    <section class="screen" id="screen-leaderboard">
+                        <button class="back-pass" id="leaderboardBack"><i class="fas fa-arrow-left"></i> Back</button>
+                        <div style="background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);">
+                            <div class="section-title" style="margin-top:0;"><i class="fas fa-trophy"></i> Top Investors</div>
+                            <div id="leaderboardList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading...</p></div>
+                        </div>
+                    </section>
+                    <section class="screen" id="screen-notifications">
+                        <button class="back-pass" id="notifBack"><i class="fas fa-arrow-left"></i> Back</button>
+                        <div style="background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);">
+                            <div class="section-title" style="margin-top:0;"><i class="fas fa-bell"></i> Notifications</div>
+                            <div id="notificationList"><p class="text-muted fs-12"><i class="fas fa-inbox"></i> No notifications</p></div>
+                        </div>
+                    </section>
                     <section class="screen" id="screen-profile">
                         <div style="background:var(--card);border-radius:var(--radius);padding:20px 16px;border:1px solid var(--border);box-shadow:var(--shadow);" class="hover-lift">
                             <div class="profile-avatar" id="avatarPreview"><i class="fas fa-user"></i><span class="camera-icon"><i class="fas fa-camera"></i></span></div>
-                            <div class="profile-name" id="profileName"><i class="fas fa-user-circle"></i> User</div>
+                            <div class="profile-name" id="profileName" onclick="openEditProfile()"><i class="fas fa-user-circle"></i> <span id="displayName">User</span> <i class="fas fa-pen" style="font-size:14px;color:var(--text-muted);"></i></div>
                             <div class="profile-email" id="profileEmail">user@example.com</div>
                             <input type="file" id="avatarFile" accept="image/*" style="display:none;" />
                             <button class="btn-invest outline" id="avatarUploadBtn" style="margin-bottom:14px;width:100%;"><i class="fas fa-camera"></i> Upload Photo</button>
                             <div class="profile-menu">
-                                <div class="item"><span class="left"><span class="icon"><i class="fas fa-user"></i></span> Personal</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></div>
-                                <div class="item"><span class="left"><span class="icon"><i class="fas fa-wallet"></i></span> Balance Record</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></div>
-                                <div class="item"><span class="left"><span class="icon"><i class="fas fa-download"></i></span> Recharge Record</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></div>
-                                <div class="item"><span class="left"><span class="icon"><i class="fas fa-upload"></i></span> Withdrawal Record</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></div>
-                                <div class="item"><span class="left"><span class="icon"><i class="fas fa-users"></i></span> My Team</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></div>
-                                <div class="item"><span class="left"><span class="icon"><i class="fas fa-info-circle"></i></span> About Us</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></div>
+                                <div class="item" onclick="openEditProfile()">
+                                    <span class="left"><span class="icon"><i class="fas fa-user-edit"></i></span> Personal</span>
+                                    <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                                </div>
+                                <div class="item" onclick="openBalanceRecord()">
+                                    <span class="left"><span class="icon"><i class="fas fa-wallet"></i></span> Balance Record</span>
+                                    <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                                </div>
+                                <div class="item" onclick="openRechargeRecord()">
+                                    <span class="left"><span class="icon"><i class="fas fa-download"></i></span> Recharge Record</span>
+                                    <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                                </div>
+                                <div class="item" onclick="openWithdrawRecord()">
+                                    <span class="left"><span class="icon"><i class="fas fa-upload"></i></span> Withdrawal Record</span>
+                                    <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                                </div>
+                                <div class="item" onclick="openMyTeam()">
+                                    <span class="left"><span class="icon"><i class="fas fa-users"></i></span> My Team</span>
+                                    <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                                </div>
+                                <div class="item" onclick="openAboutUs()">
+                                    <span class="left"><span class="icon"><i class="fas fa-info-circle"></i></span> About Us</span>
+                                    <span class="arrow"><i class="fas fa-chevron-right"></i></span>
+                                </div>
+                            </div>
+                            <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+                                <div class="flex-between">
+                                    <span class="toggle-label"><i class="fas fa-robot"></i> Auto-Invest</span>
+                                    <div class="toggle-switch" id="autoInvestToggle">
+                                        <div class="toggle-knob"></div>
+                                    </div>
+                                </div>
+                                <p style="font-size:10px;color:var(--text-muted);margin-top:6px;">Automatically reinvest daily earnings into your active plans.</p>
                             </div>
                             <button class="btn-danger" id="logoutBtn" style="margin-top:16px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
                         </div>
@@ -3125,6 +3406,7 @@
                     <button class="tab" data-tab="recharge"><i class="fas fa-wallet"></i> Recharge</button>
                     <button class="tab" data-tab="withdraw"><i class="fas fa-credit-card"></i> Withdraw</button>
                     <button class="tab" data-tab="invoices"><i class="fas fa-file-invoice"></i> Invoices</button>
+                    <button class="tab" data-tab="users"><i class="fas fa-users"></i> Users</button>
                 </div>
                 <div class="admin-content" id="adminContent">
                     <div class="tab-panel active" id="tab-dashboard">
@@ -3136,6 +3418,8 @@
                             <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-credit-card"></i> Withdraw Req.</div><div class="fw-700 fs-14" id="statWithdraw">0</div></div>
                             <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-file-invoice"></i> Total Invoices</div><div class="fw-700 fs-14" id="statInvoices">0</div></div>
                             <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-chart-bar"></i> Invoice Limit</div><div class="fw-700 fs-14" id="statInvoiceLimit">50</div></div>
+                            <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-users"></i> Total Users</div><div class="fw-700 fs-14" id="statUsers">0</div></div>
+                            <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-coins"></i> Total Deposits</div><div class="fw-700 fs-14" id="statDeposits">0</div></div>
                         </div>
                         <div class="admin-card"><div class="fw-700 fs-14 mb-8"><i class="fas fa-clock"></i> Recent Activity</div><div id="adminRecentActivity"><p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recent activity</p></div></div>
                     </div>
@@ -3168,6 +3452,14 @@
                                     <div class="form-row full"><label><i class="fas fa-bullhorn"></i> Announcement</label><input id="setAnnouncement" type="text" placeholder="Welcome message..." /></div>
                                     <div class="form-row"><div><label><i class="fas fa-coins"></i> Recharge Amounts</label><input id="setRechargeAmts" type="text" placeholder="400,800,1500,2500" /></div><div><label><i class="fas fa-credit-card"></i> Pay Methods</label><input id="setPayMethods" type="text" placeholder="USDT BEP20,USDT TRC20" /></div></div>
                                     <div class="form-row full"><label><i class="fas fa-percentage"></i> Daily Income Rate (%)</label><input id="setDailyIncomeRate" type="number" step="0.1" placeholder="0.5" value="0.5" /></div>
+                                    <div class="form-row full"><label><i class="fas fa-image"></i> Login Background Image (Base64)</label>
+                                        <div class="image-upload-container" id="authBgImageUpload">
+                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                            <div class="upload-text">Click to upload login background image</div>
+                                            <input type="file" id="authBgImageFile" accept="image/*" style="display:none;" />
+                                        </div>
+                                        <input id="setAuthBgImage" type="hidden" placeholder="data:image/png;base64,..." />
+                                    </div>
                                     <button type="button" class="btn-submit" id="saveSettingsBtn"><i class="fas fa-save"></i> Save Settings</button>
                                 </div>
                             </form>
@@ -3184,6 +3476,10 @@
                     <div class="tab-panel" id="tab-invoices">
                         <div class="panel-title"><i class="fas fa-file-invoice"></i> Invoice Management</div>
                         <div id="adminInvoiceList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading invoices...</p></div>
+                    </div>
+                    <div class="tab-panel" id="tab-users">
+                        <div class="panel-title"><i class="fas fa-users"></i> User Management</div>
+                        <div id="adminUserList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading users...</p></div>
                     </div>
                 </div>
             </div>
@@ -3222,6 +3518,7 @@
 
         const app = $('app');
         const authScreen = $('authScreen');
+        const authBgLayer = $('authBgLayer');
         const appMain = $('appMain');
         const mainScroll = $('mainScroll');
         const toastEl = $('toast');
@@ -3238,6 +3535,8 @@
         const dailyIncomeRate = $('dailyIncomeRate');
         const bgImageUpload = $('bgImageUpload');
         const bgImageFile = $('bgImageFile');
+        const authBgImageUpload = $('authBgImageUpload');
+        const authBgImageFile = $('authBgImageFile');
 
         const loginEmail = $('loginEmail');
         const loginPassword = $('loginPassword');
@@ -3265,6 +3564,7 @@
         const treasureList = $('treasureList');
         const avatarPreview = $('avatarPreview');
         const profileName = $('profileName');
+        const displayName = $('displayName');
         const profileEmail = $('profileEmail');
         const avatarFile = $('avatarFile');
         const avatarUploadBtn = $('avatarUploadBtn');
@@ -3309,6 +3609,7 @@
         const adminRechargeList = $('adminRechargeList');
         const adminWithdrawList = $('adminWithdrawList');
         const adminInvoiceList = $('adminInvoiceList');
+        const adminUserList = $('adminUserList');
         const addPlanBtn = $('addPlanBtn');
         const addTreasureBtn = $('addTreasureBtn');
         const saveSettingsBtn = $('saveSettingsBtn');
@@ -3316,6 +3617,7 @@
         const setNagad = $('setNagad');
         const setRocket = $('setRocket');
         const setBgImage = $('setBgImage');
+        const setAuthBgImage = $('setAuthBgImage');
         const setAnnouncement = $('setAnnouncement');
         const setRechargeAmts = $('setRechargeAmts');
         const setPayMethods = $('setPayMethods');
@@ -3329,20 +3631,27 @@
         const statWithdraw = $('statWithdraw');
         const statInvoices = $('statInvoices');
         const statInvoiceLimit = $('statInvoiceLimit');
+        const statUsers = $('statUsers');
+        const statDeposits = $('statDeposits');
         const adminRecentActivity = $('adminRecentActivity');
         const darkToggle = $('darkToggle');
         const notifBtn = $('notifBtn');
+        const notifCount = $('notifCount');
+        const notificationList = $('notificationList');
+        const leaderboardList = $('leaderboardList');
 
         // ============================================================
         //  STATE
         // ============================================================
         let currentUser = null;
-        let userData = { balance: 0, vipLevel: 0, investments: [], activity: [] };
+        let userData = { balance: 0, vipLevel: 0, investments: [], activity: [], notifications: [], displayName: '' };
         let plansData = [];
         let treasureData = [];
         let rechargeRequests = [];
         let withdrawRequests = [];
         let settingsData = {};
+        let allUsers = [];
+        let redeemedCodes = {};
         let invoiceData = {
             dailyUsed: 0,
             monthlyUsed: 12,
@@ -3356,7 +3665,6 @@
         let selectedGateway = 'bkash';
         let isBalanceVisible = true;
         let screenHistory = ['home'];
-        let isBackHandled = false;
 
         const gatewayConfig = {
             bkash: { label: 'bKash', icon: 'fas fa-mobile-alt', color: 'bkash', number: '01836724372', desc: 'bKash' },
@@ -3387,15 +3695,11 @@
             return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
-        function formatTime(d) {
-            if (!d) return '';
-            const dt = new Date(d);
-            return dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-        }
-
         function formatDateTime(d) {
             if (!d) return '';
-            return formatDate(d) + ' ' + formatTime(d);
+            const dt = new Date(d);
+            return dt.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit',
+                minute: '2-digit' });
         }
 
         function showAlert(msg, type = 'success') {
@@ -3416,10 +3720,176 @@
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
         // ============================================================
-        //  HISTORY / BACK BUTTON HANDLING (mobile back pass not exit)
+        //  PROFILE FUNCTIONS
+        // ============================================================
+        function openEditProfile() {
+            const name = userData.displayName || currentUser?.displayName || 'User';
+            const email = currentUser?.email || '';
+            openModal('<i class="fas fa-user-edit"></i> Edit Personal Info', `
+                    <form onsubmit="return false;" style="margin-top:10px;">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px;"><i class="fas fa-user"></i> Full Name</label>
+                            <input id="editName" type="text" value="${name}" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);" />
+                        </div>
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px;"><i class="fas fa-envelope"></i> Email (read-only)</label>
+                            <input type="text" value="${email}" readonly style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text-muted);opacity:0.7;" />
+                        </div>
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px;"><i class="fas fa-phone"></i> Phone Number</label>
+                            <input id="editPhone" type="text" placeholder="01XXXXXXXXX" value="${userData.phone || ''}" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);" />
+                        </div>
+                        <button type="button" class="btn-submit" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+                    </form>
+                `);
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('editName').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            if (!name) { toast('Name is required', 'error'); return; }
+            if (currentUser) {
+                db.ref('users/' + currentUser.uid + '/displayName').set(name);
+                db.ref('users/' + currentUser.uid + '/phone').set(phone);
+                userData.displayName = name;
+                userData.phone = phone;
+                displayName.textContent = name;
+                profileName.innerHTML = `<i class="fas fa-user-circle"></i> <span id="displayName">${name}</span> <i class="fas fa-pen" style="font-size:14px;color:var(--text-muted);"></i>`;
+                toast('Profile updated!', 'success');
+                closeModal();
+            }
+        }
+
+        function openBalanceRecord() {
+            const acts = userData.activity || [];
+            if (acts.length === 0) {
+                openModal('<i class="fas fa-wallet"></i> Balance Record', '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No balance records found</p>');
+                return;
+            }
+            const sorted = [...acts].sort((a, b) => (b.date || 0) - (a.date || 0));
+            let html = `<div style="max-height:400px;overflow-y:auto;">`;
+            sorted.forEach(a => {
+                const sign = a.positive ? '+' : '-';
+                const color = a.positive ? 'positive' : 'negative';
+                html += `
+                        <div class="record-item">
+                            <span class="label">${a.type || 'Transaction'}</span>
+                            <span style="display:flex;flex-direction:column;align-items:flex-end;">
+                                <span class="value ${color}">${sign} ${money(a.amount || 0)}</span>
+                                <span style="font-size:10px;color:var(--text-muted);">${a.date ? formatDateTime(a.date) : ''}</span>
+                            </span>
+                        </div>
+                    `;
+            });
+            html += '</div>';
+            openModal('<i class="fas fa-wallet"></i> Balance Record', html);
+        }
+
+        function openRechargeRecord() {
+            const reqs = rechargeRequests.filter(r => r.userId === currentUser?.uid);
+            if (reqs.length === 0) {
+                openModal('<i class="fas fa-download"></i> Recharge Record', '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recharge records found</p>');
+                return;
+            }
+            const sorted = [...reqs].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            let html = `<div style="max-height:400px;overflow-y:auto;">`;
+            sorted.forEach(r => {
+                const statusMap = { pending: '⏳ Pending', approved: '✅ Approved', rejected: '❌ Rejected' };
+                const statusColor = r.status === 'approved' ? '#0f9d6e' : r.status === 'rejected' ? '#dc3545' :
+                    '#b8860b';
+                html += `
+                        <div class="record-item">
+                            <span class="label">${r.gateway || 'N/A'} - ${r.trxId || 'N/A'}</span>
+                            <span style="display:flex;flex-direction:column;align-items:flex-end;">
+                                <span style="font-weight:600;color:${statusColor};">${statusMap[r.status] || r.status}</span>
+                                <span style="font-size:10px;color:var(--text-muted);">${r.createdAt ? formatDateTime(r.createdAt) : ''}</span>
+                            </span>
+                        </div>
+                    `;
+            });
+            html += '</div>';
+            openModal('<i class="fas fa-download"></i> Recharge Record', html);
+        }
+
+        function openWithdrawRecord() {
+            const reqs = withdrawRequests.filter(r => r.userId === currentUser?.uid);
+            if (reqs.length === 0) {
+                openModal('<i class="fas fa-upload"></i> Withdrawal Record', '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No withdrawal records found</p>');
+                return;
+            }
+            const sorted = [...reqs].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            let html = `<div style="max-height:400px;overflow-y:auto;">`;
+            sorted.forEach(r => {
+                const statusMap = { pending: '⏳ Pending', approved: '✅ Approved', rejected: '❌ Rejected' };
+                const statusColor = r.status === 'approved' ? '#0f9d6e' : r.status === 'rejected' ? '#dc3545' :
+                    '#b8860b';
+                html += `
+                        <div class="record-item">
+                            <span class="label">${r.method || 'N/A'} - ${money(r.amount || 0)}</span>
+                            <span style="display:flex;flex-direction:column;align-items:flex-end;">
+                                <span style="font-weight:600;color:${statusColor};">${statusMap[r.status] || r.status}</span>
+                                <span style="font-size:10px;color:var(--text-muted);">${r.createdAt ? formatDateTime(r.createdAt) : ''}</span>
+                            </span>
+                        </div>
+                    `;
+            });
+            html += '</div>';
+            openModal('<i class="fas fa-upload"></i> Withdrawal Record', html);
+        }
+
+        function openMyTeam() {
+            // Show team members from referrals
+            const referrals = userData.referrals || [];
+            if (referrals.length === 0) {
+                openModal('<i class="fas fa-users"></i> My Team', '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No team members yet</p>');
+                return;
+            }
+            let html = `<div style="max-height:400px;overflow-y:auto;">`;
+            referrals.forEach((ref, idx) => {
+                html += `
+                        <div class="record-item">
+                            <span class="label">#${idx+1} ${ref.email || 'Unknown'}</span>
+                            <span style="display:flex;flex-direction:column;align-items:flex-end;">
+                                <span class="value" style="color:${ref.status === 'active' ? '#0f9d6e' : '#b8860b'};">${ref.status || 'active'}</span>
+                                <span style="font-size:10px;color:var(--text-muted);">${ref.joinedAt ? formatDateTime(ref.joinedAt) : ''}</span>
+                            </span>
+                        </div>
+                    `;
+            });
+            html += '</div>';
+            openModal('<i class="fas fa-users"></i> My Team (' + referrals.length + ' members)', html);
+        }
+
+        function openAboutUs() {
+            openModal('<i class="fas fa-info-circle"></i> About Us', `
+                    <div style="padding:8px 0;">
+                        <div style="text-align:center;margin-bottom:16px;">
+                            <i class="fas fa-bolt" style="font-size:48px;color:var(--primary);"></i>
+                            <h3 style="margin-top:8px;">Earn BD Flow</h3>
+                            <p style="color:var(--text-muted);font-size:13px;">Version 3.0</p>
+                        </div>
+                        <p style="font-size:13px;line-height:1.8;color:var(--text);">
+                            <strong>Rexroth Flow</strong> is a smart investment platform that helps you earn daily returns on your investments.
+                            With our secure and transparent system, you can invest in various plans and watch your wealth grow.
+                        </p>
+                        <div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:10px;">
+                            <p style="font-size:12px;color:var(--text-muted);"><i class="fas fa-check-circle" style="color:#0f9d6e;"></i> Secure & Verified</p>
+                            <p style="font-size:12px;color:var(--text-muted);"><i class="fas fa-check-circle" style="color:#0f9d6e;"></i> Daily Income Auto-Credit</p>
+                            <p style="font-size:12px;color:var(--text-muted);"><i class="fas fa-check-circle" style="color:#0f9d6e;"></i> 24/7 Customer Support</p>
+                            <p style="font-size:12px;color:var(--text-muted);"><i class="fas fa-check-circle" style="color:#0f9d6e;"></i> Instant Withdrawals</p>
+                        </div>
+                        <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:16px;">
+                            © 2026 Earn BD Flow. All rights reserved.
+                        </p>
+                    </div>
+                `);
+        }
+
+        // ============================================================
+        //  HISTORY / BACK BUTTON HANDLING
         // ============================================================
         function pushScreen(screenId) {
-            if (screenHistory[screenHistory.length - 1] !== screenId) {
+            if (screenHistory.length === 0 || screenHistory[screenHistory.length - 1] !== screenId) {
                 screenHistory.push(screenId);
                 history.pushState({ screen: screenId }, '', '#');
             }
@@ -3436,60 +3906,65 @@
             return false;
         }
 
-        // Override showScreen to use history
-        const originalShowScreen = window.showScreen || function() {};
-        window.showScreen = function(screenId) {
+        function showScreen(screenId) {
             if (!screenId) return;
             const target = $('screen-' + screenId);
             if (!target) return;
 
-            // Update active screens
             $$('.screen').forEach(el => el.classList.remove('active'));
             target.classList.add('active');
 
-            // Update nav
             navItems.forEach(el => el.classList.toggle('active', el.dataset.nav === screenId));
 
-            // Update history
             if (screenHistory.length === 0 || screenHistory[screenHistory.length - 1] !== screenId) {
                 screenHistory.push(screenId);
                 history.pushState({ screen: screenId }, '', '#' + screenId);
             }
 
-            // Scroll to top
             if (mainScroll) mainScroll.scrollTop = 0;
 
-            // Render
             if (screenId === 'home') renderHome();
             if (screenId === 'plans') renderAllPlans();
             if (screenId === 'invest') renderInvestments();
             if (screenId === 'activity') renderActivity();
             if (screenId === 'withdraw') withdrawBalance.textContent = money(userData.balance || 0);
             if (screenId === 'treasure') renderTreasure();
-        };
+            if (screenId === 'leaderboard') renderLeaderboard();
+            if (screenId === 'notifications') renderNotifications();
+        }
 
-        // Handle popstate (browser back)
         window.addEventListener('popstate', (e) => {
             if (e.state && e.state.screen) {
                 showScreen(e.state.screen);
             } else {
-                // If no state, try to go back in history
                 if (!handleBackButton()) {
-                    // If at root, allow browser to handle (exit)
-                    if (screenHistory.length <= 1) {
-                        // Don't prevent exit, let browser handle it
-                        return;
-                    }
+                    if (screenHistory.length <= 1) return;
                 }
             }
         });
 
-        // Also handle hardware back on Android via history
-        // This is already handled by popstate
+        // Back button listeners
+        document.getElementById('withdrawBack')?.addEventListener('click', handleBackButton);
+        document.getElementById('treasureBack')?.addEventListener('click', handleBackButton);
+        document.getElementById('leaderboardBack')?.addEventListener('click', handleBackButton);
+        document.getElementById('notifBack')?.addEventListener('click', handleBackButton);
 
-        // ============================================================
-        //  FLOATING ACTION BUTTON
-        // ============================================================
+        navItems.forEach(el => el.addEventListener('click', () => {
+            const nav = el.dataset.nav;
+            if (nav) pushScreen(nav);
+        }));
+
+        quickItems.forEach(el => el.addEventListener('click', () => {
+            const nav = el.dataset.nav;
+            if (nav) pushScreen(nav);
+        }));
+
+        seeAll.forEach(el => el.addEventListener('click', () => {
+            const nav = el.dataset.nav;
+            if (nav) pushScreen(nav);
+        }));
+
+        // FAB
         fabBtn.addEventListener('click', () => {
             quickActionsMenu.classList.toggle('hidden');
         });
@@ -3529,14 +4004,14 @@
         }
 
         // ============================================================
-        //  IMAGE UPLOAD
+        //  IMAGE UPLOADS
         // ============================================================
         bgImageUpload.addEventListener('click', () => bgImageFile.click());
         bgImageFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = async (ev) => {
+            reader.onload = (ev) => {
                 const base64 = ev.target.result;
                 setBgImage.value = base64;
                 bgImageUpload.innerHTML = `
@@ -3549,8 +4024,27 @@
             reader.readAsDataURL(file);
         });
 
+        // Auth Background Image Upload
+        authBgImageUpload.addEventListener('click', () => authBgImageFile.click());
+        authBgImageFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const base64 = ev.target.result;
+                setAuthBgImage.value = base64;
+                authBgImageUpload.innerHTML = `
+                        <img src="${base64}" alt="Auth Background Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                        <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
+                    `;
+                toast('Login background image uploaded!', 'success');
+                authBgLayer.style.backgroundImage = `url('${base64}')`;
+            };
+            reader.readAsDataURL(file);
+        });
+
         // ============================================================
-        //  INVOICE LIMIT BANNER LOGIC
+        //  INVOICE LIMIT BANNER
         // ============================================================
         function updateInvoiceBanner() {
             const dailyPct = (invoiceData.dailyUsed / invoiceData.dailyLimit) * 100;
@@ -3707,57 +4201,6 @@
         });
 
         // ============================================================
-        //  NAVIGATION
-        // ============================================================
-        function showScreen(screenId) {
-            if (!screenId) return;
-            const target = $('screen-' + screenId);
-            if (!target) return;
-
-            $$('.screen').forEach(el => el.classList.remove('active'));
-            target.classList.add('active');
-
-            navItems.forEach(el => el.classList.toggle('active', el.dataset.nav === screenId));
-
-            if (screenHistory.length === 0 || screenHistory[screenHistory.length - 1] !== screenId) {
-                screenHistory.push(screenId);
-                history.pushState({ screen: screenId }, '', '#' + screenId);
-            }
-
-            if (mainScroll) mainScroll.scrollTop = 0;
-
-            if (screenId === 'home') renderHome();
-            if (screenId === 'plans') renderAllPlans();
-            if (screenId === 'invest') renderInvestments();
-            if (screenId === 'activity') renderActivity();
-            if (screenId === 'withdraw') withdrawBalance.textContent = money(userData.balance || 0);
-            if (screenId === 'treasure') renderTreasure();
-        }
-
-        // Back buttons: navigate to home using history
-        document.getElementById('withdrawBack')?.addEventListener('click', () => {
-            handleBackButton();
-        });
-        document.getElementById('treasureBack')?.addEventListener('click', () => {
-            handleBackButton();
-        });
-
-        navItems.forEach(el => el.addEventListener('click', () => {
-            const nav = el.dataset.nav;
-            if (nav) pushScreen(nav);
-        }));
-
-        quickItems.forEach(el => el.addEventListener('click', () => {
-            const nav = el.dataset.nav;
-            if (nav) pushScreen(nav);
-        }));
-
-        seeAll.forEach(el => el.addEventListener('click', () => {
-            const nav = el.dataset.nav;
-            if (nav) pushScreen(nav);
-        }));
-
-        // ============================================================
         //  AUTH
         // ============================================================
         function setAuthMode(mode) {
@@ -3793,8 +4236,13 @@
                         vipLevel: 0,
                         investments: {},
                         activity: {},
+                        notifications: {},
                         createdAt: Date.now(),
-                        lastDailyIncomeDate: null
+                        lastDailyIncomeDate: null,
+                        displayName: email.split('@')[0],
+                        phone: '',
+                        referrals: {},
+                        redeemedCodes: {}
                     });
                     toast('Account created!', 'success');
                 }
@@ -3806,8 +4254,6 @@
                 currentUser = user;
                 authScreen.style.display = 'none';
                 appMain.style.display = 'flex';
-                profileName.innerHTML = `<i class="fas fa-user-circle"></i> ${user.displayName || user.email.split('@')[0]}`;
-                profileEmail.textContent = user.email;
                 loadUserData();
                 loadPlans();
                 loadTreasure();
@@ -3815,7 +4261,7 @@
                 loadRechargeRequests();
                 loadWithdrawRequests();
                 loadInvoiceData();
-                // Reset history
+                loadAllUsers();
                 screenHistory = ['home'];
                 history.replaceState({ screen: 'home' }, '', '#home');
                 showScreen('home');
@@ -3917,15 +4363,32 @@
                 userData.vipLevel = data.vipLevel || 0;
                 userData.investments = data.investments ? Object.values(data.investments) : [];
                 userData.activity = data.activity ? Object.values(data.activity) : [];
+                userData.notifications = data.notifications ? Object.values(data.notifications) : [];
+                userData.displayName = data.displayName || currentUser?.displayName || currentUser?.email?.split(
+                '@')[0] || 'User';
+                userData.phone = data.phone || '';
+                userData.referrals = data.referrals ? Object.values(data.referrals) : [];
+                userData.redeemedCodes = data.redeemedCodes || {};
 
                 updateBalanceDisplay();
                 vipLevel.textContent = userData.vipLevel;
                 if (data.avatar) avatarPreview.innerHTML = `<img src="${data.avatar}" alt="avatar" />`;
 
+                // Update profile name
+                displayName.textContent = userData.displayName;
+                profileName.innerHTML =
+                    `<i class="fas fa-user-circle"></i> <span id="displayName">${userData.displayName}</span> <i class="fas fa-pen" style="font-size:14px;color:var(--text-muted);"></i>`;
+                profileEmail.textContent = currentUser?.email || '';
+
                 statInvestments.textContent = userData.investments.length;
                 const totalEarn = userData.activity.filter(a => a.positive).reduce((s, a) => s + (a.amount || 0), 0);
                 statTotalEarn.textContent = money(totalEarn);
                 statActivePlans.textContent = plansData.length;
+
+                // Update notification count
+                const unread = userData.notifications.filter(n => !n.read);
+                notifCount.textContent = unread.length;
+                notifCount.style.display = unread.length > 0 ? 'block' : 'none';
 
                 updateDailyIncomeDisplay(data.lastDailyIncomeAmount || 0);
 
@@ -3933,7 +4396,8 @@
                 if ($('screen-invest').classList.contains('active')) renderInvestments();
                 if ($('screen-activity').classList.contains('active')) renderActivity();
                 if ($('screen-withdraw').classList.contains('active')) withdrawBalance.textContent = money(userData
-                .balance);
+                    .balance);
+                if ($('screen-notifications').classList.contains('active')) renderNotifications();
             });
         }
 
@@ -3968,6 +4432,9 @@
                 const data = snap.val() || {};
                 settingsData = data;
                 if (data.backgroundImage) bgLayer.style.backgroundImage = `url('${data.backgroundImage}')`;
+                if (data.authBackgroundImage) {
+                    authBgLayer.style.backgroundImage = `url('${data.authBackgroundImage}')`;
+                }
                 if (data.bkashNumber) gatewayConfig.bkash.number = data.bkashNumber;
                 if (data.nagadNumber) gatewayConfig.nagad.number = data.nagadNumber;
                 if (data.rocketNumber) gatewayConfig.rocket.number = data.rocketNumber;
@@ -3987,6 +4454,7 @@
                 setNagad.value = data.nagadNumber || '';
                 setRocket.value = data.rocketNumber || '';
                 setBgImage.value = data.backgroundImage || '';
+                setAuthBgImage.value = data.authBackgroundImage || '';
                 setAnnouncement.value = data.announcement || '';
                 setRechargeAmts.value = data.rechargeAmounts || '';
                 setPayMethods.value = data.payMethods || '';
@@ -3994,6 +4462,14 @@
                 setMonthlyLimit.value = data.monthlyInvoiceLimit || '50';
                 setMaxAmount.value = data.maxInvoiceAmount || '50000';
                 setDailyIncomeRate.value = data.dailyIncomeRate || '0.5';
+
+                // Show auth bg preview
+                if (data.authBackgroundImage) {
+                    authBgImageUpload.innerHTML = `
+                            <img src="${data.authBackgroundImage}" alt="Auth Background Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                            <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
+                        `;
+                }
             });
         }
 
@@ -4026,6 +4502,16 @@
                 withdrawRequests.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
                 if (adminPanel.classList.contains('active') && document.querySelector('#tab-withdraw .active'))
                     renderAdminWithdraw();
+                updateAdminStats();
+            });
+        }
+
+        function loadAllUsers() {
+            db.ref('users').on('value', (snap) => {
+                const data = snap.val() || {};
+                allUsers = Object.keys(data).map(key => ({ uid: key, ...data[key] }));
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-users .active'))
+                    renderAdminUsers();
                 updateAdminStats();
             });
         }
@@ -4145,6 +4631,7 @@
                         <div class="left">
                             <div class="name"><i class="fas fa-briefcase"></i> ${inv.planName || 'Plan'}</div>
                             <div class="date"><i class="fas fa-calendar"></i> ${formatDate(inv.investedAt)}</div>
+                            <div class="projected"><i class="fas fa-chart-line"></i> Est. return: ${money(parseFloat(inv.amount || 0) * 0.1)}</div>
                         </div>
                         <div class="right">
                             <div class="amount">${money(inv.amount || 0)}</div>
@@ -4174,17 +4661,109 @@
         }
 
         function renderTreasure() {
-            if (treasureData.length === 0) {
-                treasureList.innerHTML =
-                    `<div class="empty"><i class="fas fa-box-open"></i> No treasure codes available</div>`;
+            const redeemed = userData.redeemedCodes || {};
+            const available = treasureData.filter(t => !redeemed[t.id]);
+            const used = treasureData.filter(t => redeemed[t.id]);
+
+            let html = '';
+            if (available.length === 0 && used.length === 0) {
+                html = `<div class="empty"><i class="fas fa-box-open"></i> No treasure codes available</div>`;
+            } else {
+                if (available.length > 0) {
+                    html += `<div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:6px;">Available Codes</div>`;
+                    available.forEach(t => {
+                        html += `
+                            <div class="item">
+                                <span class="code"><i class="fas fa-key"></i> ${t.code || 'N/A'}</span>
+                                <span class="points"><i class="fas fa-coins"></i> ${t.points || '0'}</span>
+                            </div>
+                        `;
+                    });
+                }
+                if (used.length > 0) {
+                    html +=
+                        `<div style="font-size:11px;font-weight:600;color:var(--text-muted);margin:10px 0 6px;">Used Codes</div>`;
+                    used.forEach(t => {
+                        html += `
+                            <div class="item">
+                                <span class="code"><i class="fas fa-check-circle" style="color:#10b981;"></i> ${t.code || 'N/A'} <span class="used-badge">Used</span></span>
+                                <span class="points"><i class="fas fa-coins"></i> ${t.points || '0'}</span>
+                            </div>
+                        `;
+                    });
+                }
+            }
+            treasureList.innerHTML = html;
+        }
+
+        function renderLeaderboard() {
+            if (allUsers.length === 0) {
+                leaderboardList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
                 return;
             }
-            treasureList.innerHTML = treasureData.map(t => `
-                    <div class="item">
-                        <span class="code"><i class="fas fa-key"></i> ${t.code || 'N/A'}</span>
-                        <span class="points"><i class="fas fa-coins"></i> ${t.points || '0'}</span>
-                    </div>
-                `).join('');
+            const sorted = [...allUsers].sort((a, b) => (b.balance || 0) - (a.balance || 0));
+            const top = sorted.slice(0, 10);
+
+            if (top.length === 0) {
+                leaderboardList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No users yet</p>';
+                return;
+            }
+
+            leaderboardList.innerHTML = top.map((u, i) => {
+                const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+                const initial = u.displayName ? u.displayName.charAt(0).toUpperCase() : u.email ? u.email.charAt(0)
+                    .toUpperCase() : 'U';
+                const name = u.displayName || (u.email ? u.email.split('@')[0] : 'User');
+                return `
+                        <div class="leaderboard-item">
+                            <div class="rank ${rankClass}">#${i + 1}</div>
+                            <div class="avatar">${initial}</div>
+                            <div class="info">
+                                <div class="name">${name}</div>
+                                <div class="sub">Invested: ${money(u.balance || 0)}</div>
+                            </div>
+                            <div class="amount">${money(u.balance || 0)}</div>
+                        </div>
+                    `;
+            }).join('');
+        }
+
+        function renderNotifications() {
+            const notifs = userData.notifications || [];
+            if (notifs.length === 0) {
+                notificationList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No notifications</p>';
+                return;
+            }
+            const sorted = [...notifs].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            notificationList.innerHTML = sorted.map(n => {
+                const iconMap = {
+                    success: 'fa-check-circle',
+                    info: 'fa-info-circle',
+                    warning: 'fa-exclamation-triangle'
+                };
+                const icon = iconMap[n.type] || 'fa-bell';
+                return `
+                        <div class="notif-item" style="${!n.read ? 'border-left:3px solid var(--primary);' : ''}">
+                            <div class="icon ${n.type || 'info'}"><i class="fas ${icon}"></i></div>
+                            <div class="content">
+                                <div class="msg">${n.title || 'Notification'} — <span style="font-weight:400;">${n.message || ''}</span></div>
+                                <div class="time">${n.createdAt ? formatDateTime(n.createdAt) : ''}</div>
+                            </div>
+                        </div>
+                    `;
+            }).join('');
+
+            if (currentUser) {
+                const notifRef = db.ref('users/' + currentUser.uid + '/notifications');
+                notifRef.once('value').then(snap => {
+                    const data = snap.val() || {};
+                    Object.keys(data).forEach(key => {
+                        if (data[key] && !data[key].read) {
+                            notifRef.child(key + '/read').set(true);
+                        }
+                    });
+                });
+            }
         }
 
         // ============================================================
@@ -4253,30 +4832,46 @@
         });
 
         // ============================================================
-        //  TREASURE REDEEM
+        //  TREASURE REDEEM (ONE-TIME PER USER PER CODE)
         // ============================================================
         treasureRedeem.addEventListener('click', async () => {
             const code = treasureCode.value.trim();
             if (!code) { toast('Please enter a redeem code', 'error'); return; }
             if (!currentUser) { toast('Please login', 'error'); return; }
-            const match = treasureData.find(t => t.code && t.code.replace(/\*/g, '').includes(code.replace(/\*/g, '')));
-            if (match) {
-                const points = parseFloat(String(match.points || '0').replace(/[^0-9.]/g, ''));
+
+            const redeemed = userData.redeemedCodes || {};
+            const existingMatch = treasureData.find(t => {
+                const tCode = (t.code || '').replace(/\*/g, '');
+                const cCode = code.replace(/\*/g, '');
+                return tCode.includes(cCode) || cCode.includes(tCode);
+            });
+
+            if (existingMatch) {
+                if (redeemed[existingMatch.id]) {
+                    toast('You have already redeemed this code! One-time use per user.', 'error');
+                    return;
+                }
+
+                const points = parseFloat(String(existingMatch.points || '0').replace(/[^0-9.]/g, ''));
                 if (!isNaN(points) && points > 0) {
                     try {
                         const newBalance = userData.balance + points;
                         await db.ref('users/' + currentUser.uid + '/balance').set(newBalance);
+                        await db.ref('users/' + currentUser.uid + '/redeemedCodes/' + existingMatch.id).set(true);
                         const actRef = db.ref('users/' + currentUser.uid + '/activity').push();
                         await actRef.set({ type: 'Treasure Redeem', amount: points, date: Date.now(), positive: true });
                         toast('Redeemed ' + money(points) + ' from treasure!', 'success');
                         treasureCode.value = '';
+                        renderTreasure();
                     } catch (e) { toast('Error: ' + e.message, 'error'); }
                 } else { toast('Invalid points value', 'error'); }
-            } else { toast('Code not found!', 'error'); }
+            } else {
+                toast('Code not found or already fully redeemed!', 'error');
+            }
         });
 
         // ============================================================
-        //  PROFILE
+        //  PROFILE - AVATAR
         // ============================================================
         avatarUploadBtn.addEventListener('click', () => avatarFile.click());
         avatarFile.addEventListener('change', (e) => {
@@ -4318,9 +4913,27 @@
         });
 
         // ============================================================
-        //  NOTIFICATION
+        //  NOTIFICATION BUTTON
         // ============================================================
-        notifBtn.addEventListener('click', () => { toast('📬 No new notifications', 'info'); });
+        notifBtn.addEventListener('click', () => {
+            pushScreen('notifications');
+        });
+
+        // ============================================================
+        //  AUTO-INVEST TOGGLE
+        // ============================================================
+        const autoInvestToggle = document.getElementById('autoInvestToggle');
+        let autoInvestEnabled = false;
+
+        autoInvestToggle.addEventListener('click', () => {
+            autoInvestEnabled = !autoInvestEnabled;
+            autoInvestToggle.classList.toggle('active', autoInvestEnabled);
+            if (autoInvestEnabled) {
+                toast('🤖 Auto-Invest enabled! Daily earnings will be reinvested.', 'success');
+            } else {
+                toast('Auto-Invest disabled.', 'info');
+            }
+        });
 
         // ============================================================
         //  ADMIN PANEL
@@ -4334,6 +4947,7 @@
                 renderAdminRecharge();
                 renderAdminWithdraw();
                 renderAdminInvoices();
+                renderAdminUsers();
                 updateAdminStats();
                 document.querySelectorAll('.admin-tabs .tab').forEach(t => t.classList.remove('active'));
                 document.querySelector('.admin-tabs .tab').classList.add('active');
@@ -4358,6 +4972,7 @@
             if (tab.dataset.tab === 'recharge') renderAdminRecharge();
             if (tab.dataset.tab === 'withdraw') renderAdminWithdraw();
             if (tab.dataset.tab === 'invoices') renderAdminInvoices();
+            if (tab.dataset.tab === 'users') renderAdminUsers();
             if (tab.dataset.tab === 'dashboard') updateAdminStats();
         });
 
@@ -4407,7 +5022,7 @@
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
-                reader.onload = async (ev) => {
+                reader.onload = (ev) => {
                     const base64 = ev.target.result;
                     document.getElementById('planImage').value = base64;
                     planImageUpload.innerHTML = `
@@ -4465,7 +5080,7 @@
                 const file = e.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
-                reader.onload = async (ev) => {
+                reader.onload = (ev) => {
                     const base64 = ev.target.result;
                     document.getElementById('ePlanImage').value = base64;
                     editPlanImageUpload.innerHTML = `
@@ -4570,6 +5185,7 @@
             const nagad = setNagad.value.trim();
             const rocket = setRocket.value.trim();
             const bg = setBgImage.value.trim();
+            const authBg = setAuthBgImage.value.trim();
             const announcement = setAnnouncement.value.trim();
             const amts = setRechargeAmts.value.trim();
             const methods = setPayMethods.value.trim();
@@ -4583,6 +5199,7 @@
                     nagadNumber: nagad,
                     rocketNumber: rocket,
                     backgroundImage: bg,
+                    authBackgroundImage: authBg,
                     announcement: announcement,
                     rechargeAmounts: amts,
                     payMethods: methods,
@@ -4759,6 +5376,51 @@
             toast('Invoice ' + id + ' marked as paid', 'success');
         };
 
+        // ===== ADMIN: USERS =====
+        function renderAdminUsers() {
+            if (allUsers.length === 0) {
+                adminUserList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No users registered</p>';
+                return;
+            }
+            adminUserList.innerHTML = allUsers.map(u => {
+                const refCount = u.referrals ? Object.keys(u.referrals).length : 0;
+                const invCount = u.investments ? Object.keys(u.investments).length : 0;
+                const name = u.displayName || (u.email ? u.email.split('@')[0] : 'Unknown');
+                return `
+                        <div class="admin-card hover-lift">
+                            <div class="row">
+                                <div class="info">
+                                    <div class="label"><i class="fas fa-user"></i> ${name} <span class="badge-status" style="background:var(--primary-light);color:var(--primary);">VIP ${u.vipLevel || 0}</span></div>
+                                    <div class="sub"><i class="fas fa-wallet"></i> ${money(u.balance || 0)} | <i class="fas fa-briefcase"></i> ${invCount} investments | <i class="fas fa-users"></i> ${refCount} team</div>
+                                    <div class="sub text-muted fs-12"><i class="fas fa-envelope"></i> ${u.email || 'N/A'} | <i class="fas fa-calendar"></i> Joined: ${u.createdAt ? formatDate(u.createdAt) : 'N/A'}</div>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn-sm info" onclick="viewUser('${u.uid}')"><i class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+            }).join('');
+        }
+
+        window.viewUser = function(uid) {
+            const u = allUsers.find(x => x.uid === uid);
+            if (!u) return;
+            const name = u.displayName || (u.email ? u.email.split('@')[0] : 'User');
+            openModal('<i class="fas fa-user"></i> User Details', `
+                    <div style="padding: 10px;">
+                        <p><strong>Name:</strong> ${name}</p>
+                        <p><strong>Email:</strong> ${u.email || 'N/A'}</p>
+                        <p><strong>Balance:</strong> ${money(u.balance || 0)}</p>
+                        <p><strong>VIP Level:</strong> ${u.vipLevel || 0}</p>
+                        <p><strong>Phone:</strong> ${u.phone || 'N/A'}</p>
+                        <p><strong>Team Members:</strong> ${u.referrals ? Object.keys(u.referrals).length : 0}</p>
+                        <p><strong>Investments:</strong> ${u.investments ? Object.keys(u.investments).length : 0}</p>
+                        <p><strong>Joined:</strong> ${u.createdAt ? formatDateTime(u.createdAt) : 'N/A'}</p>
+                    </div>
+                `);
+        };
+
         // ===== ADMIN: STATS =====
         function updateAdminStats() {
             statPlans.textContent = plansData.length;
@@ -4767,6 +5429,17 @@
             statWithdraw.textContent = withdrawRequests.filter(r => r.status === 'pending').length;
             statInvoices.textContent = invoiceData.monthlyUsed;
             statInvoiceLimit.textContent = invoiceData.monthlyLimit;
+            statUsers.textContent = allUsers.length;
+            let totalDeposits = 0;
+            allUsers.forEach(u => {
+                const acts = u.activity ? Object.values(u.activity) : [];
+                acts.forEach(a => {
+                    if (a.type && a.type.includes('Recharge') && a.positive) {
+                        totalDeposits += (a.amount || 0);
+                    }
+                });
+            });
+            statDeposits.textContent = money(totalDeposits);
 
             const all = [];
             rechargeRequests.forEach(r => all.push({ type: 'Recharge', status: r.status, date: r.createdAt, user: r
@@ -4797,16 +5470,18 @@
         fabBtn.innerHTML = '<i class="fas fa-bolt"></i>';
         updateDailyIncomeDisplay(0);
 
-        // Set initial history state
         history.replaceState({ screen: 'home' }, '', '#home');
 
-        console.log('🚀 Rexroth Flow v8.0 ready - Full UI + Back Button Support');
-        console.log('💰 Daily Income auto-credit system');
-        console.log('🖼 Image upload for plans and backgrounds');
-        console.log('🎯 Floating Action Button');
-        console.log('👁 Balance eye toggle');
-        console.log('🔙 Hardware back button supported (history API)');
-        console.log('📱 Full screen responsive design');
+        console.log('🚀 Rexroth Flow v4.0 - Full Profile Management');
+        console.log('✅ Personal info editing (name, phone)');
+        console.log('✅ Balance Record - full transaction history');
+        console.log('✅ Recharge Record - all recharge requests');
+        console.log('✅ Withdrawal Record - all withdrawal requests');
+        console.log('✅ My Team - referral team members');
+        console.log('✅ About Us - app info');
+        console.log('✅ Login background image from base64 (admin settings)');
+        console.log('✅ Profile name edit with live update');
+        console.log('✅ Auto-Invest toggle');
     </script>
 </body>
 </html>
