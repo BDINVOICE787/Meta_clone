@@ -12,6 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         :root {
             --primary: #0072b0;
@@ -28,7 +29,7 @@
             --text: #1a2b3c;
             --text-muted: #6b7f8f;
             --border: #e2ebf2;
-            --shadow: 0 4px 20px rgba(0, 50, 90, 0.08);
+            --shadow: 0 8px 32px rgba(0, 50, 90, 0.08);
             --radius: 16px;
             --radius-sm: 10px;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -39,31 +40,65 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
+            --header-height: 60px;
+            --nav-height: 64px;
         }
+        html,
         body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: #dce5ed;
+            color: var(--text);
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             margin: 0;
-            padding: 12px;
+            padding: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
         }
+
+        /* ===== FULL SCREEN PHONE ===== */
         .phone {
             width: 100%;
-            max-width: 400px;
-            min-height: 780px;
+            height: 100vh;
+            height: 100dvh;
+            max-width: 480px;
             background: var(--bg);
-            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 30, 60, 0.20);
+            box-shadow: 0 0 80px rgba(0, 30, 60, 0.15);
             position: relative;
             display: flex;
             flex-direction: column;
-            height: 820px;
-            max-height: 95vh;
+            transition: background 0.3s;
         }
+        @media (min-width: 520px) {
+            .phone {
+                border-radius: 32px;
+                height: 92vh;
+                max-height: 900px;
+                box-shadow: 0 30px 80px rgba(0, 30, 60, 0.25);
+            }
+            body {
+                padding: 12px;
+            }
+        }
+        @media (max-width: 519px) {
+            .phone {
+                border-radius: 0;
+                max-width: 100%;
+                height: 100vh;
+                height: 100dvh;
+            }
+            body {
+                padding: 0;
+            }
+        }
+
         .bg-layer {
             position: absolute;
             top: 0;
@@ -75,19 +110,20 @@
             opacity: 0.06;
             pointer-events: none;
             z-index: 0;
+            transition: opacity 0.5s;
         }
 
         /* ===== HEADER ===== */
         .app-header {
             background: var(--primary-gradient);
-            padding: 14px 18px;
+            padding: 10px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
             position: relative;
             z-index: 2;
-            min-height: 56px;
+            min-height: var(--header-height);
         }
         .app-header .logo {
             display: flex;
@@ -103,13 +139,18 @@
             animation: logoPulse 2s infinite;
         }
         @keyframes logoPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1) rotate(-3deg);
+            }
         }
         .app-header .logo span {
             color: rgba(255, 255, 255, 0.7);
             font-weight: 400;
-            font-size: 14px;
+            font-size: 13px;
             margin-left: 2px;
         }
         .app-header .actions {
@@ -120,37 +161,43 @@
         .app-header .actions button {
             background: rgba(255, 255, 255, 0.15);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             color: #fff;
-            width: 34px;
-            height: 34px;
-            font-size: 14px;
+            width: 36px;
+            height: 36px;
+            font-size: 15px;
             cursor: pointer;
             display: grid;
             place-items: center;
-            transition: 0.15s;
+            transition: 0.2s;
             position: relative;
+            backdrop-filter: blur(4px);
         }
         .app-header .actions button:hover {
             background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+        .app-header .actions button:active {
+            transform: scale(0.92);
         }
         .app-header .actions .badge-dot::after {
             content: '';
             position: absolute;
-            top: 4px;
-            right: 4px;
+            top: 6px;
+            right: 6px;
             width: 8px;
             height: 8px;
             background: #ff6b6b;
             border-radius: 50%;
             border: 2px solid var(--primary);
+            animation: pulse 1.5s infinite;
         }
 
         /* ===== MAIN SCROLL ===== */
         .main-scroll {
             flex: 1;
             overflow-y: auto;
-            padding: 14px 14px 80px;
+            padding: 12px 14px calc(12px + var(--nav-height));
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
             z-index: 2;
@@ -165,19 +212,19 @@
         }
         .screen {
             display: none;
-            animation: fadeUp 0.3s ease;
+            animation: fadeSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .screen.active {
             display: block;
         }
-        @keyframes fadeUp {
+        @keyframes fadeSlideUp {
             0% {
                 opacity: 0;
-                transform: translateY(12px);
+                transform: translateY(16px) scale(0.98);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -186,12 +233,12 @@
             background: linear-gradient(135deg, #10b981, #059669);
             border-radius: var(--radius-sm);
             padding: 12px 16px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             color: #fff;
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
             animation: slideInDown 0.5s ease-out;
             position: relative;
             overflow: hidden;
@@ -204,7 +251,7 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
         }
         .daily-income-banner .icon {
             font-size: 24px;
@@ -230,6 +277,26 @@
             font-size: 20px;
             position: relative;
             z-index: 1;
+            animation: pulse 2s infinite;
+        }
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         /* ===== INVOICE LIMIT BANNER ===== */
@@ -238,11 +305,12 @@
             border: 1px solid #f5c518;
             border-radius: 12px;
             padding: 16px 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(245, 197, 24, 0.15);
+            margin-bottom: 14px;
+            box-shadow: 0 2px 12px rgba(245, 197, 24, 0.15);
             position: relative;
             overflow: hidden;
             animation: slideInDown 0.5s ease-out;
+            transition: all 0.3s;
         }
         .invoice-limit-banner::before {
             content: '';
@@ -256,7 +324,7 @@
         .invoice-limit-banner.dark-mode {
             background: linear-gradient(135deg, #2a1f00, #1a1500);
             border-color: #f5c518;
-            box-shadow: 0 2px 8px rgba(245, 197, 24, 0.2);
+            box-shadow: 0 2px 12px rgba(245, 197, 24, 0.2);
         }
         .invoice-limit-banner .banner-header {
             display: flex;
@@ -297,10 +365,16 @@
             color: #999;
             cursor: pointer;
             padding: 4px;
-            transition: 0.2s;
+            transition: 0.3s;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
         }
         .invoice-limit-banner .close-banner:hover {
             color: #333;
+            background: rgba(0, 0, 0, 0.05);
             transform: rotate(90deg);
         }
         .invoice-limit-banner .limit-info {
@@ -315,6 +389,11 @@
             padding: 10px;
             text-align: center;
             border: 1px solid rgba(245, 197, 24, 0.3);
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .invoice-limit-banner .limit-item:hover {
+            transform: translateY(-2px);
         }
         .invoice-limit-banner .limit-item .limit-value {
             font-size: 16px;
@@ -337,7 +416,7 @@
             color: #ff9800;
         }
         .invoice-limit-banner .limit-progress {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         .invoice-limit-banner .progress-bar {
             width: 100%;
@@ -350,7 +429,7 @@
         .invoice-limit-banner .progress-fill {
             height: 100%;
             border-radius: 4px;
-            transition: width 0.5s ease;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
             background: linear-gradient(90deg, #4caf50, #8bc34a);
         }
         .invoice-limit-banner .progress-fill.warning {
@@ -378,7 +457,12 @@
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
         .invoice-limit-banner .banner-btn.primary {
             background: linear-gradient(135deg, #f5c518, #ff9800);
@@ -386,7 +470,7 @@
         }
         .invoice-limit-banner .banner-btn.primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 197, 24, 0.4);
+            box-shadow: 0 4px 16px rgba(245, 197, 24, 0.4);
         }
         .invoice-limit-banner .banner-btn.secondary {
             background: transparent;
@@ -394,25 +478,19 @@
             border: 1px solid #ddd;
         }
         .invoice-limit-banner .banner-btn.secondary:hover {
-            background: #f5f5f5;
+            background: rgba(0, 0, 0, 0.04);
         }
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .invoice-limit-banner .banner-btn:active {
+            transform: scale(0.95);
         }
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
         }
         .invoice-limit-banner.dark-mode .banner-title h3 {
             color: #e0e0e0;
@@ -436,7 +514,7 @@
         .invoice-limit-banner.dark-mode .progress-labels {
             color: #aaa;
         }
-        @media (max-width: 360px) {
+        @media (max-width: 380px) {
             .invoice-limit-banner .limit-info {
                 grid-template-columns: 1fr;
                 gap: 6px;
@@ -452,10 +530,15 @@
             border-radius: var(--radius);
             padding: 20px 22px 18px;
             color: #fff;
-            box-shadow: 0 8px 30px rgba(0, 114, 176, 0.35);
-            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 114, 176, 0.35);
+            margin-bottom: 14px;
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .balance-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 114, 176, 0.4);
         }
         .balance-card::before {
             content: '';
@@ -480,7 +563,7 @@
         .balance-card .label {
             font-size: 11px;
             font-weight: 500;
-            opacity: 0.8;
+            opacity: 0.85;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             position: relative;
@@ -507,16 +590,17 @@
             cursor: pointer;
             font-size: 18px;
             opacity: 0.7;
-            transition: 0.2s;
+            transition: 0.3s;
         }
         .balance-card .amount .eye-toggle:hover {
             opacity: 1;
+            transform: scale(1.1);
         }
         .balance-card .sub {
             display: flex;
             justify-content: space-between;
             font-size: 12px;
-            opacity: 0.85;
+            opacity: 0.9;
             position: relative;
             z-index: 1;
             flex-wrap: wrap;
@@ -530,17 +614,18 @@
         }
         .balance-card .sub .vip-badge-display {
             background: rgba(255, 255, 255, 0.2);
-            padding: 2px 10px;
+            padding: 2px 12px;
             border-radius: 20px;
             font-size: 10px;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 4px;
+            backdrop-filter: blur(4px);
         }
         .balance-card .sub .daily-income-badge {
             background: rgba(255, 255, 255, 0.2);
-            padding: 2px 10px;
+            padding: 2px 12px;
             border-radius: 20px;
             font-size: 10px;
             font-weight: 700;
@@ -548,6 +633,7 @@
             align-items: center;
             gap: 4px;
             animation: pulse 2s infinite;
+            backdrop-filter: blur(4px);
         }
 
         /* ===== QUICK GRID ===== */
@@ -555,7 +641,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
         .quick-grid .q-item {
             background: var(--card);
@@ -565,12 +651,28 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
             overflow: hidden;
         }
+        .quick-grid .q-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+        .quick-grid .q-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 50, 90, 0.12);
+        }
         .quick-grid .q-item:active {
-            transform: scale(0.95);
+            transform: scale(0.94);
         }
         .quick-grid .q-item .icon {
             width: 44px;
@@ -583,11 +685,12 @@
             margin: 0 auto 6px;
             font-size: 20px;
             font-weight: 700;
-            transition: 0.2s;
+            transition: 0.3s;
             position: relative;
+            z-index: 1;
         }
         .quick-grid .q-item:hover .icon {
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
         }
         .quick-grid .q-item .icon.gold {
             background: var(--gold-light);
@@ -620,6 +723,8 @@
             font-size: 10px;
             font-weight: 600;
             color: var(--text-muted);
+            position: relative;
+            z-index: 1;
         }
 
         /* ===== SECTION TITLE ===== */
@@ -627,7 +732,7 @@
             font-size: 16px;
             font-weight: 700;
             color: var(--text);
-            margin: 20px 0 10px;
+            margin: 18px 0 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -637,10 +742,10 @@
             font-weight: 600;
             color: var(--primary);
             cursor: pointer;
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 20px;
             background: var(--primary-light);
-            transition: 0.2s;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             gap: 4px;
@@ -648,6 +753,10 @@
         .section-title .see-all:hover {
             background: var(--primary);
             color: #fff;
+            transform: translateX(2px);
+        }
+        .section-title .see-all:active {
+            transform: scale(0.95);
         }
 
         /* ===== PLAN CARD ===== */
@@ -660,12 +769,13 @@
             border: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
             overflow: hidden;
         }
         .plan-card:hover {
-            box-shadow: 0 6px 28px rgba(0, 50, 90, 0.12);
+            box-shadow: 0 8px 32px rgba(0, 50, 90, 0.12);
+            transform: translateY(-2px);
         }
         .plan-card .top {
             display: flex;
@@ -686,6 +796,11 @@
             color: var(--primary);
             border: 2px solid var(--border);
             position: relative;
+            transition: 0.3s;
+        }
+        .plan-card:hover .top .icon-box {
+            border-color: var(--primary);
+            transform: scale(1.02);
         }
         .plan-card .top .icon-box img {
             width: 100%;
@@ -723,7 +838,11 @@
             border-radius: 20px;
             display: inline-block;
             margin-top: 2px;
-            position: relative;
+            transition: 0.3s;
+        }
+        .plan-card:hover .top .info .vip-badge {
+            background: var(--primary);
+            color: #fff;
         }
         .plan-card .stats {
             display: grid;
@@ -733,6 +852,7 @@
             background: var(--bg);
             border-radius: var(--radius-sm);
             padding: 12px 8px;
+            transition: 0.3s;
         }
         .plan-card .stats .stat {
             text-align: center;
@@ -769,24 +889,30 @@
             font-size: 14px;
             border: none;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(0, 114, 176, 0.30);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 16px rgba(0, 114, 176, 0.30);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-family: inherit;
         }
         .btn-invest:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
         }
         .btn-invest:hover {
-            box-shadow: 0 6px 20px rgba(0, 114, 176, 0.40);
+            box-shadow: 0 6px 24px rgba(0, 114, 176, 0.40);
+            transform: translateY(-2px);
         }
         .btn-invest.outline {
             background: transparent;
             color: var(--primary);
             border: 1.5px solid var(--primary);
             box-shadow: none;
+        }
+        .btn-invest.outline:hover {
+            background: var(--primary);
+            color: #fff;
         }
 
         /* ===== RECHARGE ===== */
@@ -821,6 +947,7 @@
             font-weight: 800;
             font-size: 18px;
             font-family: 'Hind Siliguri', sans-serif;
+            transition: 0.3s;
         }
         .gateway-badge.bkash {
             background: var(--bkash-pink);
@@ -849,7 +976,7 @@
             font-weight: 600;
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
             font-family: inherit;
             position: relative;
         }
@@ -858,20 +985,29 @@
             display: block;
             margin-bottom: 2px;
         }
+        .gateway-selector .gw-btn:hover {
+            transform: translateY(-2px);
+        }
+        .gateway-selector .gw-btn:active {
+            transform: scale(0.95);
+        }
         .gateway-selector .gw-btn.active.bkash {
             border-color: var(--bkash-pink);
             background: #fdf0f5;
             color: var(--bkash-pink);
+            box-shadow: 0 4px 16px rgba(226, 19, 110, 0.15);
         }
         .gateway-selector .gw-btn.active.nagad {
             border-color: var(--nagad-orange);
             background: #fff0e6;
             color: var(--nagad-orange);
+            box-shadow: 0 4px 16px rgba(255, 107, 0, 0.15);
         }
         .gateway-selector .gw-btn.active.rocket {
             border-color: var(--rocket-purple);
             background: #f0e8ff;
             color: var(--rocket-purple);
+            box-shadow: 0 4px 16px rgba(108, 43, 217, 0.15);
         }
         .recharge-wrapper .header-title {
             text-align: center;
@@ -897,6 +1033,7 @@
             padding: 16px;
             margin-bottom: 18px;
             border-left: 4px solid var(--primary);
+            transition: 0.3s;
         }
         .payment-steps .step {
             display: flex;
@@ -920,6 +1057,10 @@
             flex-shrink: 0;
             margin-right: 12px;
             margin-top: 1px;
+            transition: 0.3s;
+        }
+        .payment-steps .step:hover .step-num {
+            transform: scale(1.1);
         }
         .payment-steps .step .step-text {
             font-size: 13px;
@@ -949,7 +1090,7 @@
             margin: 0 auto;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
         .copy-section .copy-container .copy-number {
             flex: 1;
@@ -964,6 +1105,7 @@
             color: var(--text);
             font-family: 'Hind Siliguri', sans-serif;
             letter-spacing: 0.5px;
+            transition: 0.3s;
         }
         .copy-section .copy-container .copy-btn {
             color: #fff;
@@ -972,7 +1114,7 @@
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
             border-radius: 0 10px 10px 0;
             font-family: 'Hind Siliguri', sans-serif;
             display: flex;
@@ -984,18 +1126,21 @@
         }
         .copy-section .copy-container .copy-btn.bkash:hover {
             background: #c0105f;
+            transform: scale(1.02);
         }
         .copy-section .copy-container .copy-btn.nagad {
             background: var(--nagad-orange);
         }
         .copy-section .copy-container .copy-btn.nagad:hover {
             background: #e05a00;
+            transform: scale(1.02);
         }
         .copy-section .copy-container .copy-btn.rocket {
             background: var(--rocket-purple);
         }
         .copy-section .copy-container .copy-btn.rocket:hover {
             background: #5a1fb5;
+            transform: scale(1.02);
         }
         .copy-section .copy-container .copy-btn:active {
             transform: scale(0.95);
@@ -1020,14 +1165,14 @@
             border-radius: 10px;
             font-size: 14px;
             font-family: 'Hind Siliguri', sans-serif;
-            transition: 0.2s;
+            transition: 0.3s;
             background: var(--bg);
             color: var(--text);
         }
         .recharge-form .form-group input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 114, 176, 0.10);
+            box-shadow: 0 0 0 4px rgba(0, 114, 176, 0.10);
             background: var(--card);
         }
         .recharge-form .form-group input::placeholder {
@@ -1042,7 +1187,7 @@
             font-size: 16px;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             font-family: 'Hind Siliguri', sans-serif;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             margin-top: 4px;
@@ -1057,6 +1202,7 @@
         .btn-recharge-submit.bkash:hover {
             background: #c0105f;
             transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(226, 19, 110, 0.35);
         }
         .btn-recharge-submit.nagad {
             background: var(--nagad-orange);
@@ -1064,6 +1210,7 @@
         .btn-recharge-submit.nagad:hover {
             background: #e05a00;
             transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(255, 107, 0, 0.35);
         }
         .btn-recharge-submit.rocket {
             background: var(--rocket-purple);
@@ -1071,9 +1218,10 @@
         .btn-recharge-submit.rocket:hover {
             background: #5a1fb5;
             transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(108, 43, 217, 0.35);
         }
         .btn-recharge-submit:active {
-            transform: scale(0.97) !important;
+            transform: scale(0.96) !important;
         }
         .recharge-note {
             font-size: 11px;
@@ -1120,10 +1268,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.2s;
+            transition: 0.3s;
         }
         .invest-item:hover {
             box-shadow: var(--shadow);
+            transform: translateX(2px);
         }
         .invest-item .left .name {
             font-weight: 600;
@@ -1175,10 +1324,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: 0.2s;
+            transition: 0.3s;
         }
         .activity-item:hover {
             box-shadow: var(--shadow);
+            transform: translateX(2px);
         }
         .activity-item .left .type {
             font-weight: 600;
@@ -1219,11 +1369,12 @@
             cursor: pointer;
             overflow: hidden;
             border: 3px solid var(--primary);
-            transition: 0.2s;
+            transition: 0.3s;
             position: relative;
         }
         .profile-avatar:hover {
             border-color: var(--gold);
+            transform: scale(1.02);
         }
         .profile-avatar img {
             width: 100%;
@@ -1244,6 +1395,10 @@
             justify-content: center;
             font-size: 12px;
             border: 2px solid #fff;
+            transition: 0.3s;
+        }
+        .profile-avatar:hover .camera-icon {
+            transform: scale(1.1);
         }
         .profile-name {
             text-align: center;
@@ -1273,13 +1428,16 @@
             padding: 14px 16px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
-            transition: 0.1s;
+            transition: 0.2s;
         }
         .profile-menu .item:last-child {
             border-bottom: none;
         }
-        .profile-menu .item:active {
+        .profile-menu .item:hover {
             background: var(--bg);
+        }
+        .profile-menu .item:active {
+            transform: scale(0.98);
         }
         .profile-menu .item .left {
             display: flex;
@@ -1304,21 +1462,29 @@
             border-radius: 50%;
             margin-left: auto;
             margin-right: 8px;
+            animation: pulse 1.5s infinite;
         }
 
         /* ===== BOTTOM NAV ===== */
         .bottom-nav {
             background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-top: 1px solid var(--border);
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            padding: 6px 0 calc(6px + var(--safe-bottom));
+            padding: 4px 0 calc(4px + var(--safe-bottom));
             flex-shrink: 0;
             position: sticky;
             bottom: 0;
             z-index: 20;
             border-radius: 0 0 32px 32px;
+            transition: background 0.3s;
+        }
+        @media (max-width: 519px) {
+            .bottom-nav {
+                border-radius: 0;
+            }
         }
         .bottom-nav .nav-item {
             background: none;
@@ -1332,14 +1498,14 @@
             font-weight: 600;
             cursor: pointer;
             padding: 6px 0 4px;
-            transition: 0.2s;
+            transition: 0.3s;
             font-family: inherit;
             position: relative;
         }
         .bottom-nav .nav-item .icon {
             font-size: 22px;
             line-height: 1;
-            transition: 0.2s;
+            transition: 0.3s;
             position: relative;
         }
         .bottom-nav .nav-item .icon .badge {
@@ -1357,10 +1523,25 @@
             color: var(--primary);
         }
         .bottom-nav .nav-item.active .icon {
-            transform: scale(1.08);
+            transform: scale(1.08) translateY(-2px);
         }
         .bottom-nav .nav-item:active {
             transform: scale(0.92);
+        }
+        .bottom-nav .nav-item::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 20px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--primary);
+            transition: 0.3s;
+        }
+        .bottom-nav .nav-item.active::after {
+            transform: translateX(-50%) scaleX(1);
         }
 
         /* ===== AUTH ===== */
@@ -1384,6 +1565,7 @@
             max-width: 340px;
             box-shadow: 0 20px 60px rgba(0, 30, 60, 0.12);
             border: 1px solid var(--border);
+            animation: fadeSlideUp 0.5s ease;
         }
         .auth-box .brand {
             text-align: center;
@@ -1447,13 +1629,14 @@
             font-size: 14px;
             font-family: inherit;
             background: var(--bg);
-            transition: 0.15s;
+            transition: 0.3s;
             color: var(--text);
         }
         .auth-box .input-group input:focus {
             outline: none;
             border-color: var(--primary);
             background: var(--card);
+            box-shadow: 0 0 0 4px rgba(0, 114, 176, 0.08);
         }
         .auth-box .input-group .input-icon {
             position: absolute;
@@ -1472,16 +1655,21 @@
             font-size: 15px;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
             box-shadow: 0 4px 16px rgba(0, 114, 176, 0.25);
             margin-top: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-family: inherit;
         }
         .auth-box .btn-auth:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
+        }
+        .auth-box .btn-auth:hover {
+            box-shadow: 0 6px 24px rgba(0, 114, 176, 0.35);
+            transform: translateY(-2px);
         }
         .auth-box .switch-link {
             background: none;
@@ -1497,15 +1685,18 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            font-family: inherit;
+            transition: 0.2s;
         }
         .auth-box .switch-link:hover {
             text-decoration: underline;
+            transform: scale(1.02);
         }
 
         /* ===== TOAST ===== */
         .toast {
             position: fixed;
-            bottom: 90px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
             background: #1a2b3c;
@@ -1515,15 +1706,17 @@
             font-size: 13px;
             font-weight: 500;
             opacity: 0;
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 999;
             pointer-events: none;
             max-width: 340px;
             text-align: center;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
             display: flex;
             align-items: center;
             gap: 8px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
         .toast.show {
             opacity: 1;
@@ -1546,62 +1739,197 @@
         .hidden {
             display: none !important;
         }
-        @media (max-width: 440px) {
-            body {
-                padding: 0;
-            }
-            .phone {
-                border-radius: 0;
-                max-height: 100vh;
-                height: 100vh;
-                max-width: 100%;
-            }
-            .bottom-nav {
-                border-radius: 0;
-            }
-            .auth-box {
-                padding: 24px 18px 22px;
-            }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .main-scroll {
-            scrollbar-width: thin;
+        .gap-8 {
+            gap: 8px;
         }
-        .input-group {
-            margin-bottom: 12px;
+        .mt-8 {
+            margin-top: 8px;
         }
-        .input-group label {
-            font-size: 11px;
-            font-weight: 600;
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
             color: var(--text-muted);
+        }
+        .w-full {
+            width: 100%;
+        }
+        .fw-700 {
+            font-weight: 700;
+        }
+        .fs-12 {
+            font-size: 12px;
+        }
+        .fs-14 {
+            font-size: 14px;
+        }
+        .badge-count {
+            background: #dc3545;
+            color: #fff;
+            font-size: 9px;
+            padding: 1px 8px;
+            border-radius: 20px;
+            margin-left: 4px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .gw-color-bkash {
+            color: var(--bkash-pink);
+        }
+        .gw-color-nagad {
+            color: var(--nagad-orange);
+        }
+        .gw-color-rocket {
+            color: var(--rocket-purple);
+        }
+        .bg-bkash {
+            background: var(--bkash-pink);
+        }
+        .bg-nagad {
+            background: var(--nagad-orange);
+        }
+        .bg-rocket {
+            background: var(--rocket-purple);
+        }
+        .announcement-bar {
+            background: var(--gold-light);
+            border: 1px solid var(--gold);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text);
+            animation: slideInDown 0.5s ease;
+        }
+        .announcement-bar .icon {
+            font-size: 18px;
+        }
+        .announcement-bar .close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.3s;
+            padding: 4px;
+            border-radius: 50%;
+        }
+        .announcement-bar .close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text);
+        }
+
+        /* ---- advance withdraw & treasure UI ---- */
+        .withdraw-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 20px 18px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .withdraw-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 50, 90, 0.12);
+        }
+        .withdraw-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .withdraw-card .card-header .icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            transition: 0.3s;
+        }
+        .withdraw-card:hover .card-header .icon-wrap {
+            transform: scale(1.05) rotate(-3deg);
+        }
+        .withdraw-card .card-header .title-group h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text);
+        }
+        .withdraw-card .card-header .title-group p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .withdraw-card .balance-info {
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .withdraw-card .balance-info .label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        .withdraw-card .balance-info .amount {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .withdraw-card .form-group {
+            margin-bottom: 14px;
+        }
+        .withdraw-card .form-group label {
             display: block;
-            margin-bottom: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .input-group input,
-        .input-group select,
-        .input-group textarea {
+        .withdraw-card .form-group input,
+        .withdraw-card .form-group select {
             width: 100%;
             padding: 12px 14px;
-            border-radius: var(--radius-sm);
             border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
             font-size: 14px;
             font-family: inherit;
             background: var(--card);
             color: var(--text);
-            transition: 0.15s;
+            transition: 0.3s;
         }
-        .input-group input:focus,
-        .input-group select:focus,
-        .input-group textarea:focus {
+        .withdraw-card .form-group input:focus,
+        .withdraw-card .form-group select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 114, 176, 0.10);
+            box-shadow: 0 0 0 4px rgba(0, 114, 176, 0.08);
         }
-        .btn-submit {
+        .withdraw-card .btn-withdraw {
             width: 100%;
-            padding: 13px;
+            padding: 14px;
             border-radius: var(--radius-sm);
             background: var(--primary-gradient);
             color: #fff;
@@ -1609,138 +1937,181 @@
             font-size: 15px;
             border: none;
             cursor: pointer;
-            transition: 0.15s;
+            transition: 0.3s;
             box-shadow: 0 4px 16px rgba(0, 114, 176, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-        .btn-submit:active {
-            transform: scale(0.97);
-        }
-        .btn-submit.danger {
-            background: linear-gradient(135deg, #dc3545, #e74c5e);
-            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.25);
-        }
-        .btn-submit.success {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            box-shadow: 0 4px 16px rgba(40, 167, 69, 0.25);
-        }
-        .btn-submit.outline {
-            background: transparent;
-            color: var(--primary);
-            border: 1.5px solid var(--primary);
-            box-shadow: none;
-        }
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 11px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.15s;
             font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
-        .btn-sm:active {
-            transform: scale(0.95);
+        .withdraw-card .btn-withdraw:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 114, 176, 0.35);
         }
-        .btn-sm.primary {
-            background: var(--primary);
-            color: #fff;
-        }
-        .btn-sm.danger {
-            background: #dc3545;
-            color: #fff;
-        }
-        .btn-sm.success {
-            background: #28a745;
-            color: #fff;
-        }
-        .btn-sm.warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        .btn-sm.outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-        .btn-sm.info {
-            background: #3b82f6;
-            color: #fff;
+        .withdraw-card .btn-withdraw:active {
+            transform: scale(0.96);
         }
 
-        /* ===== IMAGE UPLOAD ===== */
-        .image-upload-container {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-sm);
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            position: relative;
-        }
-        .image-upload-container:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-        .image-upload-container .upload-icon {
-            font-size: 40px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-        .image-upload-container .upload-text {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-        .image-upload-container img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: var(--radius-sm);
-            margin-top: 10px;
-        }
-
-        /* ===== STATS MINI ===== */
-        .stats-mini {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .stats-mini .stat-box {
+        .treasure-card {
             background: var(--card);
-            border-radius: var(--radius-sm);
-            padding: 12px 8px;
-            text-align: center;
+            border-radius: var(--radius);
+            padding: 20px 18px;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
+            transition: all 0.3s;
+            margin-top: 10px;
         }
-        .stats-mini .stat-box .num {
-            font-weight: 800;
-            font-size: 18px;
-            color: var(--primary);
+        .treasure-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 50, 90, 0.12);
+        }
+        .treasure-card .card-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 4px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
-        .stats-mini .stat-box .lbl {
-            font-size: 9px;
+        .treasure-card .card-header .icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #e3f5ec;
+            color: #0f9d6e;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            transition: 0.3s;
+        }
+        .treasure-card:hover .card-header .icon-wrap {
+            transform: scale(1.05) rotate(-3deg);
+        }
+        .treasure-card .card-header .title-group h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text);
+        }
+        .treasure-card .card-header .title-group p {
+            font-size: 12px;
             color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-top: 2px;
+            margin: 0;
+        }
+        .treasure-card .treasure-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .treasure-card .treasure-input-group input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: inherit;
+            background: var(--card);
+            color: var(--text);
+            transition: 0.3s;
+        }
+        .treasure-card .treasure-input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 114, 176, 0.08);
+        }
+        .treasure-card .treasure-input-group .btn-redeem {
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+        .treasure-card .treasure-input-group .btn-redeem:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+        }
+        .treasure-card .treasure-input-group .btn-redeem:active {
+            transform: scale(0.95);
+        }
+        .treasure-card .treasure-list {
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+        }
+        .treasure-card .treasure-list .empty {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 20px 0;
+        }
+        .treasure-card .treasure-list .empty i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+        .treasure-card .treasure-list .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        .treasure-card .treasure-list .item:last-child {
+            border-bottom: none;
+        }
+        .treasure-card .treasure-list .item .code {
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .treasure-card .treasure-list .item .points {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 13px;
+        }
+
+        /* Back button with pass */
+        .back-pass {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 6px 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--primary);
+            transition: 0.3s;
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            width: fit-content;
+        }
+        .back-pass i {
+            font-size: 16px;
+        }
+        .back-pass:hover {
+            color: var(--primary-dark);
+            transform: translateX(-3px);
+        }
+        .back-pass:active {
+            transform: scale(0.95);
         }
 
         /* ===== FLOATING ACTION BUTTON ===== */
         .floating-action-btn {
             position: fixed;
-            bottom: 90px;
+            bottom: 80px;
             right: 20px;
             width: 50px;
             height: 50px;
@@ -1754,11 +2125,11 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             z-index: 50;
         }
         .floating-action-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(10deg);
             box-shadow: 0 6px 30px rgba(0, 114, 176, 0.5);
         }
         .floating-action-btn:active {
@@ -1766,7 +2137,7 @@
         }
         .quick-actions-menu {
             position: fixed;
-            bottom: 150px;
+            bottom: 140px;
             right: 20px;
             display: flex;
             flex-direction: column;
@@ -1774,8 +2145,8 @@
             z-index: 49;
         }
         .quick-actions-menu .qa-item {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
@@ -1784,21 +2155,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
             animation: slideInLeft 0.3s ease;
         }
         .quick-actions-menu .qa-item:hover {
             transform: scale(1.1);
         }
+        .quick-actions-menu .qa-item:active {
+            transform: scale(0.9);
+        }
         @keyframes slideInLeft {
             from {
                 opacity: 0;
-                transform: translateX(20px);
+                transform: translateX(30px) scale(0.8);
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateX(0) scale(1);
             }
         }
 
@@ -1814,17 +2188,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            border-radius: 32px;
+            border-radius: inherit;
             overflow: hidden;
         }
         .admin-panel.active {
             display: flex;
-            animation: fadeUp 0.3s ease;
-        }
-        @media (max-width: 440px) {
-            .admin-panel {
-                border-radius: 0;
-            }
+            animation: fadeSlideUp 0.3s ease;
         }
         .admin-header {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
@@ -1866,10 +2235,11 @@
             cursor: pointer;
             display: grid;
             place-items: center;
-            transition: 0.15s;
+            transition: 0.2s;
         }
         .admin-header .actions button:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
         }
         .admin-tabs {
             display: flex;
@@ -1891,7 +2261,7 @@
             color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
             white-space: nowrap;
-            transition: 0.15s;
+            transition: 0.2s;
             background: transparent;
             border: none;
             font-family: inherit;
@@ -1914,7 +2284,7 @@
         }
         .admin-content .tab-panel {
             display: none;
-            animation: fadeUp 0.25s ease;
+            animation: fadeSlideUp 0.25s ease;
         }
         .admin-content .tab-panel.active {
             display: block;
@@ -1935,6 +2305,11 @@
             border: 1px solid var(--border);
             margin-bottom: 10px;
             box-shadow: var(--shadow);
+            transition: 0.3s;
+        }
+        .admin-card:hover {
+            box-shadow: 0 6px 24px rgba(0, 50, 90, 0.08);
+            transform: translateY(-1px);
         }
         .admin-card .row {
             display: flex;
@@ -1951,6 +2326,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
         }
         .admin-card .row .info .sub {
             font-size: 11px;
@@ -2015,12 +2391,14 @@
             font-family: inherit;
             background: var(--card);
             color: var(--text);
+            transition: 0.3s;
         }
         .admin-form input:focus,
         .admin-form select:focus,
         .admin-form textarea:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 114, 176, 0.08);
         }
         .admin-form textarea {
             resize: vertical;
@@ -2043,7 +2421,8 @@
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 999;
             display: none;
             justify-content: center;
@@ -2052,6 +2431,7 @@
         }
         .modal-overlay.active {
             display: flex;
+            animation: fadeIn 0.25s ease;
         }
         .modal-box {
             background: var(--card);
@@ -2061,8 +2441,9 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            animation: fadeIn 0.3s ease;
+            animation: fadeSlideUp 0.3s ease;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border);
         }
         .modal-box .modal-title {
             font-size: 18px;
@@ -2079,10 +2460,18 @@
             font-size: 26px;
             cursor: pointer;
             color: var(--text-muted);
-            transition: 0.15s;
+            transition: 0.3s;
+            padding: 4px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
         }
         .modal-box .modal-close:hover {
             color: var(--text);
+            background: var(--bg);
+            transform: rotate(90deg);
         }
 
         /* ===== DARK MODE ===== */
@@ -2184,18 +2573,6 @@
             background: #1a2633;
             border-color: #2a3a4a;
         }
-        .phone.dark #screen-withdraw>div {
-            background: #1a2633 !important;
-            border-color: #2a3a4a !important;
-        }
-        .phone.dark #screen-treasure>div {
-            background: #1a2633 !important;
-            border-color: #2a3a4a !important;
-        }
-        .phone.dark #screen-profile>div {
-            background: #1a2633 !important;
-            border-color: #2a3a4a !important;
-        }
         .phone.dark .gateway-selector .gw-btn {
             background: #0d1520;
             border-color: #2a3a4a;
@@ -2216,186 +2593,104 @@
             border-color: var(--rocket-purple);
             color: var(--rocket-purple);
         }
+        .phone.dark .invoice-limit-banner {
+            background: linear-gradient(135deg, #2a1f00, #1a1500);
+            border-color: #f5c518;
+        }
+        .phone.dark .invoice-limit-banner .banner-title h3 {
+            color: #e0e0e0;
+        }
+        .phone.dark .invoice-limit-banner .banner-title p {
+            color: #aaa;
+        }
+        .phone.dark .invoice-limit-banner .limit-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(245, 197, 24, 0.4);
+        }
+        .phone.dark .invoice-limit-banner .limit-item .limit-value {
+            color: #e0e0e0;
+        }
+        .phone.dark .invoice-limit-banner .limit-item .limit-label {
+            color: #aaa;
+        }
+        .phone.dark .invoice-limit-banner .progress-bar {
+            background: #333;
+        }
+        .phone.dark .invoice-limit-banner .progress-labels {
+            color: #aaa;
+        }
 
-        /* ===== ADDITIONAL ===== */
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* ===== IMAGE UPLOAD ===== */
+        .image-upload-container {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
         }
-        .gap-8 {
-            gap: 8px;
+        .image-upload-container:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
         }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mb-8 {
+        .image-upload-container .upload-icon {
+            font-size: 40px;
+            color: var(--text-muted);
             margin-bottom: 8px;
         }
-        .text-center {
-            text-align: center;
-        }
-        .text-muted {
+        .image-upload-container .upload-text {
+            font-size: 12px;
             color: var(--text-muted);
         }
-        .w-full {
-            width: 100%;
-        }
-        .fw-700 {
-            font-weight: 700;
-        }
-        .fs-12 {
-            font-size: 12px;
-        }
-        .fs-14 {
-            font-size: 14px;
-        }
-        .badge-count {
-            background: #dc3545;
-            color: #fff;
-            font-size: 9px;
-            padding: 1px 8px;
-            border-radius: 20px;
-            margin-left: 4px;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-        .gw-color-bkash {
-            color: var(--bkash-pink);
-        }
-        .gw-color-nagad {
-            color: var(--nagad-orange);
-        }
-        .gw-color-rocket {
-            color: var(--rocket-purple);
-        }
-        .bg-bkash {
-            background: var(--bkash-pink);
-        }
-        .bg-nagad {
-            background: var(--nagad-orange);
-        }
-        .bg-rocket {
-            background: var(--rocket-purple);
-        }
-        .announcement-bar {
-            background: var(--gold-light);
-            border: 1px solid var(--gold);
+        .image-upload-container img {
+            max-width: 100%;
+            max-height: 200px;
             border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: var(--text);
-        }
-        .announcement-bar .icon {
-            font-size: 18px;
-        }
-        .announcement-bar .close {
-            margin-left: auto;
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        /* ---- advance withdraw & treasure UI ---- */
-        .withdraw-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 20px 18px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            transition: all 0.2s;
             margin-top: 10px;
         }
-        .withdraw-card:hover {
-            box-shadow: 0 8px 30px rgba(0, 50, 90, 0.12);
-        }
-        .withdraw-card .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+
+        /* ===== STATS MINI ===== */
+        .stats-mini {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
             margin-bottom: 16px;
         }
-        .withdraw-card .card-header .icon-wrap {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: var(--primary-light);
-            color: var(--primary);
-            display: grid;
-            place-items: center;
-            font-size: 22px;
-        }
-        .withdraw-card .card-header .title-group h4 {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
-            color: var(--text);
-        }
-        .withdraw-card .card-header .title-group p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-        .withdraw-card .balance-info {
-            background: var(--bg);
-            border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            margin-bottom: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .withdraw-card .balance-info .label {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-        .withdraw-card .balance-info .amount {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--primary);
-        }
-        .withdraw-card .form-group {
-            margin-bottom: 14px;
-        }
-        .withdraw-card .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .withdraw-card .form-group input,
-        .withdraw-card .form-group select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-family: inherit;
+        .stats-mini .stat-box {
             background: var(--card);
-            color: var(--text);
-            transition: 0.15s;
+            border-radius: var(--radius-sm);
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: 0.3s;
         }
-        .withdraw-card .form-group input:focus,
-        .withdraw-card .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 114, 176, 0.10);
+        .stats-mini .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 50, 90, 0.08);
         }
-        .withdraw-card .btn-withdraw {
+        .stats-mini .stat-box .num {
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .stats-mini .stat-box .lbl {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-submit {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             border-radius: var(--radius-sm);
             background: var(--primary-gradient);
             color: #fff;
@@ -2403,168 +2698,156 @@
             font-size: 15px;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.3s;
             box-shadow: 0 4px 16px rgba(0, 114, 176, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-family: inherit;
         }
-        .withdraw-card .btn-withdraw:hover {
+        .btn-submit:active {
+            transform: scale(0.96);
+        }
+        .btn-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 24px rgba(0, 114, 176, 0.35);
         }
-        .withdraw-card .btn-withdraw:active {
-            transform: scale(0.97);
+        .btn-submit.danger {
+            background: linear-gradient(135deg, #dc3545, #e74c5e);
+            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.25);
         }
-
-        .treasure-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 20px 18px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            transition: all 0.2s;
-            margin-top: 10px;
+        .btn-submit.success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            box-shadow: 0 4px 16px rgba(40, 167, 69, 0.25);
         }
-        .treasure-card:hover {
-            box-shadow: 0 8px 30px rgba(0, 50, 90, 0.12);
+        .btn-submit.outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+            box-shadow: none;
         }
-        .treasure-card .card-header {
+        .btn-submit.outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 11px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            font-family: inherit;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 4px;
         }
-        .treasure-card .card-header .icon-wrap {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: #e3f5ec;
-            color: #0f9d6e;
-            display: grid;
-            place-items: center;
-            font-size: 22px;
+        .btn-sm:active {
+            transform: scale(0.95);
         }
-        .treasure-card .card-header .title-group h4 {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
+        .btn-sm.primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-sm.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 114, 176, 0.3);
+        }
+        .btn-sm.danger {
+            background: #dc3545;
+            color: #fff;
+        }
+        .btn-sm.danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        .btn-sm.success {
+            background: #28a745;
+            color: #fff;
+        }
+        .btn-sm.success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        .btn-sm.warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn-sm.outline {
+            background: transparent;
+            border: 1px solid var(--border);
             color: var(--text);
         }
-        .treasure-card .card-header .title-group p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin: 0;
+        .btn-sm.outline:hover {
+            background: var(--bg);
         }
-        .treasure-card .treasure-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
+        .btn-sm.info {
+            background: #3b82f6;
+            color: #fff;
         }
-        .treasure-card .treasure-input-group input {
-            flex: 1;
-            padding: 12px 14px;
-            border: 1.5px solid var(--border);
+        .btn-sm.info:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .btn-danger {
+            width: 100%;
+            padding: 12px;
             border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-family: inherit;
-            background: var(--card);
-            color: var(--text);
-            transition: 0.15s;
-        }
-        .treasure-card .treasure-input-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 114, 176, 0.10);
-        }
-        .treasure-card .treasure-input-group .btn-redeem {
-            padding: 12px 24px;
-            border-radius: var(--radius-sm);
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #dc3545, #e74c5e);
             color: #fff;
             font-weight: 700;
             font-size: 14px;
             border: none;
             cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
+            transition: 0.3s;
+            box-shadow: 0 4px 16px rgba(220, 53, 69, 0.25);
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
         }
-        .treasure-card .treasure-input-group .btn-redeem:hover {
+        .btn-danger:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 6px 24px rgba(220, 53, 69, 0.35);
         }
-        .treasure-card .treasure-input-group .btn-redeem:active {
-            transform: scale(0.97);
-        }
-        .treasure-card .treasure-list {
-            border-top: 1px solid var(--border);
-            padding-top: 14px;
-        }
-        .treasure-card .treasure-list .empty {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            padding: 20px 0;
-        }
-        .treasure-card .treasure-list .empty i {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 8px;
-            opacity: 0.5;
-        }
-        .treasure-card .treasure-list .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .treasure-card .treasure-list .item:last-child {
-            border-bottom: none;
-        }
-        .treasure-card .treasure-list .item .code {
-            font-weight: 600;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .treasure-card .treasure-list .item .points {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 13px;
+        .btn-danger:active {
+            transform: scale(0.96);
         }
 
-        /* Back button with pass */
-        .back-pass {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding: 6px 0;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--primary);
-            transition: 0.2s;
-            background: transparent;
-            border: none;
-            font-family: inherit;
-            width: fit-content;
-        }
-        .back-pass i {
-            font-size: 16px;
-        }
-        .back-pass:hover {
-            color: var(--primary-dark);
-            transform: translateX(-2px);
-        }
-        .back-pass:active {
-            transform: scale(0.95);
+        /* ===== RESPONSIVE TWEAKS ===== */
+        @media (max-width: 380px) {
+            .balance-card .amount {
+                font-size: 28px;
+            }
+            .quick-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            .quick-grid .q-item {
+                padding: 10px 2px 8px;
+            }
+            .quick-grid .q-item .icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            .quick-grid .q-item .label {
+                font-size: 8px;
+            }
+            .plan-card .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .stats-mini {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 4px;
+            }
+            .stats-mini .stat-box .num {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -2701,9 +2984,9 @@
                         </div>
                     </section>
                     <section class="screen" id="screen-plans">
-                        <div class="input-group">
+                        <div class="input-group" style="margin-bottom:12px;">
                             <label><i class="fas fa-search"></i> Search plans</label>
-                            <input id="searchPlans" placeholder="Type plan name..." />
+                            <input id="searchPlans" placeholder="Type plan name..." style="width:100%;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);font-size:14px;font-family:inherit;background:var(--card);color:var(--text);transition:0.3s;" />
                         </div>
                         <div id="allPlansList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading plans...</p></div>
                     </section>
@@ -2749,7 +3032,6 @@
                             <div class="recharge-note"><i class="fas fa-clock"></i> Payment verification may take some time. Please be patient.</div>
                         </div>
                     </section>
-                    <!-- ===== ADVANCE WITHDRAW UI ===== -->
                     <section class="screen" id="screen-withdraw">
                         <button class="back-pass" id="withdrawBack"><i class="fas fa-arrow-left"></i> Back</button>
                         <div class="withdraw-card">
@@ -2784,7 +3066,6 @@
                             <button class="btn-withdraw" id="withdrawSubmit"><i class="fas fa-paper-plane"></i> Withdraw</button>
                         </div>
                     </section>
-                    <!-- ===== ADVANCE TREASURE UI ===== -->
                     <section class="screen" id="screen-treasure">
                         <button class="back-pass" id="treasureBack"><i class="fas fa-arrow-left"></i> Back</button>
                         <div class="treasure-card">
@@ -2909,9 +3190,12 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/11.7.1/firebase-database-compat.js">
+    </script>
 
     <script>
         // ============================================================
@@ -3071,6 +3355,8 @@
         let isAdmin = false;
         let selectedGateway = 'bkash';
         let isBalanceVisible = true;
+        let screenHistory = ['home'];
+        let isBackHandled = false;
 
         const gatewayConfig = {
             bkash: { label: 'bKash', icon: 'fas fa-mobile-alt', color: 'bkash', number: '01836724372', desc: 'bKash' },
@@ -3082,7 +3368,8 @@
         //  HELPERS
         // ============================================================
         function toast(msg, type = 'info') {
-            toastEl.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${msg}`;
+            toastEl.innerHTML =
+                `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${msg}`;
             toastEl.className = `toast ${type}`;
             toastEl.classList.add('show');
             clearTimeout(toastEl._timer);
@@ -3090,7 +3377,8 @@
         }
 
         function money(amount, currency = '৳') {
-            return currency + ' ' + Number(amount || 0).toLocaleString('en-BD', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return currency + ' ' + Number(amount || 0).toLocaleString('en-BD', { minimumFractionDigits: 2,
+                maximumFractionDigits: 2 });
         }
 
         function formatDate(d) {
@@ -3128,6 +3416,78 @@
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
         // ============================================================
+        //  HISTORY / BACK BUTTON HANDLING (mobile back pass not exit)
+        // ============================================================
+        function pushScreen(screenId) {
+            if (screenHistory[screenHistory.length - 1] !== screenId) {
+                screenHistory.push(screenId);
+                history.pushState({ screen: screenId }, '', '#');
+            }
+            showScreen(screenId);
+        }
+
+        function handleBackButton() {
+            if (screenHistory.length > 1) {
+                screenHistory.pop();
+                const prev = screenHistory[screenHistory.length - 1];
+                showScreen(prev);
+                return true;
+            }
+            return false;
+        }
+
+        // Override showScreen to use history
+        const originalShowScreen = window.showScreen || function() {};
+        window.showScreen = function(screenId) {
+            if (!screenId) return;
+            const target = $('screen-' + screenId);
+            if (!target) return;
+
+            // Update active screens
+            $$('.screen').forEach(el => el.classList.remove('active'));
+            target.classList.add('active');
+
+            // Update nav
+            navItems.forEach(el => el.classList.toggle('active', el.dataset.nav === screenId));
+
+            // Update history
+            if (screenHistory.length === 0 || screenHistory[screenHistory.length - 1] !== screenId) {
+                screenHistory.push(screenId);
+                history.pushState({ screen: screenId }, '', '#' + screenId);
+            }
+
+            // Scroll to top
+            if (mainScroll) mainScroll.scrollTop = 0;
+
+            // Render
+            if (screenId === 'home') renderHome();
+            if (screenId === 'plans') renderAllPlans();
+            if (screenId === 'invest') renderInvestments();
+            if (screenId === 'activity') renderActivity();
+            if (screenId === 'withdraw') withdrawBalance.textContent = money(userData.balance || 0);
+            if (screenId === 'treasure') renderTreasure();
+        };
+
+        // Handle popstate (browser back)
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.screen) {
+                showScreen(e.state.screen);
+            } else {
+                // If no state, try to go back in history
+                if (!handleBackButton()) {
+                    // If at root, allow browser to handle (exit)
+                    if (screenHistory.length <= 1) {
+                        // Don't prevent exit, let browser handle it
+                        return;
+                    }
+                }
+            }
+        });
+
+        // Also handle hardware back on Android via history
+        // This is already handled by popstate
+
+        // ============================================================
         //  FLOATING ACTION BUTTON
         // ============================================================
         fabBtn.addEventListener('click', () => {
@@ -3138,7 +3498,7 @@
             btn.addEventListener('click', (e) => {
                 const action = e.target.closest('.qa-item').dataset.action;
                 if (action) {
-                    showScreen(action);
+                    pushScreen(action);
                     quickActionsMenu.classList.add('hidden');
                 }
             });
@@ -3180,9 +3540,9 @@
                 const base64 = ev.target.result;
                 setBgImage.value = base64;
                 bgImageUpload.innerHTML = `
-                    <img src="${base64}" alt="Background Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
-                    <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
-                `;
+                        <img src="${base64}" alt="Background Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                        <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
+                    `;
                 toast('Background image uploaded!', 'success');
                 bgLayer.style.backgroundImage = `url('${base64}')`;
             };
@@ -3250,50 +3610,50 @@
 
         upgradeLimitBtn.addEventListener('click', () => {
             openModal('<i class="fas fa-bolt"></i> Upgrade Invoice Limits', `
-                <div style="padding: 10px;">
-                    <p style="margin-bottom: 16px; color: var(--text-muted); font-size: 13px;"><i class="fas fa-info-circle"></i> Choose a plan to increase your invoice generation limits:</p>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div style="border: 2px solid var(--border); border-radius: 12px; padding: 16px;" class="hover-lift">
-                            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);"><i class="fas fa-user"></i> Basic Plan</div>
-                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">20 daily / 200 monthly invoices</div>
-                            <button class="btn-submit" style="margin-top: 8px;"><i class="fas fa-check"></i> Upgrade - Free</button>
-                        </div>
-                        <div style="border: 2px solid var(--gold); border-radius: 12px; padding: 16px; background: var(--gold-light);" class="hover-lift">
-                            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);"><i class="fas fa-star"></i> Premium Plan ⭐</div>
-                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">50 daily / 500 monthly invoices</div>
-                            <button class="btn-submit" style="margin-top: 8px;"><i class="fas fa-crown"></i> Upgrade - ৳ 500</button>
-                        </div>
-                        <div style="border: 2px solid var(--primary); border-radius: 12px; padding: 16px;" class="hover-lift">
-                            <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);"><i class="fas fa-building"></i> Enterprise Plan 🏢</div>
-                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Unlimited invoices</div>
-                            <button class="btn-submit" style="margin-top: 8px;"><i class="fas fa-phone"></i> Contact Support</button>
+                    <div style="padding: 10px;">
+                        <p style="margin-bottom: 16px; color: var(--text-muted); font-size: 13px;"><i class="fas fa-info-circle"></i> Choose a plan to increase your invoice generation limits:</p>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="border: 2px solid var(--border); border-radius: 12px; padding: 16px;" class="hover-lift">
+                                <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);"><i class="fas fa-user"></i> Basic Plan</div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">20 daily / 200 monthly invoices</div>
+                                <button class="btn-submit" style="margin-top: 8px;"><i class="fas fa-check"></i> Upgrade - Free</button>
+                            </div>
+                            <div style="border: 2px solid var(--gold); border-radius: 12px; padding: 16px; background: var(--gold-light);" class="hover-lift">
+                                <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);"><i class="fas fa-star"></i> Premium Plan ⭐</div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">50 daily / 500 monthly invoices</div>
+                                <button class="btn-submit" style="margin-top: 8px;"><i class="fas fa-crown"></i> Upgrade - ৳ 500</button>
+                            </div>
+                            <div style="border: 2px solid var(--primary); border-radius: 12px; padding: 16px;" class="hover-lift">
+                                <div style="font-weight: 700; margin-bottom: 4px; color: var(--text);"><i class="fas fa-building"></i> Enterprise Plan 🏢</div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Unlimited invoices</div>
+                                <button class="btn-submit" style="margin-top: 8px;"><i class="fas fa-phone"></i> Contact Support</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `);
+                `);
         });
 
         viewInvoicesBtn.addEventListener('click', () => {
             openModal('<i class="fas fa-history"></i> Invoice History', `
-                <div style="padding: 10px;">
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600;">
-                        <span><i class="fas fa-calendar"></i> Date</span>
-                        <span><i class="fas fa-file-invoice"></i> Invoice #</span>
-                        <span><i class="fas fa-money-bill"></i> Amount</span>
-                        <span><i class="fas fa-check-circle"></i> Status</span>
+                    <div style="padding: 10px;">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600;">
+                            <span><i class="fas fa-calendar"></i> Date</span>
+                            <span><i class="fas fa-file-invoice"></i> Invoice #</span>
+                            <span><i class="fas fa-money-bill"></i> Amount</span>
+                            <span><i class="fas fa-check-circle"></i> Status</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
+                            <span>2024-01-15</span><span>INV-001</span><span>৳ 5,000</span><span style="color: #28a745;"><i class="fas fa-check-circle"></i> Paid</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
+                            <span>2024-01-20</span><span>INV-002</span><span>৳ 3,500</span><span style="color: #28a745;"><i class="fas fa-check-circle"></i> Paid</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 12px;">
+                            <span>2024-01-25</span><span>INV-003</span><span>৳ 7,200</span><span style="color: #ffc107;"><i class="fas fa-clock"></i> Pending</span>
+                        </div>
+                        <p class="text-muted fs-12 mt-8"><i class="fas fa-info-circle"></i> Showing last 3 invoices from this month</p>
                     </div>
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
-                        <span>2024-01-15</span><span>INV-001</span><span>৳ 5,000</span><span style="color: #28a745;"><i class="fas fa-check-circle"></i> Paid</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
-                        <span>2024-01-20</span><span>INV-002</span><span>৳ 3,500</span><span style="color: #28a745;"><i class="fas fa-check-circle"></i> Paid</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 12px;">
-                        <span>2024-01-25</span><span>INV-003</span><span>৳ 7,200</span><span style="color: #ffc107;"><i class="fas fa-clock"></i> Pending</span>
-                    </div>
-                    <p class="text-muted fs-12 mt-8"><i class="fas fa-info-circle"></i> Showing last 3 invoices from this month</p>
-                </div>
-            `);
+                `);
         });
 
         if (localStorage.getItem('invoiceBannerHidden') === 'true') {
@@ -3350,11 +3710,22 @@
         //  NAVIGATION
         // ============================================================
         function showScreen(screenId) {
-            $$('.screen').forEach(el => el.classList.remove('active'));
+            if (!screenId) return;
             const target = $('screen-' + screenId);
-            if (target) target.classList.add('active');
+            if (!target) return;
+
+            $$('.screen').forEach(el => el.classList.remove('active'));
+            target.classList.add('active');
+
             navItems.forEach(el => el.classList.toggle('active', el.dataset.nav === screenId));
+
+            if (screenHistory.length === 0 || screenHistory[screenHistory.length - 1] !== screenId) {
+                screenHistory.push(screenId);
+                history.pushState({ screen: screenId }, '', '#' + screenId);
+            }
+
             if (mainScroll) mainScroll.scrollTop = 0;
+
             if (screenId === 'home') renderHome();
             if (screenId === 'plans') renderAllPlans();
             if (screenId === 'invest') renderInvestments();
@@ -3363,13 +3734,28 @@
             if (screenId === 'treasure') renderTreasure();
         }
 
-        // Back buttons: navigate to home
-        document.getElementById('withdrawBack')?.addEventListener('click', () => showScreen('home'));
-        document.getElementById('treasureBack')?.addEventListener('click', () => showScreen('home'));
+        // Back buttons: navigate to home using history
+        document.getElementById('withdrawBack')?.addEventListener('click', () => {
+            handleBackButton();
+        });
+        document.getElementById('treasureBack')?.addEventListener('click', () => {
+            handleBackButton();
+        });
 
-        navItems.forEach(el => el.addEventListener('click', () => showScreen(el.dataset.nav)));
-        quickItems.forEach(el => el.addEventListener('click', () => { const nav = el.dataset.nav; if (nav) showScreen(nav); }));
-        seeAll.forEach(el => el.addEventListener('click', () => { const nav = el.dataset.nav; if (nav) showScreen(nav); }));
+        navItems.forEach(el => el.addEventListener('click', () => {
+            const nav = el.dataset.nav;
+            if (nav) pushScreen(nav);
+        }));
+
+        quickItems.forEach(el => el.addEventListener('click', () => {
+            const nav = el.dataset.nav;
+            if (nav) pushScreen(nav);
+        }));
+
+        seeAll.forEach(el => el.addEventListener('click', () => {
+            const nav = el.dataset.nav;
+            if (nav) pushScreen(nav);
+        }));
 
         // ============================================================
         //  AUTH
@@ -3429,6 +3815,9 @@
                 loadRechargeRequests();
                 loadWithdrawRequests();
                 loadInvoiceData();
+                // Reset history
+                screenHistory = ['home'];
+                history.replaceState({ screen: 'home' }, '', '#home');
                 showScreen('home');
                 const adminRef = db.ref('admins/' + user.uid);
                 const snap = await adminRef.once('value');
@@ -3441,6 +3830,7 @@
                 appMain.style.display = 'none';
                 adminPanel.classList.remove('active');
                 setAuthMode('login');
+                screenHistory = ['home'];
             }
         });
 
@@ -3454,11 +3844,11 @@
                 const data = snap.val() || {};
                 const lastDate = data.lastDailyIncomeDate;
                 const today = new Date().toDateString();
-                
+
                 if (lastDate !== today) {
                     const investments = data.investments ? Object.values(data.investments) : [];
                     let totalDailyIncome = 0;
-                    
+
                     investments.forEach(inv => {
                         if (inv.status === 'active') {
                             const plan = plansData.find(p => p.id === inv.planId);
@@ -3467,7 +3857,7 @@
                             }
                         }
                     });
-                    
+
                     if (totalDailyIncome > 0) {
                         const newBalance = (data.balance || 0) + totalDailyIncome;
                         userRef.update({
@@ -3475,7 +3865,7 @@
                             lastDailyIncomeDate: today,
                             lastDailyIncomeAmount: totalDailyIncome
                         });
-                        
+
                         const actRef = db.ref('users/' + currentUser.uid + '/activity').push();
                         actRef.set({
                             type: 'Daily Income',
@@ -3483,7 +3873,7 @@
                             date: Date.now(),
                             positive: true
                         });
-                        
+
                         toast(`Daily income credited: ${money(totalDailyIncome)}`, 'success');
                         updateDailyIncomeDisplay(totalDailyIncome);
                     } else {
@@ -3500,7 +3890,7 @@
 
         function updateDailyIncomeDisplay(amount) {
             dailyIncomeAmount.textContent = `+${money(amount || 0)}`;
-            
+
             const investments = userData.investments || [];
             let totalDailyRate = 0;
             investments.forEach(inv => {
@@ -3511,7 +3901,7 @@
                     }
                 }
             });
-            
+
             dailyIncomeRate.textContent = `+${money(totalDailyRate)}`;
         }
 
@@ -3527,22 +3917,23 @@
                 userData.vipLevel = data.vipLevel || 0;
                 userData.investments = data.investments ? Object.values(data.investments) : [];
                 userData.activity = data.activity ? Object.values(data.activity) : [];
-                
+
                 updateBalanceDisplay();
                 vipLevel.textContent = userData.vipLevel;
                 if (data.avatar) avatarPreview.innerHTML = `<img src="${data.avatar}" alt="avatar" />`;
-                
+
                 statInvestments.textContent = userData.investments.length;
                 const totalEarn = userData.activity.filter(a => a.positive).reduce((s, a) => s + (a.amount || 0), 0);
                 statTotalEarn.textContent = money(totalEarn);
                 statActivePlans.textContent = plansData.length;
-                
+
                 updateDailyIncomeDisplay(data.lastDailyIncomeAmount || 0);
-                
+
                 if ($('screen-home').classList.contains('active')) renderHome();
                 if ($('screen-invest').classList.contains('active')) renderInvestments();
                 if ($('screen-activity').classList.contains('active')) renderActivity();
-                if ($('screen-withdraw').classList.contains('active')) withdrawBalance.textContent = money(userData.balance);
+                if ($('screen-withdraw').classList.contains('active')) withdrawBalance.textContent = money(userData
+                .balance);
             });
         }
 
@@ -3553,7 +3944,8 @@
                 plansData.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
                 if ($('screen-home').classList.contains('active')) renderHome();
                 if ($('screen-plans').classList.contains('active')) renderAllPlans();
-                if (adminPanel.classList.contains('active') && document.querySelector('#tab-plans .active')) renderAdminPlans();
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-plans .active'))
+                    renderAdminPlans();
                 updateAdminStats();
                 statActivePlans.textContent = plansData.length;
                 updateDailyIncomeDisplay(userData.lastDailyIncomeAmount || 0);
@@ -3565,7 +3957,8 @@
                 const data = snap.val() || {};
                 treasureData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 if ($('screen-treasure').classList.contains('active')) renderTreasure();
-                if (adminPanel.classList.contains('active') && document.querySelector('#tab-treasure .active')) renderAdminTreasure();
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-treasure .active'))
+                    renderAdminTreasure();
                 updateAdminStats();
             });
         }
@@ -3586,7 +3979,7 @@
                 if (data.monthlyInvoiceLimit) invoiceData.monthlyLimit = parseInt(data.monthlyInvoiceLimit);
                 if (data.maxInvoiceAmount) invoiceData.maxAmount = parseInt(data.maxInvoiceAmount);
                 updateInvoiceBanner();
-                
+
                 const config = gatewayConfig[selectedGateway];
                 if (config) gatewayNumber.textContent = settingsData[selectedGateway + 'Number'] || config.number;
 
@@ -3620,7 +4013,8 @@
                 const data = snap.val() || {};
                 rechargeRequests = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 rechargeRequests.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                if (adminPanel.classList.contains('active') && document.querySelector('#tab-recharge .active')) renderAdminRecharge();
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-recharge .active'))
+                    renderAdminRecharge();
                 updateAdminStats();
             });
         }
@@ -3630,7 +4024,8 @@
                 const data = snap.val() || {};
                 withdrawRequests = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 withdrawRequests.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                if (adminPanel.classList.contains('active') && document.querySelector('#tab-withdraw .active')) renderAdminWithdraw();
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-withdraw .active'))
+                    renderAdminWithdraw();
                 updateAdminStats();
             });
         }
@@ -3641,25 +4036,25 @@
         function planCardHTML(p) {
             const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}" />` : (p.icon || '<i class="fas fa-chart-line"></i>');
             return `
-                <div class="plan-card hover-lift">
-                    <div class="top">
-                        <div class="icon-box">${imgHtml}</div>
-                        <div class="info">
-                            <div class="name">${p.name}</div>
-                            <span class="vip-badge"><i class="fas fa-crown"></i> ${p.badge || 'VIP'}</span>
+                    <div class="plan-card hover-lift">
+                        <div class="top">
+                            <div class="icon-box">${imgHtml}</div>
+                            <div class="info">
+                                <div class="name">${p.name}</div>
+                                <span class="vip-badge"><i class="fas fa-crown"></i> ${p.badge || 'VIP'}</span>
+                            </div>
                         </div>
+                        <div class="stats">
+                            <div class="stat"><div class="num">${p.period || 'N/A'}</div><div class="lbl">Period</div></div>
+                            <div class="stat"><div class="num gold">${p.daily || '0'}</div><div class="lbl">Day Income</div></div>
+                            <div class="stat"><div class="num blue">${p.total || '0'}</div><div class="lbl">Total Income</div></div>
+                            <div class="stat"><div class="num">${p.price || '0'}</div><div class="lbl">Price</div></div>
+                        </div>
+                        <button class="btn-invest invest-btn" data-id="${p.id}" data-price="${p.price}" data-name="${p.name}">
+                            <i class="fas fa-chart-line"></i> Invest Now
+                        </button>
                     </div>
-                    <div class="stats">
-                        <div class="stat"><div class="num">${p.period || 'N/A'}</div><div class="lbl">Period</div></div>
-                        <div class="stat"><div class="num gold">${p.daily || '0'}</div><div class="lbl">Day Income</div></div>
-                        <div class="stat"><div class="num blue">${p.total || '0'}</div><div class="lbl">Total Income</div></div>
-                        <div class="stat"><div class="num">${p.price || '0'}</div><div class="lbl">Price</div></div>
-                    </div>
-                    <button class="btn-invest invest-btn" data-id="${p.id}" data-price="${p.price}" data-name="${p.name}">
-                        <i class="fas fa-chart-line"></i> Invest Now
-                    </button>
-                </div>
-            `;
+                `;
         }
 
         function renderHome() {
@@ -3674,13 +4069,13 @@
                 recentActivity.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recent activity</p>';
             } else {
                 recentActivity.innerHTML = acts.map(a => `
-                    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
-                        <span style="font-weight:500;font-size:13px;"><i class="fas fa-exchange-alt"></i> ${a.type || 'Unknown'}</span>
-                        <span style="font-weight:700;color:${a.positive ? '#0f9d6e' : '#dc3545'};">
-                            ${a.positive ? '<i class="fas fa-arrow-up"></i> +' : '<i class="fas fa-arrow-down"></i> -'} ${money(a.amount || 0)}
-                        </span>
-                    </div>
-                `).join('');
+                        <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+                            <span style="font-weight:500;font-size:13px;"><i class="fas fa-exchange-alt"></i> ${a.type || 'Unknown'}</span>
+                            <span style="font-weight:700;color:${a.positive ? '#0f9d6e' : '#dc3545'};">
+                                ${a.positive ? '<i class="fas fa-arrow-up"></i> +' : '<i class="fas fa-arrow-down"></i> -'} ${money(a.amount || 0)}
+                            </span>
+                        </div>
+                    `).join('');
             }
             document.querySelectorAll('.invest-btn').forEach(btn => {
                 btn.removeEventListener('click', handleInvest);
@@ -3696,7 +4091,7 @@
             const id = btn.dataset.id;
             if (userData.balance < price) { toast('Insufficient balance! Need ' + money(price), 'error'); return; }
             if (!currentUser) { toast('Please login', 'error'); return; }
-            
+
             if (invoiceData.dailyUsed >= invoiceData.dailyLimit) {
                 toast('Daily invoice limit reached! Upgrade your plan to continue.', 'error');
                 return;
@@ -3705,14 +4100,14 @@
                 toast('Monthly invoice limit reached! Upgrade your plan to continue.', 'error');
                 return;
             }
-            
+
             const newBalance = userData.balance - price;
             const invRef = db.ref('users/' + currentUser.uid + '/investments').push();
             invRef.set({ planId: id, planName: name, amount: price, investedAt: Date.now(), status: 'active' });
             db.ref('users/' + currentUser.uid + '/balance').set(newBalance);
             const actRef = db.ref('users/' + currentUser.uid + '/activity').push();
             actRef.set({ type: 'Investment', amount: price, date: Date.now(), positive: false });
-            
+
             const newDailyUsed = invoiceData.dailyUsed + 1;
             const newMonthlyUsed = invoiceData.monthlyUsed + 1;
             const newTotalAmount = invoiceData.totalAmount + price;
@@ -3722,15 +4117,17 @@
                 totalAmount: newTotalAmount,
                 lastUpdated: Date.now()
             });
-            
+
             toast('Invested in ' + name + '! Invoice generated.', 'success');
         }
 
         function renderAllPlans() {
             const query = searchPlans.value.toLowerCase().trim();
             let filtered = plansData;
-            if (query) filtered = plansData.filter(p => (p.name || '').toLowerCase().includes(query) || (p.badge || '').toLowerCase().includes(query));
-            if (filtered.length === 0) { allPlansList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-search"></i> No plans found</p>'; return; }
+            if (query) filtered = plansData.filter(p => (p.name || '').toLowerCase().includes(query) || (p.badge || '')
+                .toLowerCase().includes(query));
+            if (filtered.length === 0) { allPlansList.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-search"></i> No plans found</p>'; return; }
             allPlansList.innerHTML = filtered.map(p => planCardHTML(p)).join('');
             document.querySelectorAll('#allPlansList .invest-btn').forEach(btn => {
                 btn.removeEventListener('click', handleInvest);
@@ -3741,19 +4138,20 @@
 
         function renderInvestments() {
             const invs = userData.investments || [];
-            if (invs.length === 0) { myInvestments.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No investments yet</p>'; return; }
+            if (invs.length === 0) { myInvestments.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No investments yet</p>'; return; }
             myInvestments.innerHTML = invs.map(inv => `
-                <div class="invest-item">
-                    <div class="left">
-                        <div class="name"><i class="fas fa-briefcase"></i> ${inv.planName || 'Plan'}</div>
-                        <div class="date"><i class="fas fa-calendar"></i> ${formatDate(inv.investedAt)}</div>
+                    <div class="invest-item">
+                        <div class="left">
+                            <div class="name"><i class="fas fa-briefcase"></i> ${inv.planName || 'Plan'}</div>
+                            <div class="date"><i class="fas fa-calendar"></i> ${formatDate(inv.investedAt)}</div>
+                        </div>
+                        <div class="right">
+                            <div class="amount">${money(inv.amount || 0)}</div>
+                            <span class="status ${inv.status || 'active'}"><i class="fas fa-circle"></i> ${inv.status || 'active'}</span>
+                        </div>
                     </div>
-                    <div class="right">
-                        <div class="amount">${money(inv.amount || 0)}</div>
-                        <span class="status ${inv.status || 'active'}"><i class="fas fa-circle"></i> ${inv.status || 'active'}</span>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         function renderActivity() {
@@ -3761,31 +4159,32 @@
             if (acts.length === 0) { activityList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No activity</p>'; return; }
             const sorted = [...acts].sort((a, b) => (b.date || 0) - (a.date || 0));
             activityList.innerHTML = sorted.map(a => `
-                <div class="activity-item">
-                    <div class="left">
-                        <div class="type"><i class="fas fa-exchange-alt"></i> ${a.type || 'Unknown'}</div>
-                        <div class="time"><i class="fas fa-clock"></i> ${a.date ? formatDate(a.date) + ' ' + formatTime(a.date) : ''}</div>
+                    <div class="activity-item">
+                        <div class="left">
+                            <div class="type"><i class="fas fa-exchange-alt"></i> ${a.type || 'Unknown'}</div>
+                            <div class="time"><i class="fas fa-clock"></i> ${a.date ? formatDate(a.date) + ' ' + formatTime(a.date) : ''}</div>
+                        </div>
+                        <div class="right">
+                            <span class="amt ${a.positive ? 'positive' : 'negative'}">
+                                ${a.positive ? '<i class="fas fa-arrow-up"></i> +' : '<i class="fas fa-arrow-down"></i> -'} ${money(a.amount || 0)}
+                            </span>
+                        </div>
                     </div>
-                    <div class="right">
-                        <span class="amt ${a.positive ? 'positive' : 'negative'}">
-                            ${a.positive ? '<i class="fas fa-arrow-up"></i> +' : '<i class="fas fa-arrow-down"></i> -'} ${money(a.amount || 0)}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         function renderTreasure() {
             if (treasureData.length === 0) {
-                treasureList.innerHTML = `<div class="empty"><i class="fas fa-box-open"></i> No treasure codes available</div>`;
+                treasureList.innerHTML =
+                    `<div class="empty"><i class="fas fa-box-open"></i> No treasure codes available</div>`;
                 return;
             }
             treasureList.innerHTML = treasureData.map(t => `
-                <div class="item">
-                    <span class="code"><i class="fas fa-key"></i> ${t.code || 'N/A'}</span>
-                    <span class="points"><i class="fas fa-coins"></i> ${t.points || '0'}</span>
-                </div>
-            `).join('');
+                    <div class="item">
+                        <span class="code"><i class="fas fa-key"></i> ${t.code || 'N/A'}</span>
+                        <span class="points"><i class="fas fa-coins"></i> ${t.points || '0'}</span>
+                    </div>
+                `).join('');
         }
 
         // ============================================================
@@ -3811,7 +4210,8 @@
                     createdAt: Date.now()
                 });
                 const actRef = db.ref('users/' + currentUser.uid + '/activity').push();
-                await actRef.set({ type: 'Recharge Request (' + selectedGateway + ')', amount: 0, date: Date.now(), positive: false });
+                await actRef.set({ type: 'Recharge Request (' + selectedGateway + ')', amount: 0, date: Date.now(),
+                    positive: false });
                 showAlert('✅ Recharge request submitted! Please wait for admin verification.', 'success');
                 senderNumber.value = '';
                 trxId.value = '';
@@ -3896,7 +4296,8 @@
             reader.readAsDataURL(file);
         });
 
-        logoutBtn.addEventListener('click', () => { auth.signOut(); toast('Logged out', 'info'); });
+        logoutBtn.addEventListener('click', () => { auth.signOut();
+            toast('Logged out', 'info'); });
 
         // ============================================================
         //  ANNOUNCEMENT
@@ -3962,42 +4363,43 @@
 
         // ===== ADMIN: PLANS =====
         function renderAdminPlans() {
-            if (plansData.length === 0) { adminPlansList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No plans added yet</p>'; return; }
+            if (plansData.length === 0) { adminPlansList.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No plans added yet</p>'; return; }
             adminPlansList.innerHTML = plansData.map(p => `
-                <div class="admin-card hover-lift">
-                    <div class="row">
-                        <div class="info">
-                            <div class="label"><i class="fas fa-chart-line"></i> ${p.name} <span class="badge-status" style="background:var(--primary-light);color:var(--primary);">${p.badge || 'VIP'}</span></div>
-                            <div class="sub"><i class="fas fa-money-bill"></i> ${p.price} | <i class="fas fa-calendar"></i> ${p.period} | <i class="fas fa-chart-bar"></i> ${p.daily}/day</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-sm primary" onclick="editPlan('${p.id}')"><i class="fas fa-edit"></i></button>
-                            <button class="btn-sm danger" onclick="deletePlan('${p.id}')"><i class="fas fa-trash"></i></button>
+                    <div class="admin-card hover-lift">
+                        <div class="row">
+                            <div class="info">
+                                <div class="label"><i class="fas fa-chart-line"></i> ${p.name} <span class="badge-status" style="background:var(--primary-light);color:var(--primary);">${p.badge || 'VIP'}</span></div>
+                                <div class="sub"><i class="fas fa-money-bill"></i> ${p.price} | <i class="fas fa-calendar"></i> ${p.period} | <i class="fas fa-chart-bar"></i> ${p.daily}/day</div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm primary" onclick="editPlan('${p.id}')"><i class="fas fa-edit"></i></button>
+                                <button class="btn-sm danger" onclick="deletePlan('${p.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         addPlanBtn.addEventListener('click', () => {
             openModal('<i class="fas fa-plus"></i> Add Investment Plan', `
-                <form class="admin-form" id="planForm" onsubmit="return false;">
-                    <div class="form-row full"><label><i class="fas fa-tag"></i> Plan Name</label><input id="planName" type="text" placeholder="boschrexroth-7" /></div>
-                    <div class="form-row"><div><label><i class="fas fa-crown"></i> Badge</label><input id="planBadge" type="text" placeholder="VIP0" /></div><div><label><i class="fas fa-calendar"></i> Period</label><input id="planPeriod" type="text" placeholder="22 Days" /></div></div>
-                    <div class="form-row"><div><label><i class="fas fa-chart-line"></i> Daily Income</label><input id="planDaily" type="text" placeholder="35.00" /></div><div><label><i class="fas fa-chart-bar"></i> Total Income</label><input id="planTotal" type="text" placeholder="770.00" /></div></div>
-                    <div class="form-row"><div><label><i class="fas fa-money-bill"></i> Price</label><input id="planPrice" type="text" placeholder="400" /></div><div><label><i class="fas fa-image"></i> Icon (emoji)</label><input id="planIcon" type="text" placeholder="📈" /></div></div>
-                    <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image (Upload)</label>
-                        <div class="image-upload-container" id="planImageUpload">
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <div class="upload-text">Click to upload plan image</div>
-                            <input type="file" id="planImageFile" accept="image/*" style="display:none;" />
+                    <form class="admin-form" id="planForm" onsubmit="return false;">
+                        <div class="form-row full"><label><i class="fas fa-tag"></i> Plan Name</label><input id="planName" type="text" placeholder="boschrexroth-7" /></div>
+                        <div class="form-row"><div><label><i class="fas fa-crown"></i> Badge</label><input id="planBadge" type="text" placeholder="VIP0" /></div><div><label><i class="fas fa-calendar"></i> Period</label><input id="planPeriod" type="text" placeholder="22 Days" /></div></div>
+                        <div class="form-row"><div><label><i class="fas fa-chart-line"></i> Daily Income</label><input id="planDaily" type="text" placeholder="35.00" /></div><div><label><i class="fas fa-chart-bar"></i> Total Income</label><input id="planTotal" type="text" placeholder="770.00" /></div></div>
+                        <div class="form-row"><div><label><i class="fas fa-money-bill"></i> Price</label><input id="planPrice" type="text" placeholder="400" /></div><div><label><i class="fas fa-image"></i> Icon (emoji)</label><input id="planIcon" type="text" placeholder="📈" /></div></div>
+                        <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image (Upload)</label>
+                            <div class="image-upload-container" id="planImageUpload">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <div class="upload-text">Click to upload plan image</div>
+                                <input type="file" id="planImageFile" accept="image/*" style="display:none;" />
+                            </div>
+                            <input id="planImage" type="hidden" placeholder="data:image/..." />
                         </div>
-                        <input id="planImage" type="hidden" placeholder="data:image/..." />
-                    </div>
-                    <div class="btn-row"><button type="button" class="btn-submit" id="savePlanBtn"><i class="fas fa-save"></i> Save Plan</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
-                </form>
-            `);
-            
+                        <div class="btn-row"><button type="button" class="btn-submit" id="savePlanBtn"><i class="fas fa-save"></i> Save Plan</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
+                    </form>
+                `);
+
             const planImageUpload = document.getElementById('planImageUpload');
             const planImageFile = document.getElementById('planImageFile');
             planImageUpload.addEventListener('click', () => planImageFile.click());
@@ -4009,14 +4411,14 @@
                     const base64 = ev.target.result;
                     document.getElementById('planImage').value = base64;
                     planImageUpload.innerHTML = `
-                        <img src="${base64}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />
-                        <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
-                    `;
+                            <img src="${base64}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                            <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
+                        `;
                     toast('Plan image uploaded!', 'success');
                 };
                 reader.readAsDataURL(file);
             });
-            
+
             document.getElementById('savePlanBtn').addEventListener('click', async () => {
                 const name = document.getElementById('planName').value.trim();
                 const badge = document.getElementById('planBadge').value.trim();
@@ -4040,22 +4442,22 @@
             const p = plansData.find(x => x.id === id);
             if (!p) return;
             openModal('<i class="fas fa-edit"></i> Edit Plan', `
-                <form class="admin-form" id="editPlanForm" onsubmit="return false;">
-                    <div class="form-row full"><label><i class="fas fa-tag"></i> Plan Name</label><input id="ePlanName" type="text" value="${p.name || ''}" /></div>
-                    <div class="form-row"><div><label><i class="fas fa-crown"></i> Badge</label><input id="ePlanBadge" type="text" value="${p.badge || ''}" /></div><div><label><i class="fas fa-calendar"></i> Period</label><input id="ePlanPeriod" type="text" value="${p.period || ''}" /></div></div>
-                    <div class="form-row"><div><label><i class="fas fa-chart-line"></i> Daily Income</label><input id="ePlanDaily" type="text" value="${p.daily || ''}" /></div><div><label><i class="fas fa-chart-bar"></i> Total Income</label><input id="ePlanTotal" type="text" value="${p.total || ''}" /></div></div>
-                    <div class="form-row"><div><label><i class="fas fa-money-bill"></i> Price</label><input id="ePlanPrice" type="text" value="${p.price || ''}" /></div><div><label><i class="fas fa-image"></i> Icon</label><input id="ePlanIcon" type="text" value="${p.icon || ''}" /></div></div>
-                    <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image</label>
-                        <div class="image-upload-container" id="editPlanImageUpload">
-                            ${p.image ? `<img src="${p.image}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />` : '<i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload plan image</div>'}
-                            <input type="file" id="editPlanImageFile" accept="image/*" style="display:none;" />
+                    <form class="admin-form" id="editPlanForm" onsubmit="return false;">
+                        <div class="form-row full"><label><i class="fas fa-tag"></i> Plan Name</label><input id="ePlanName" type="text" value="${p.name || ''}" /></div>
+                        <div class="form-row"><div><label><i class="fas fa-crown"></i> Badge</label><input id="ePlanBadge" type="text" value="${p.badge || ''}" /></div><div><label><i class="fas fa-calendar"></i> Period</label><input id="ePlanPeriod" type="text" value="${p.period || ''}" /></div></div>
+                        <div class="form-row"><div><label><i class="fas fa-chart-line"></i> Daily Income</label><input id="ePlanDaily" type="text" value="${p.daily || ''}" /></div><div><label><i class="fas fa-chart-bar"></i> Total Income</label><input id="ePlanTotal" type="text" value="${p.total || ''}" /></div></div>
+                        <div class="form-row"><div><label><i class="fas fa-money-bill"></i> Price</label><input id="ePlanPrice" type="text" value="${p.price || ''}" /></div><div><label><i class="fas fa-image"></i> Icon</label><input id="ePlanIcon" type="text" value="${p.icon || ''}" /></div></div>
+                        <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image</label>
+                            <div class="image-upload-container" id="editPlanImageUpload">
+                                ${p.image ? `<img src="${p.image}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />` : '<i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload plan image</div>'}
+                                <input type="file" id="editPlanImageFile" accept="image/*" style="display:none;" />
+                            </div>
+                            <input id="ePlanImage" type="hidden" value="${p.image || ''}" />
                         </div>
-                        <input id="ePlanImage" type="hidden" value="${p.image || ''}" />
-                    </div>
-                    <div class="btn-row"><button type="button" class="btn-submit" id="updatePlanBtn"><i class="fas fa-save"></i> Update Plan</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
-                </form>
-            `);
-            
+                        <div class="btn-row"><button type="button" class="btn-submit" id="updatePlanBtn"><i class="fas fa-save"></i> Update Plan</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
+                    </form>
+                `);
+
             const editPlanImageUpload = document.getElementById('editPlanImageUpload');
             const editPlanImageFile = document.getElementById('editPlanImageFile');
             editPlanImageUpload.addEventListener('click', () => editPlanImageFile.click());
@@ -4067,14 +4469,14 @@
                     const base64 = ev.target.result;
                     document.getElementById('ePlanImage').value = base64;
                     editPlanImageUpload.innerHTML = `
-                        <img src="${base64}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />
-                        <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
-                    `;
+                            <img src="${base64}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />
+                            <div class="upload-text" style="margin-top:8px;">✅ Image uploaded! Click to change</div>
+                        `;
                     toast('Plan image updated!', 'success');
                 };
                 reader.readAsDataURL(file);
             });
-            
+
             document.getElementById('updatePlanBtn').addEventListener('click', async () => {
                 const name = document.getElementById('ePlanName').value.trim();
                 const badge = document.getElementById('ePlanBadge').value.trim();
@@ -4095,30 +4497,32 @@
 
         window.deletePlan = function(id) {
             if (!confirm('Delete this plan?')) return;
-            db.ref('plans/' + id).remove().then(() => toast('Plan deleted', 'success')).catch(e => toast('Error: ' + e.message, 'error'));
+            db.ref('plans/' + id).remove().then(() => toast('Plan deleted', 'success')).catch(e => toast('Error: ' + e
+                .message, 'error'));
         };
 
         // ===== ADMIN: TREASURE =====
         function renderAdminTreasure() {
-            if (treasureData.length === 0) { adminTreasureList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No treasure codes added yet</p>'; return; }
+            if (treasureData.length === 0) { adminTreasureList.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No treasure codes added yet</p>'; return; }
             adminTreasureList.innerHTML = treasureData.map(t => `
-                <div class="admin-card hover-lift">
-                    <div class="row">
-                        <div class="info"><div class="label"><i class="fas fa-key"></i> ${t.code || 'N/A'}</div><div class="sub"><i class="fas fa-coins"></i> ${t.points || '0'} points</div></div>
-                        <div class="actions"><button class="btn-sm primary" onclick="editTreasure('${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-sm danger" onclick="deleteTreasure('${t.id}')"><i class="fas fa-trash"></i></button></div>
+                    <div class="admin-card hover-lift">
+                        <div class="row">
+                            <div class="info"><div class="label"><i class="fas fa-key"></i> ${t.code || 'N/A'}</div><div class="sub"><i class="fas fa-coins"></i> ${t.points || '0'} points</div></div>
+                            <div class="actions"><button class="btn-sm primary" onclick="editTreasure('${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-sm danger" onclick="deleteTreasure('${t.id}')"><i class="fas fa-trash"></i></button></div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         addTreasureBtn.addEventListener('click', () => {
             openModal('<i class="fas fa-plus"></i> Add Treasure Code', `
-                <form class="admin-form" id="treasureForm" onsubmit="return false;">
-                    <div class="form-row full"><label><i class="fas fa-key"></i> Code</label><input id="tCode" type="text" placeholder="U95***/3450" /></div>
-                    <div class="form-row full"><label><i class="fas fa-coins"></i> Points</label><input id="tPoints" type="text" placeholder="P 18.1U" /></div>
-                    <div class="btn-row"><button type="button" class="btn-submit" id="saveTreasureBtn"><i class="fas fa-save"></i> Save Code</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
-                </form>
-            `);
+                    <form class="admin-form" id="treasureForm" onsubmit="return false;">
+                        <div class="form-row full"><label><i class="fas fa-key"></i> Code</label><input id="tCode" type="text" placeholder="U95***/3450" /></div>
+                        <div class="form-row full"><label><i class="fas fa-coins"></i> Points</label><input id="tPoints" type="text" placeholder="P 18.1U" /></div>
+                        <div class="btn-row"><button type="button" class="btn-submit" id="saveTreasureBtn"><i class="fas fa-save"></i> Save Code</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
+                    </form>
+                `);
             document.getElementById('saveTreasureBtn').addEventListener('click', async () => {
                 const code = document.getElementById('tCode').value.trim();
                 const points = document.getElementById('tPoints').value.trim();
@@ -4136,12 +4540,12 @@
             const t = treasureData.find(x => x.id === id);
             if (!t) return;
             openModal('<i class="fas fa-edit"></i> Edit Treasure Code', `
-                <form class="admin-form" id="editTreasureForm" onsubmit="return false;">
-                    <div class="form-row full"><label><i class="fas fa-key"></i> Code</label><input id="eTCode" type="text" value="${t.code || ''}" /></div>
-                    <div class="form-row full"><label><i class="fas fa-coins"></i> Points</label><input id="eTPoints" type="text" value="${t.points || ''}" /></div>
-                    <div class="btn-row"><button type="button" class="btn-submit" id="updateTreasureBtn"><i class="fas fa-save"></i> Update Code</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
-                </form>
-            `);
+                    <form class="admin-form" id="editTreasureForm" onsubmit="return false;">
+                        <div class="form-row full"><label><i class="fas fa-key"></i> Code</label><input id="eTCode" type="text" value="${t.code || ''}" /></div>
+                        <div class="form-row full"><label><i class="fas fa-coins"></i> Points</label><input id="eTPoints" type="text" value="${t.points || ''}" /></div>
+                        <div class="btn-row"><button type="button" class="btn-submit" id="updateTreasureBtn"><i class="fas fa-save"></i> Update Code</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
+                    </form>
+                `);
             document.getElementById('updateTreasureBtn').addEventListener('click', async () => {
                 const code = document.getElementById('eTCode').value.trim();
                 const points = document.getElementById('eTPoints').value.trim();
@@ -4156,7 +4560,8 @@
 
         window.deleteTreasure = function(id) {
             if (!confirm('Delete this treasure code?')) return;
-            db.ref('treasure/' + id).remove().then(() => toast('Code deleted', 'success')).catch(e => toast('Error: ' + e.message, 'error'));
+            db.ref('treasure/' + id).remove().then(() => toast('Code deleted', 'success')).catch(e => toast('Error: ' + e
+                .message, 'error'));
         };
 
         // ===== ADMIN: SETTINGS =====
@@ -4193,28 +4598,29 @@
 
         // ===== ADMIN: RECHARGE =====
         function renderAdminRecharge() {
-            if (rechargeRequests.length === 0) { adminRechargeList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recharge requests</p>'; return; }
+            if (rechargeRequests.length === 0) { adminRechargeList.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recharge requests</p>'; return; }
             const pending = rechargeRequests.filter(r => r.status === 'pending');
             const others = rechargeRequests.filter(r => r.status !== 'pending');
             const sorted = [...pending, ...others];
             adminRechargeList.innerHTML = sorted.map(r => `
-                <div class="admin-card hover-lift">
-                    <div class="row">
-                        <div class="info">
-                            <div class="label"><i class="fas fa-user"></i> ${r.sender || 'N/A'} <span class="badge-status ${r.status || 'pending'}">${r.status || 'pending'}</span></div>
-                            <div class="sub"><i class="fas fa-receipt"></i> ${r.trxId || 'N/A'} | <i class="fas fa-credit-card"></i> ${r.gateway || 'N/A'} | <i class="fas fa-envelope"></i> ${r.userEmail || 'N/A'}</div>
-                            <div class="sub text-muted fs-12"><i class="fas fa-clock"></i> ${r.createdAt ? formatDateTime(r.createdAt) : ''}</div>
-                        </div>
-                        <div class="actions">
-                            ${r.status === 'pending' ? `
-                                <button class="btn-sm success" onclick="approveRecharge('${r.id}')"><i class="fas fa-check"></i></button>
-                                <button class="btn-sm danger" onclick="rejectRecharge('${r.id}')"><i class="fas fa-times"></i></button>
-                            ` : ''}
-                            <button class="btn-sm danger" onclick="deleteRecharge('${r.id}')"><i class="fas fa-trash"></i></button>
+                    <div class="admin-card hover-lift">
+                        <div class="row">
+                            <div class="info">
+                                <div class="label"><i class="fas fa-user"></i> ${r.sender || 'N/A'} <span class="badge-status ${r.status || 'pending'}">${r.status || 'pending'}</span></div>
+                                <div class="sub"><i class="fas fa-receipt"></i> ${r.trxId || 'N/A'} | <i class="fas fa-credit-card"></i> ${r.gateway || 'N/A'} | <i class="fas fa-envelope"></i> ${r.userEmail || 'N/A'}</div>
+                                <div class="sub text-muted fs-12"><i class="fas fa-clock"></i> ${r.createdAt ? formatDateTime(r.createdAt) : ''}</div>
+                            </div>
+                            <div class="actions">
+                                ${r.status === 'pending' ? `
+                                    <button class="btn-sm success" onclick="approveRecharge('${r.id}')"><i class="fas fa-check"></i></button>
+                                    <button class="btn-sm danger" onclick="rejectRecharge('${r.id}')"><i class="fas fa-times"></i></button>
+                                ` : ''}
+                                <button class="btn-sm danger" onclick="deleteRecharge('${r.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         window.approveRecharge = function(id) {
@@ -4228,7 +4634,8 @@
             if (r.userId) {
                 db.ref('users/' + r.userId + '/balance').transaction((current) => (current || 0) + amt);
                 const actRef = db.ref('users/' + r.userId + '/activity').push();
-                actRef.set({ type: 'Recharge Approved (' + (r.gateway || 'N/A') + ')', amount: amt, date: Date.now(), positive: true });
+                actRef.set({ type: 'Recharge Approved (' + (r.gateway || 'N/A') + ')', amount: amt, date: Date.now(),
+                    positive: true });
             }
             toast('Recharge approved! ' + money(amt), 'success');
         };
@@ -4246,28 +4653,29 @@
 
         // ===== ADMIN: WITHDRAW =====
         function renderAdminWithdraw() {
-            if (withdrawRequests.length === 0) { adminWithdrawList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No withdrawal requests</p>'; return; }
+            if (withdrawRequests.length === 0) { adminWithdrawList.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No withdrawal requests</p>'; return; }
             const pending = withdrawRequests.filter(r => r.status === 'pending');
             const others = withdrawRequests.filter(r => r.status !== 'pending');
             const sorted = [...pending, ...others];
             adminWithdrawList.innerHTML = sorted.map(r => `
-                <div class="admin-card hover-lift">
-                    <div class="row">
-                        <div class="info">
-                            <div class="label"><i class="fas fa-user"></i> ${r.account || 'N/A'} <span class="badge-status ${r.status || 'pending'}">${r.status || 'pending'}</span></div>
-                            <div class="sub"><i class="fas fa-money-bill"></i> ${money(r.amount || 0)} | <i class="fas fa-credit-card"></i> ${r.method || 'N/A'} | <i class="fas fa-envelope"></i> ${r.userEmail || 'N/A'}</div>
-                            <div class="sub text-muted fs-12"><i class="fas fa-clock"></i> ${r.createdAt ? formatDateTime(r.createdAt) : ''}</div>
-                        </div>
-                        <div class="actions">
-                            ${r.status === 'pending' ? `
-                                <button class="btn-sm success" onclick="approveWithdraw('${r.id}')"><i class="fas fa-check"></i></button>
-                                <button class="btn-sm danger" onclick="rejectWithdraw('${r.id}')"><i class="fas fa-times"></i></button>
-                            ` : ''}
-                            <button class="btn-sm danger" onclick="deleteWithdraw('${r.id}')"><i class="fas fa-trash"></i></button>
+                    <div class="admin-card hover-lift">
+                        <div class="row">
+                            <div class="info">
+                                <div class="label"><i class="fas fa-user"></i> ${r.account || 'N/A'} <span class="badge-status ${r.status || 'pending'}">${r.status || 'pending'}</span></div>
+                                <div class="sub"><i class="fas fa-money-bill"></i> ${money(r.amount || 0)} | <i class="fas fa-credit-card"></i> ${r.method || 'N/A'} | <i class="fas fa-envelope"></i> ${r.userEmail || 'N/A'}</div>
+                                <div class="sub text-muted fs-12"><i class="fas fa-clock"></i> ${r.createdAt ? formatDateTime(r.createdAt) : ''}</div>
+                            </div>
+                            <div class="actions">
+                                ${r.status === 'pending' ? `
+                                    <button class="btn-sm success" onclick="approveWithdraw('${r.id}')"><i class="fas fa-check"></i></button>
+                                    <button class="btn-sm danger" onclick="rejectWithdraw('${r.id}')"><i class="fas fa-times"></i></button>
+                                ` : ''}
+                                <button class="btn-sm danger" onclick="deleteWithdraw('${r.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         window.approveWithdraw = function(id) {
@@ -4297,51 +4705,54 @@
         // ===== ADMIN: INVOICES =====
         function renderAdminInvoices() {
             const invoices = [
-                { id: 'INV-001', user: 'user1@example.com', amount: 5000, date: Date.now() - 86400000 * 10, status: 'paid' },
-                { id: 'INV-002', user: 'user2@example.com', amount: 3500, date: Date.now() - 86400000 * 5, status: 'paid' },
-                { id: 'INV-003', user: 'user3@example.com', amount: 7200, date: Date.now() - 86400000 * 2, status: 'pending' }
+                { id: 'INV-001', user: 'user1@example.com', amount: 5000, date: Date.now() - 86400000 * 10,
+                status: 'paid' },
+                { id: 'INV-002', user: 'user2@example.com', amount: 3500, date: Date.now() - 86400000 * 5,
+                status: 'paid' },
+                { id: 'INV-003', user: 'user3@example.com', amount: 7200, date: Date.now() - 86400000 * 2,
+                status: 'pending' }
             ];
-            
+
             adminInvoiceList.innerHTML = invoices.map(inv => `
-                <div class="admin-card hover-lift">
-                    <div class="row">
-                        <div class="info">
-                            <div class="label"><i class="fas fa-file-invoice"></i> ${inv.id} <span class="badge-status ${inv.status === 'paid' ? 'approved' : 'pending'}">${inv.status}</span></div>
-                            <div class="sub"><i class="fas fa-user"></i> ${inv.user} | <i class="fas fa-money-bill"></i> ${money(inv.amount)} | <i class="fas fa-calendar"></i> ${formatDate(inv.date)}</div>
-                        </div>
-                        <div class="actions">
-                            <button class="btn-sm info" onclick="viewInvoice('${inv.id}')"><i class="fas fa-eye"></i></button>
-                            <button class="btn-sm success" onclick="markInvoicePaid('${inv.id}')"><i class="fas fa-check"></i></button>
+                    <div class="admin-card hover-lift">
+                        <div class="row">
+                            <div class="info">
+                                <div class="label"><i class="fas fa-file-invoice"></i> ${inv.id} <span class="badge-status ${inv.status === 'paid' ? 'approved' : 'pending'}">${inv.status}</span></div>
+                                <div class="sub"><i class="fas fa-user"></i> ${inv.user} | <i class="fas fa-money-bill"></i> ${money(inv.amount)} | <i class="fas fa-calendar"></i> ${formatDate(inv.date)}</div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm info" onclick="viewInvoice('${inv.id}')"><i class="fas fa-eye"></i></button>
+                                <button class="btn-sm success" onclick="markInvoicePaid('${inv.id}')"><i class="fas fa-check"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         window.viewInvoice = function(id) {
             openModal('<i class="fas fa-file-invoice"></i> Invoice Details', `
-                <div style="padding: 10px;">
-                    <p class="text-muted fs-14"><i class="fas fa-file-invoice"></i> Invoice #${id}</p>
-                    <div style="margin-top: 12px;">
-                        <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
-                            <span class="text-muted fs-12"><i class="fas fa-hashtag"></i> Invoice ID</span>
-                            <span class="fw-700 fs-12">${id}</span>
-                        </div>
-                        <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
-                            <span class="text-muted fs-12"><i class="fas fa-money-bill"></i> Amount</span>
-                            <span class="fw-700 fs-12">৳ 5,000</span>
-                        </div>
-                        <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
-                            <span class="text-muted fs-12"><i class="fas fa-check-circle"></i> Status</span>
-                            <span class="fw-700 fs-12" style="color: #28a745;">Paid</span>
-                        </div>
-                        <div class="flex-between" style="padding: 8px 0;">
-                            <span class="text-muted fs-12"><i class="fas fa-calendar"></i> Date</span>
-                            <span class="fw-700 fs-12">${formatDate(Date.now())}</span>
+                    <div style="padding: 10px;">
+                        <p class="text-muted fs-14"><i class="fas fa-file-invoice"></i> Invoice #${id}</p>
+                        <div style="margin-top: 12px;">
+                            <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                <span class="text-muted fs-12"><i class="fas fa-hashtag"></i> Invoice ID</span>
+                                <span class="fw-700 fs-12">${id}</span>
+                            </div>
+                            <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                <span class="text-muted fs-12"><i class="fas fa-money-bill"></i> Amount</span>
+                                <span class="fw-700 fs-12">৳ 5,000</span>
+                            </div>
+                            <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
+                                <span class="text-muted fs-12"><i class="fas fa-check-circle"></i> Status</span>
+                                <span class="fw-700 fs-12" style="color: #28a745;">Paid</span>
+                            </div>
+                            <div class="flex-between" style="padding: 8px 0;">
+                                <span class="text-muted fs-12"><i class="fas fa-calendar"></i> Date</span>
+                                <span class="fw-700 fs-12">${formatDate(Date.now())}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `);
+                `);
         };
 
         window.markInvoicePaid = function(id) {
@@ -4358,19 +4769,21 @@
             statInvoiceLimit.textContent = invoiceData.monthlyLimit;
 
             const all = [];
-            rechargeRequests.forEach(r => all.push({ type: 'Recharge', status: r.status, date: r.createdAt, user: r.userEmail, gateway: r.gateway }));
-            withdrawRequests.forEach(r => all.push({ type: 'Withdraw', status: r.status, date: r.createdAt, user: r.userEmail, method: r.method }));
+            rechargeRequests.forEach(r => all.push({ type: 'Recharge', status: r.status, date: r.createdAt, user: r
+                    .userEmail, gateway: r.gateway }));
+            withdrawRequests.forEach(r => all.push({ type: 'Withdraw', status: r.status, date: r.createdAt, user: r
+                    .userEmail, method: r.method }));
             all.sort((a, b) => (b.date || 0) - (a.date || 0));
             const recent = all.slice(0, 10);
             if (recent.length === 0) {
                 adminRecentActivity.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recent activity</p>';
             } else {
                 adminRecentActivity.innerHTML = recent.map(a => `
-                    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">
-                        <span><i class="fas fa-exchange-alt"></i> ${a.type} ${a.gateway ? '('+a.gateway+')' : a.method ? '('+a.method+')' : ''} <span class="badge-status ${a.status || 'pending'}">${a.status || 'pending'}</span></span>
-                        <span class="text-muted">${a.user || 'N/A'} ${a.date ? formatDate(a.date) : ''}</span>
-                    </div>
-                `).join('');
+                        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">
+                            <span><i class="fas fa-exchange-alt"></i> ${a.type} ${a.gateway ? '('+a.gateway+')' : a.method ? '('+a.method+')' : ''} <span class="badge-status ${a.status || 'pending'}">${a.status || 'pending'}</span></span>
+                            <span class="text-muted">${a.user || 'N/A'} ${a.date ? formatDate(a.date) : ''}</span>
+                        </div>
+                    `).join('');
             }
         }
 
@@ -4384,13 +4797,16 @@
         fabBtn.innerHTML = '<i class="fas fa-bolt"></i>';
         updateDailyIncomeDisplay(0);
 
-        console.log('🚀 Rexroth Flow v7.0 ready - All features active');
+        // Set initial history state
+        history.replaceState({ screen: 'home' }, '', '#home');
+
+        console.log('🚀 Rexroth Flow v8.0 ready - Full UI + Back Button Support');
         console.log('💰 Daily Income auto-credit system');
         console.log('🖼 Image upload for plans and backgrounds');
-        console.log('🎨 Font Awesome Icons');
         console.log('🎯 Floating Action Button');
         console.log('👁 Balance eye toggle');
-        console.log('🔙 Back buttons added to Withdraw & Treasure');
+        console.log('🔙 Hardware back button supported (history API)');
+        console.log('📱 Full screen responsive design');
     </script>
 </body>
 </html>
