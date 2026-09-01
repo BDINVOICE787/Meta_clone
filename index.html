@@ -35,6 +35,10 @@
             --safe-bottom: env(safe-area-inset-bottom, 0px);
             --header-height: 60px;
             --nav-height: 64px;
+            --drawer-width: 320px;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-glow: 0 8px 40px rgba(0, 114, 176, 0.15);
         }
         html,
         body {
@@ -114,6 +118,324 @@
             pointer-events: none;
             z-index: 0;
             transition: opacity 0.5s;
+        }
+
+        /* ===== GLASS DRAWER (ADVANCED) ===== */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 100;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .drawer-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: var(--drawer-width);
+            max-width: 85vw;
+            height: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border-right: 1px solid var(--glass-border);
+            z-index: 101;
+            transition: left 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 8px 0 60px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .drawer.open {
+            left: 0;
+        }
+        .drawer-header {
+            padding: 24px 20px 20px;
+            background: var(--primary-gradient);
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .drawer-header::after {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .drawer-header .drawer-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: grid;
+            place-items: center;
+            float: right;
+            margin-top: -4px;
+            backdrop-filter: blur(4px);
+        }
+        .drawer-header .drawer-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        .drawer-header .drawer-user {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 12px;
+        }
+        .drawer-header .drawer-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            color: #fff;
+            flex-shrink: 0;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        .drawer-header .drawer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .drawer-header .drawer-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .drawer-header .drawer-name {
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+        .drawer-header .drawer-email {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        .drawer-header .drawer-balance {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 12px 4px 8px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            width: fit-content;
+        }
+        .drawer-header .drawer-balance i {
+            font-size: 14px;
+        }
+        .drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 10px 20px;
+        }
+        .drawer-body::-webkit-scrollbar {
+            width: 3px;
+        }
+        .drawer-body::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 12px;
+        }
+        .drawer-section {
+            margin-bottom: 12px;
+        }
+        .drawer-section .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            padding: 8px 14px 4px;
+            opacity: 0.6;
+        }
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+            background: transparent;
+            border: none;
+            width: 100%;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 2px 0;
+        }
+        .drawer-item:hover {
+            background: rgba(0, 114, 176, 0.08);
+            transform: translateX(4px);
+        }
+        .drawer-item:active {
+            transform: scale(0.97);
+        }
+        .drawer-item .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
+        .drawer-item .icon.blue {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        .drawer-item .icon.gold {
+            background: var(--gold-light);
+            color: var(--gold);
+        }
+        .drawer-item .icon.green {
+            background: #e3f5ec;
+            color: #0f9d6e;
+        }
+        .drawer-item .icon.purple {
+            background: #ede7f9;
+            color: #7c4dff;
+        }
+        .drawer-item .icon.pink {
+            background: #fce4ec;
+            color: #e91e63;
+        }
+        .drawer-item .icon.red {
+            background: #fdf2f2;
+            color: #dc3545;
+        }
+        .drawer-item .icon.teal {
+            background: #e0f7fa;
+            color: #00897b;
+        }
+        .drawer-item .icon.orange {
+            background: #fff0e6;
+            color: #ff6b00;
+        }
+        .drawer-item .icon.cyan {
+            background: #e0f7fa;
+            color: #00bcd4;
+        }
+        .drawer-item .badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: #fff;
+            font-size: 9px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+        .drawer-item .badge.gold {
+            background: var(--gold);
+        }
+        .drawer-item .badge.red {
+            background: #dc3545;
+        }
+        .drawer-item .badge.green {
+            background: #28a745;
+        }
+        .drawer-item .badge.purple {
+            background: #7c4dff;
+        }
+        .drawer-item .badge.cyan {
+            background: #00bcd4;
+        }
+        .drawer-item .arrow {
+            margin-left: auto;
+            color: var(--text-muted);
+            font-size: 12px;
+            opacity: 0.4;
+            transition: 0.3s;
+        }
+        .drawer-item:hover .arrow {
+            opacity: 0.8;
+            transform: translateX(2px);
+        }
+        .drawer-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 6px 14px;
+            opacity: 0.3;
+        }
+
+        /* ===== DRAWER CONTACT ROW - FIXED HEIGHT 40px ===== */
+        .drawer-contact-row {
+            display: flex;
+            gap: 10px;
+            padding: 6px 14px 12px;
+            flex-wrap: wrap;
+        }
+        .drawer-contact-row a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 40px;
+            min-height: 40px;
+            padding: 0 16px;
+            border-radius: var(--radius-sm);
+            background: var(--card);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            transition: 0.3s;
+            flex: 1;
+            box-shadow: var(--shadow);
+            min-width: 60px;
+            white-space: nowrap;
+        }
+        .drawer-contact-row a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 50, 90, 0.12);
+        }
+        .drawer-contact-row a i {
+            font-size: 16px;
+        }
+        .drawer-contact-row a.whatsapp i {
+            color: #25d366;
+        }
+        .drawer-contact-row a.email i {
+            color: var(--primary);
+        }
+        .drawer-contact-row a.phone i {
+            color: var(--gold);
         }
 
         /* ===== HEADER ===== */
@@ -207,6 +529,24 @@
             border-radius: 10px;
             min-width: 16px;
             text-align: center;
+        }
+        .app-header .menu-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .app-header .menu-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
         }
 
         /* ===== MAIN SCROLL ===== */
@@ -2740,6 +3080,12 @@
         .phone.dark .invoice-limit-banner .progress-labels {
             color: #aaa;
         }
+        .phone.dark .drawer {
+            background: rgba(26, 38, 51, 0.92);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
 
         /* ===== IMAGE UPLOAD ===== */
         .image-upload-container {
@@ -3052,7 +3398,7 @@
             font-weight: 700;
         }
 
-        /* ===== APP DOWNLOAD SECTION (NEW) ===== */
+        /* ===== APP DOWNLOAD SECTION ===== */
         .app-download-section {
             background: var(--card);
             border-radius: var(--radius);
@@ -3148,6 +3494,112 @@
             }
         }
 
+        /* ===== PRODUCT CARD ===== */
+        .product-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 50, 90, 0.12);
+        }
+        .product-card .product-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .product-card .product-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        .product-card .product-info {
+            flex: 1;
+        }
+        .product-card .product-info .name {
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .product-card .product-info .desc {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .product-card .product-info .price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 13px;
+        }
+        .product-card .product-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .product-card .product-actions .btn-sm {
+            font-size: 10px;
+        }
+
+        /* ===== CHAT STYLES ===== */
+        .chat-message {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: flex-end;
+        }
+        .chat-message .bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .chat-message.sent {
+            justify-content: flex-end;
+        }
+        .chat-message.sent .bubble {
+            background: var(--primary-gradient);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-message.received .bubble {
+            background: var(--bg);
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+        }
+        .chat-message .time {
+            font-size: 9px;
+            opacity: 0.6;
+            margin-top: 4px;
+            text-align: right;
+        }
+        .chat-message.sent .time {
+            color: rgba(255,255,255,0.7);
+        }
+        .chat-message.received .time {
+            color: var(--text-muted);
+        }
+        .chat-admin-badge {
+            font-size: 9px;
+            background: var(--gold);
+            color: #fff;
+            padding: 1px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+
         /* ===== RESPONSIVE TWEAKS ===== */
         @media (max-width: 380px) {
             .balance-card .amount {
@@ -3182,14 +3634,22 @@
             .leaderboard-item {
                 padding: 8px 10px;
             }
+            .drawer {
+                max-width: 90vw;
+            }
         }
     </style>
 </head>
 <body>
     <div class="phone" id="app">
+        <!-- ===== AUTH BG LAYER ===== -->
         <div class="auth-bg-layer" id="authBgLayer"></div>
         <div class="bg-layer" id="bgLayer" style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==');"></div>
+
+        <!-- ===== TOAST ===== -->
         <div class="toast" id="toast"></div>
+
+        <!-- ===== FAB ===== -->
         <button class="floating-action-btn" id="fabBtn"><i class="fas fa-bolt"></i></button>
         <div class="quick-actions-menu hidden" id="quickActionsMenu">
             <button class="qa-item" style="background: #0072b0;" data-action="recharge" title="Recharge"><i class="fas fa-wallet"></i></button>
@@ -3198,6 +3658,8 @@
             <button class="qa-item" style="background: #8b5cf6;" data-action="leaderboard" title="Leaderboard"><i class="fas fa-trophy"></i></button>
             <button class="qa-item" style="background: #ef4444;" data-action="activity" title="Activity"><i class="fas fa-chart-line"></i></button>
         </div>
+
+        <!-- ===== MODAL ===== -->
         <div class="modal-overlay" id="modalOverlay">
             <div class="modal-box" id="modalBox">
                 <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
@@ -3205,6 +3667,73 @@
                 <div id="modalBody"></div>
             </div>
         </div>
+
+        <!-- ===== GLASS DRAWER (ADVANCED) ===== -->
+        <div class="drawer-overlay" id="drawerOverlay"></div>
+        <div class="drawer" id="drawer">
+            <div class="drawer-header">
+                <button class="drawer-close" id="drawerClose"><i class="fas fa-times"></i></button>
+                <div class="drawer-user">
+                    <div class="drawer-avatar" id="drawerAvatar"><i class="fas fa-user"></i></div>
+                    <div class="drawer-info">
+                        <div class="drawer-name" id="drawerName">User</div>
+                        <div class="drawer-email" id="drawerEmail">user@example.com</div>
+                        <div class="drawer-balance" id="drawerBalance">
+                            <i class="fas fa-wallet"></i>
+                            <span id="drawerBalanceAmount">৳ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="drawer-body">
+                <!-- ===== MAIN MENU ===== -->
+                <div class="drawer-section">
+                    <div class="section-label">Menu</div>
+                    <button class="drawer-item" data-nav="home"><span class="icon blue"><i class="fas fa-home"></i></span> Home <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="plans"><span class="icon gold"><i class="fas fa-chart-line"></i></span> Plans <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="invest"><span class="icon green"><i class="fas fa-briefcase"></i></span> My Investments <span class="badge" id="drawerInvestBadge">0</span></button>
+                    <button class="drawer-item" data-nav="activity"><span class="icon purple"><i class="fas fa-history"></i></span> Activity <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="recharge"><span class="icon teal"><i class="fas fa-wallet"></i></span> Recharge <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="withdraw"><span class="icon pink"><i class="fas fa-arrow-up"></i></span> Withdraw <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="treasure"><span class="icon gold"><i class="fas fa-gift"></i></span> Treasure <span class="badge gold" id="drawerTreasureBadge">0</span></button>
+                    <button class="drawer-item" data-nav="leaderboard"><span class="icon purple"><i class="fas fa-trophy"></i></span> Leaderboard <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="notifications"><span class="icon red"><i class="fas fa-bell"></i></span> Notifications <span class="badge red" id="drawerNotifBadge">0</span></button>
+                    <button class="drawer-item" data-nav="profile"><span class="icon blue"><i class="fas fa-user"></i></span> Profile <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="contact"><span class="icon orange"><i class="fas fa-headset"></i></span> Contact Admin <span class="badge purple" id="drawerChatBadge">0</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" data-nav="products"><span class="icon cyan"><i class="fas fa-box"></i></span> Products <span class="badge cyan">1</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                </div>
+
+                <div class="drawer-divider"></div>
+
+                <!-- ===== ADMIN CONTACT - FIXED HEIGHT 40px ===== -->
+                <div class="drawer-section">
+                    <div class="section-label">Quick Contact</div>
+                    <div class="drawer-contact-row">
+                        <a href="https://wa.me/8801836724372" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="mailto:admin@rexrothflow.com" class="email"><i class="fas fa-envelope"></i> Email</a>
+                        <a href="tel:+8801836724372" class="phone"><i class="fas fa-phone"></i> Call</a>
+                    </div>
+                </div>
+
+                <div class="drawer-divider"></div>
+
+                <!-- ===== ADMIN TOOLS ===== -->
+                <div class="drawer-section" id="drawerAdminSection" style="display:none;">
+                    <div class="section-label">Admin Tools</div>
+                    <button class="drawer-item" id="drawerAdminBtn"><span class="icon red"><i class="fas fa-cog"></i></span> Admin Panel <span class="badge red"><i class="fas fa-shield-alt"></i></span><span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" id="drawerBalanceManager"><span class="icon pink"><i class="fas fa-balance-scale"></i></span> Balance Manager <span class="badge red">Set to 0</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" id="drawerSendAll"><span class="icon purple"><i class="fas fa-bullhorn"></i></span> Send to All <span class="badge green">Notify</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                    <button class="drawer-item" id="drawerManageProducts"><span class="icon cyan"><i class="fas fa-box"></i></span> Manage Products <span class="badge cyan">CRUD</span><span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+                </div>
+
+                <div class="drawer-divider"></div>
+
+                <!-- ===== LOGOUT ===== -->
+                <button class="drawer-item" id="drawerLogout" style="color:#dc3545;"><span class="icon red"><i class="fas fa-sign-out-alt"></i></span> Logout <span class="arrow"><i class="fas fa-chevron-right"></i></span></button>
+            </div>
+        </div>
+
+        <!-- ===== AUTH SCREEN ===== -->
         <div id="authScreen" style="display:flex;flex:1;flex-direction:column;min-height:100%;">
             <div class="auth-container">
                 <div class="auth-box">
@@ -3229,9 +3758,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- ===== APP MAIN ===== -->
         <div id="appMain" style="display:none;flex:1;flex-direction:column;min-height:100%;">
             <div class="app-header animated-bg">
-                <div class="logo"><i class="fas fa-bolt"></i> Earn BD <span>flow</span></div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+                    <div class="logo"><i class="fas fa-bolt"></i> Earn BD <span>flow</span></div>
+                </div>
                 <div class="actions">
                     <button id="notifBtn" class="badge-dot tooltip" data-tooltip="Notifications"><i class="fas fa-bell"></i><span class="notif-count" id="notifCount">0</span></button>
                     <button id="darkToggle" class="tooltip" data-tooltip="Dark Mode"><i class="fas fa-moon"></i></button>
@@ -3240,6 +3774,7 @@
             </div>
             <div id="userPanel" style="flex:1;display:flex;flex-direction:column;min-height:0;">
                 <div class="main-scroll" id="mainScroll">
+                    <!-- ===== HOME ===== -->
                     <section class="screen active" id="screen-home">
                         <div class="announcement-bar" id="announcementBar">
                             <span class="icon"><i class="fas fa-bullhorn"></i></span>
@@ -3307,7 +3842,6 @@
                             <div class="q-item ripple" data-nav="treasure"><div class="icon green"><i class="fas fa-gift"></i></div><div class="label">Treasure</div></div>
                             <div class="q-item ripple" data-nav="leaderboard"><div class="icon purple"><i class="fas fa-trophy"></i></div><div class="label">Top</div></div>
                         </div>
-                        <!-- ===== NEW APP DOWNLOAD SECTION ===== -->
                         <div class="app-download-section" id="appDownloadSection">
                             <div class="app-download-inner">
                                 <div class="app-icon-wrap" id="appIconWrap">
@@ -3333,6 +3867,8 @@
                             <p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recent activity</p>
                         </div>
                     </section>
+
+                    <!-- ===== PLANS ===== -->
                     <section class="screen" id="screen-plans">
                         <div class="input-group" style="margin-bottom:12px;">
                             <label><i class="fas fa-search"></i> Search plans</label>
@@ -3340,14 +3876,20 @@
                         </div>
                         <div id="allPlansList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading plans...</p></div>
                     </section>
+
+                    <!-- ===== INVEST ===== -->
                     <section class="screen" id="screen-invest">
                         <div class="section-title"><i class="fas fa-briefcase"></i> My Investments</div>
                         <div id="myInvestments"><p class="text-muted fs-12"><i class="fas fa-inbox"></i> No investments yet</p></div>
                     </section>
+
+                    <!-- ===== ACTIVITY ===== -->
                     <section class="screen" id="screen-activity">
                         <div class="section-title"><i class="fas fa-history"></i> Transaction History</div>
                         <div id="activityList"><p class="text-muted fs-12"><i class="fas fa-inbox"></i> No activity</p></div>
                     </section>
+
+                    <!-- ===== RECHARGE ===== -->
                     <section class="screen" id="screen-recharge">
                         <div class="recharge-wrapper">
                             <div class="gateway-selector" id="gatewaySelector">
@@ -3382,6 +3924,8 @@
                             <div class="recharge-note"><i class="fas fa-clock"></i> Payment verification may take some time. Please be patient.</div>
                         </div>
                     </section>
+
+                    <!-- ===== WITHDRAW ===== -->
                     <section class="screen" id="screen-withdraw">
                         <button class="back-pass" id="withdrawBack"><i class="fas fa-arrow-left"></i> Back</button>
                         <div class="withdraw-card">
@@ -3416,6 +3960,8 @@
                             <button class="btn-withdraw" id="withdrawSubmit"><i class="fas fa-paper-plane"></i> Withdraw</button>
                         </div>
                     </section>
+
+                    <!-- ===== TREASURE ===== -->
                     <section class="screen" id="screen-treasure">
                         <button class="back-pass" id="treasureBack"><i class="fas fa-arrow-left"></i> Back</button>
                         <div class="treasure-card">
@@ -3435,6 +3981,8 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- ===== LEADERBOARD ===== -->
                     <section class="screen" id="screen-leaderboard">
                         <button class="back-pass" id="leaderboardBack"><i class="fas fa-arrow-left"></i> Back</button>
                         <div style="background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);">
@@ -3442,6 +3990,8 @@
                             <div id="leaderboardList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading...</p></div>
                         </div>
                     </section>
+
+                    <!-- ===== NOTIFICATIONS ===== -->
                     <section class="screen" id="screen-notifications">
                         <button class="back-pass" id="notifBack"><i class="fas fa-arrow-left"></i> Back</button>
                         <div style="background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);">
@@ -3449,6 +3999,8 @@
                             <div id="notificationList"><p class="text-muted fs-12"><i class="fas fa-inbox"></i> No notifications</p></div>
                         </div>
                     </section>
+
+                    <!-- ===== PROFILE ===== -->
                     <section class="screen" id="screen-profile">
                         <div style="background:var(--card);border-radius:var(--radius);padding:20px 16px;border:1px solid var(--border);box-shadow:var(--shadow);" class="hover-lift">
                             <div class="profile-avatar" id="avatarPreview"><i class="fas fa-user"></i><span class="camera-icon"><i class="fas fa-camera"></i></span></div>
@@ -3494,7 +4046,41 @@
                             <button class="btn-danger" id="logoutBtn" style="margin-top:16px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
                         </div>
                     </section>
+
+                    <!-- ===== CONTACT ADMIN ===== -->
+                    <section class="screen" id="screen-contact">
+                        <button class="back-pass" id="contactBack"><i class="fas fa-arrow-left"></i> Back</button>
+                        <div style="background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);">
+                            <div class="section-title" style="margin-top:0;"><i class="fas fa-headset"></i> Contact Admin</div>
+                            <div id="adminContactList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading admins...</p></div>
+                            <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+                                <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+                                    <i class="fas fa-comment-dots" style="font-size:20px;color:var(--primary);"></i>
+                                    <span style="font-weight:600;">Live Chat</span>
+                                    <span style="font-size:10px;color:var(--text-muted);">(Admin responds in real-time)</span>
+                                </div>
+                                <div id="chatMessages" style="max-height:300px;overflow-y:auto;background:var(--bg);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px;">
+                                    <p class="text-muted fs-12"><i class="fas fa-inbox"></i> No messages yet</p>
+                                </div>
+                                <div style="display:flex;gap:8px;">
+                                    <input id="chatInput" type="text" placeholder="Type your message..." style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--card);color:var(--text);" />
+                                    <button id="chatSendBtn" class="btn-submit" style="flex:0 0 auto;padding:10px 20px;width:auto;"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ===== PRODUCTS ===== -->
+                    <section class="screen" id="screen-products">
+                        <button class="back-pass" id="productsBack"><i class="fas fa-arrow-left"></i> Back</button>
+                        <div style="background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);box-shadow:var(--shadow);">
+                            <div class="section-title" style="margin-top:0;"><i class="fas fa-box"></i> Products</div>
+                            <div id="productsList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading products...</p></div>
+                        </div>
+                    </section>
                 </div>
+
+                <!-- ===== BOTTOM NAV ===== -->
                 <div class="bottom-nav">
                     <button class="nav-item active" data-nav="home"><span class="icon"><i class="fas fa-home"></i></span> Home</button>
                     <button class="nav-item" data-nav="plans"><span class="icon"><i class="fas fa-chart-line"></i></span> Plans</button>
@@ -3503,6 +4089,8 @@
                     <button class="nav-item" data-nav="profile"><span class="icon"><i class="fas fa-user"></i></span> My</button>
                 </div>
             </div>
+
+            <!-- ===== ADMIN PANEL ===== -->
             <div class="admin-panel" id="adminPanel">
                 <div class="admin-header">
                     <div class="title"><i class="fas fa-cog"></i> Admin <span class="badge"><i class="fas fa-shield-alt"></i> v3.0</span></div>
@@ -3518,8 +4106,12 @@
                     <button class="tab" data-tab="withdraw"><i class="fas fa-credit-card"></i> Withdraw</button>
                     <button class="tab" data-tab="invoices"><i class="fas fa-file-invoice"></i> Invoices</button>
                     <button class="tab" data-tab="users"><i class="fas fa-users"></i> Users</button>
+                    <button class="tab" data-tab="products"><i class="fas fa-box"></i> Products</button>
+                    <button class="tab" data-tab="balance"><i class="fas fa-balance-scale"></i> Balance</button>
+                    <button class="tab" data-tab="chat"><i class="fas fa-comment-dots"></i> Chat</button>
                 </div>
                 <div class="admin-content" id="adminContent">
+                    <!-- Dashboard -->
                     <div class="tab-panel active" id="tab-dashboard">
                         <div class="panel-title"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
                         <div id="adminStats" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
@@ -3531,55 +4123,40 @@
                             <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-chart-bar"></i> Invoice Limit</div><div class="fw-700 fs-14" id="statInvoiceLimit">50</div></div>
                             <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-users"></i> Total Users</div><div class="fw-700 fs-14" id="statUsers">0</div></div>
                             <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-coins"></i> Total Deposits</div><div class="fw-700 fs-14" id="statDeposits">0</div></div>
+                            <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-box"></i> Products</div><div class="fw-700 fs-14" id="statProducts">0</div></div>
+                            <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-file-invoice"></i> Invoices Generated</div><div class="fw-700 fs-14" id="statGeneratedInvoices">0</div></div>
+                            <div class="admin-card hover-lift"><div class="text-muted fs-12"><i class="fas fa-comment-dots"></i> Unread Chats</div><div class="fw-700 fs-14" id="statUnreadChats">0</div></div>
                         </div>
                         <div class="admin-card"><div class="fw-700 fs-14 mb-8"><i class="fas fa-clock"></i> Recent Activity</div><div id="adminRecentActivity"><p class="text-muted fs-12"><i class="fas fa-inbox"></i> No recent activity</p></div></div>
                     </div>
+
+                    <!-- Plans -->
                     <div class="tab-panel" id="tab-plans">
                         <div class="flex-between mb-8"><span class="panel-title"><i class="fas fa-chart-line"></i> Investment Plans</span><button class="btn-sm primary" id="addPlanBtn"><i class="fas fa-plus"></i> Add Plan</button></div>
                         <div id="adminPlansList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading plans...</p></div>
                     </div>
+
+                    <!-- Treasure -->
                     <div class="tab-panel" id="tab-treasure">
                         <div class="flex-between mb-8"><span class="panel-title"><i class="fas fa-gift"></i> Treasure Codes</span><button class="btn-sm primary" id="addTreasureBtn"><i class="fas fa-plus"></i> Add Code</button></div>
                         <div id="adminTreasureList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading codes...</p></div>
                     </div>
-                    <!-- ===== NEW ADMIN TAB: APP DOWNLOAD ===== -->
+
+                    <!-- App Download -->
                     <div class="tab-panel" id="tab-app">
                         <div class="panel-title"><i class="fas fa-mobile-alt"></i> App Download Management</div>
                         <div class="admin-card">
                             <form id="appSettingsForm" onsubmit="return false;">
                                 <div class="admin-form">
-                                    <div class="form-row full">
-                                        <label><i class="fas fa-tag"></i> App Name</label>
-                                        <input id="setAppName" type="text" placeholder="Rexroth Flow App" />
+                                    <div class="form-row full"><label><i class="fas fa-tag"></i> App Name</label><input id="setAppName" type="text" placeholder="Rexroth Flow App" /></div>
+                                    <div class="form-row full"><label><i class="fas fa-link"></i> Download URL</label><input id="setAppDownloadLink" type="url" placeholder="https://example.com/app.apk" /></div>
+                                    <div class="form-row full"><label><i class="fas fa-image"></i> App Icon (Base64)</label>
+                                        <div class="image-upload-container" id="appIconUpload"><i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload app icon</div><input type="file" id="appIconFile" accept="image/*" style="display:none;" /></div>
+                                        <input id="setAppIcon" type="hidden" />
                                     </div>
-                                    <div class="form-row full">
-                                        <label><i class="fas fa-link"></i> Download URL</label>
-                                        <input id="setAppDownloadLink" type="url" placeholder="https://example.com/app.apk" />
-                                    </div>
-                                    <div class="form-row full">
-                                        <label><i class="fas fa-image"></i> App Icon (Base64)</label>
-                                        <div class="image-upload-container" id="appIconUpload">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <div class="upload-text">Click to upload app icon</div>
-                                            <input type="file" id="appIconFile" accept="image/*" style="display:none;" />
-                                        </div>
-                                        <input id="setAppIcon" type="hidden" placeholder="data:image/png;base64,..." />
-                                    </div>
-                                    <div class="form-row full">
-                                        <label><i class="fas fa-code-branch"></i> Version</label>
-                                        <input id="setAppVersion" type="text" placeholder="v2.1.0" value="v2.1.0" />
-                                    </div>
-                                    <div class="form-row full">
-                                        <label><i class="fas fa-info-circle"></i> Description (optional)</label>
-                                        <input id="setAppDesc" type="text" placeholder="Download our official app for better experience" />
-                                    </div>
-                                    <div class="form-row full">
-                                        <label><i class="fas fa-toggle-on"></i> Show Download Section</label>
-                                        <select id="setAppShow">
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
-                                        </select>
-                                    </div>
+                                    <div class="form-row full"><label><i class="fas fa-code-branch"></i> Version</label><input id="setAppVersion" type="text" placeholder="v2.1.0" value="v2.1.0" /></div>
+                                    <div class="form-row full"><label><i class="fas fa-info-circle"></i> Description</label><input id="setAppDesc" type="text" placeholder="Download our official app" /></div>
+                                    <div class="form-row full"><label><i class="fas fa-toggle-on"></i> Show Download Section</label><select id="setAppShow"><option value="true">Yes</option><option value="false">No</option></select></div>
                                     <button type="button" class="btn-submit" id="saveAppSettingsBtn"><i class="fas fa-save"></i> Save App Settings</button>
                                 </div>
                             </form>
@@ -3587,19 +4164,14 @@
                         <div class="admin-card" style="margin-top:10px;">
                             <div style="font-weight:600;font-size:13px;margin-bottom:8px;"><i class="fas fa-eye"></i> Preview</div>
                             <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);">
-                                <div style="width:48px;height:48px;border-radius:12px;background:var(--primary-light);display:grid;place-items:center;font-size:24px;color:var(--primary);flex-shrink:0;" id="appPreviewIcon">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <div style="flex:1;">
-                                    <div style="font-weight:700;font-size:14px;" id="appPreviewName">Rexroth Flow App</div>
-                                    <div style="font-size:11px;color:var(--text-muted);" id="appPreviewDesc">Download our official app</div>
-                                    <div style="font-size:10px;color:var(--text-muted);opacity:0.6;" id="appPreviewVersion">v2.1.0</div>
-                                </div>
+                                <div style="width:48px;height:48px;border-radius:12px;background:var(--primary-light);display:grid;place-items:center;font-size:24px;color:var(--primary);flex-shrink:0;" id="appPreviewIcon"><i class="fas fa-mobile-alt"></i></div>
+                                <div style="flex:1;"><div style="font-weight:700;font-size:14px;" id="appPreviewName">Rexroth Flow App</div><div style="font-size:11px;color:var(--text-muted);" id="appPreviewDesc">Download our official app</div><div style="font-size:10px;color:var(--text-muted);opacity:0.6;" id="appPreviewVersion">v2.1.0</div></div>
                                 <button style="padding:8px 16px;border-radius:8px;background:var(--primary-gradient);color:#fff;font-weight:600;font-size:12px;border:none;cursor:pointer;"><i class="fas fa-download"></i> Download</button>
                             </div>
-                            <p style="font-size:11px;color:var(--text-muted);margin-top:8px;"><i class="fas fa-info-circle"></i> This preview shows how the download section will appear to users on the home screen.</p>
                         </div>
                     </div>
+
+                    <!-- Settings -->
                     <div class="tab-panel" id="tab-settings">
                         <div class="panel-title"><i class="fas fa-cog"></i> Settings</div>
                         <div class="admin-card">
@@ -3610,45 +4182,82 @@
                                     <div class="form-row full"><label><i class="fas fa-rocket"></i> Rocket Number</label><input id="setRocket" type="text" placeholder="01836724372" /></div>
                                     <div class="form-row"><div><label><i class="fas fa-calendar-day"></i> Daily Limit</label><input id="setDailyLimit" type="number" placeholder="5" value="5" /></div><div><label><i class="fas fa-calendar"></i> Monthly Limit</label><input id="setMonthlyLimit" type="number" placeholder="50" value="50" /></div></div>
                                     <div class="form-row full"><label><i class="fas fa-money-bill"></i> Max Amount</label><input id="setMaxAmount" type="number" placeholder="50000" value="50000" /></div>
-                                    <div class="form-row full"><label><i class="fas fa-image"></i> Background Image (Upload)</label>
-                                        <div class="image-upload-container" id="bgImageUpload">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <div class="upload-text">Click to upload background image</div>
-                                            <input type="file" id="bgImageFile" accept="image/*" style="display:none;" />
-                                        </div>
-                                        <input id="setBgImage" type="hidden" placeholder="data:image/png;base64,..." />
+                                    <div class="form-row full"><label><i class="fas fa-image"></i> Background Image</label>
+                                        <div class="image-upload-container" id="bgImageUpload"><i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload</div><input type="file" id="bgImageFile" accept="image/*" style="display:none;" /></div>
+                                        <input id="setBgImage" type="hidden" />
+                                    </div>
+                                    <div class="form-row full"><label><i class="fas fa-image"></i> Login Background</label>
+                                        <div class="image-upload-container" id="authBgImageUpload"><i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload</div><input type="file" id="authBgImageFile" accept="image/*" style="display:none;" /></div>
+                                        <input id="setAuthBgImage" type="hidden" />
                                     </div>
                                     <div class="form-row full"><label><i class="fas fa-bullhorn"></i> Announcement</label><input id="setAnnouncement" type="text" placeholder="Welcome message..." /></div>
                                     <div class="form-row"><div><label><i class="fas fa-coins"></i> Recharge Amounts</label><input id="setRechargeAmts" type="text" placeholder="400,800,1500,2500" /></div><div><label><i class="fas fa-credit-card"></i> Pay Methods</label><input id="setPayMethods" type="text" placeholder="USDT BEP20,USDT TRC20" /></div></div>
                                     <div class="form-row full"><label><i class="fas fa-percentage"></i> Daily Income Rate (%)</label><input id="setDailyIncomeRate" type="number" step="0.1" placeholder="0.5" value="0.5" /></div>
-                                    <div class="form-row full"><label><i class="fas fa-image"></i> Login Background Image (Base64)</label>
-                                        <div class="image-upload-container" id="authBgImageUpload">
-                                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                            <div class="upload-text">Click to upload login background image</div>
-                                            <input type="file" id="authBgImageFile" accept="image/*" style="display:none;" />
-                                        </div>
-                                        <input id="setAuthBgImage" type="hidden" placeholder="data:image/png;base64,..." />
-                                    </div>
                                     <button type="button" class="btn-submit" id="saveSettingsBtn"><i class="fas fa-save"></i> Save Settings</button>
                                 </div>
                             </form>
                         </div>
                     </div>
+
+                    <!-- Recharge -->
                     <div class="tab-panel" id="tab-recharge">
                         <div class="panel-title"><i class="fas fa-wallet"></i> Recharge Requests</div>
                         <div id="adminRechargeList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading requests...</p></div>
                     </div>
+
+                    <!-- Withdraw -->
                     <div class="tab-panel" id="tab-withdraw">
                         <div class="panel-title"><i class="fas fa-credit-card"></i> Withdrawal Requests</div>
                         <div id="adminWithdrawList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading requests...</p></div>
                     </div>
+
+                    <!-- Invoices -->
                     <div class="tab-panel" id="tab-invoices">
                         <div class="panel-title"><i class="fas fa-file-invoice"></i> Invoice Management</div>
                         <div id="adminInvoiceList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading invoices...</p></div>
                     </div>
+
+                    <!-- Users -->
                     <div class="tab-panel" id="tab-users">
                         <div class="panel-title"><i class="fas fa-users"></i> User Management</div>
                         <div id="adminUserList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading users...</p></div>
+                    </div>
+
+                    <!-- Products -->
+                    <div class="tab-panel" id="tab-products">
+                        <div class="flex-between mb-8"><span class="panel-title"><i class="fas fa-box"></i> Products <span class="badge gold" style="font-size:10px;">1 Invoice</span></span><button class="btn-sm primary" id="addProductBtn"><i class="fas fa-plus"></i> Add Product</button></div>
+                        <div id="adminProductsList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading products...</p></div>
+                    </div>
+
+                    <!-- Balance Manager -->
+                    <div class="tab-panel" id="tab-balance">
+                        <div class="panel-title"><i class="fas fa-balance-scale"></i> Balance Manager</div>
+                        <div class="admin-card">
+                            <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;"><i class="fas fa-info-circle"></i> Set any user's balance to 0 instantly.</p>
+                            <form id="balanceManagerForm" onsubmit="return false;">
+                                <div class="admin-form">
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-envelope"></i> User Email</label>
+                                        <input id="balanceUserEmail" type="email" placeholder="user@example.com" />
+                                    </div>
+                                    <div class="form-row full">
+                                        <label><i class="fas fa-money-bill"></i> New Balance</label>
+                                        <input id="balanceNewAmount" type="number" placeholder="0" value="0" />
+                                    </div>
+                                    <button type="button" class="btn-submit danger" id="setBalanceZeroBtn"><i class="fas fa-times-circle"></i> Set Balance to 0</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="admin-card" style="margin-top:10px;">
+                            <div style="font-weight:600;font-size:13px;margin-bottom:8px;"><i class="fas fa-users"></i> Quick Select Users</div>
+                            <div id="quickUserList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Management -->
+                    <div class="tab-panel" id="tab-chat">
+                        <div class="panel-title"><i class="fas fa-comment-dots"></i> Chat Management</div>
+                        <div id="adminChatList"><p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading chats...</p></div>
                     </div>
                 </div>
             </div>
@@ -3779,8 +4388,11 @@
         const adminWithdrawList = $('adminWithdrawList');
         const adminInvoiceList = $('adminInvoiceList');
         const adminUserList = $('adminUserList');
+        const adminProductsList = $('adminProductsList');
+        const adminChatList = $('adminChatList');
         const addPlanBtn = $('addPlanBtn');
         const addTreasureBtn = $('addTreasureBtn');
+        const addProductBtn = $('addProductBtn');
         const saveSettingsBtn = $('saveSettingsBtn');
         const setBkash = $('setBkash');
         const setNagad = $('setNagad');
@@ -3802,6 +4414,9 @@
         const statInvoiceLimit = $('statInvoiceLimit');
         const statUsers = $('statUsers');
         const statDeposits = $('statDeposits');
+        const statProducts = $('statProducts');
+        const statGeneratedInvoices = $('statGeneratedInvoices');
+        const statUnreadChats = $('statUnreadChats');
         const adminRecentActivity = $('adminRecentActivity');
         const darkToggle = $('darkToggle');
         const notifBtn = $('notifBtn');
@@ -3809,7 +4424,6 @@
         const notificationList = $('notificationList');
         const leaderboardList = $('leaderboardList');
 
-        // ===== NEW APP DOWNLOAD DOM REFS =====
         const appDownloadSection = $('appDownloadSection');
         const appIconWrap = $('appIconWrap');
         const appDownloadName = $('appDownloadName');
@@ -3829,6 +4443,43 @@
         const appPreviewName = $('appPreviewName');
         const appPreviewDesc = $('appPreviewDesc');
         const appPreviewVersion = $('appPreviewVersion');
+
+        // Drawer
+        const drawerOverlay = $('drawerOverlay');
+        const drawer = $('drawer');
+        const drawerClose = $('drawerClose');
+        const menuBtn = $('menuBtn');
+        const drawerAvatar = $('drawerAvatar');
+        const drawerName = $('drawerName');
+        const drawerEmail = $('drawerEmail');
+        const drawerBalanceAmount = $('drawerBalanceAmount');
+        const drawerInvestBadge = $('drawerInvestBadge');
+        const drawerTreasureBadge = $('drawerTreasureBadge');
+        const drawerNotifBadge = $('drawerNotifBadge');
+        const drawerChatBadge = $('drawerChatBadge');
+        const drawerAdminSection = $('drawerAdminSection');
+        const drawerAdminBtn = $('drawerAdminBtn');
+        const drawerBalanceManager = $('drawerBalanceManager');
+        const drawerSendAll = $('drawerSendAll');
+        const drawerManageProducts = $('drawerManageProducts');
+        const drawerLogout = $('drawerLogout');
+
+        // Balance Manager
+        const balanceUserEmail = $('balanceUserEmail');
+        const balanceNewAmount = $('balanceNewAmount');
+        const setBalanceZeroBtn = $('setBalanceZeroBtn');
+        const quickUserList = $('quickUserList');
+
+        // Contact / Chat
+        const adminContactList = $('adminContactList');
+        const chatMessages = $('chatMessages');
+        const chatInput = $('chatInput');
+        const chatSendBtn = $('chatSendBtn');
+        const contactBack = $('contactBack');
+
+        // Products
+        const productsList = $('productsList');
+        const productsBack = $('productsBack');
 
         // ============================================================
         //  STATE
@@ -3855,6 +4506,13 @@
         let selectedGateway = 'bkash';
         let isBalanceVisible = true;
         let screenHistory = ['home'];
+        let productsData = [];
+        let generatedInvoices = [];
+        let invoiceCounter = 0;
+        let adminsData = [];
+        let chatListener = null;
+        let currentChatUserId = null;
+        let balanceLoaded = false;
 
         const gatewayConfig = {
             bkash: { label: 'bKash', icon: 'fas fa-mobile-alt', color: 'bkash', number: '01836724372', desc: 'bKash' },
@@ -3916,6 +4574,203 @@
         modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
         // ============================================================
+        //  DRAWER
+        // ============================================================
+        function openDrawer() {
+            drawer.classList.add('open');
+            drawerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            drawerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        menuBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        document.querySelectorAll('.drawer-item[data-nav]').forEach(item => {
+            item.addEventListener('click', () => {
+                const nav = item.dataset.nav;
+                if (nav) {
+                    pushScreen(nav);
+                    closeDrawer();
+                }
+            });
+        });
+
+        drawerManageProducts.addEventListener('click', () => {
+            closeDrawer();
+            if (!isAdmin) { toast('Admin access required', 'error'); return; }
+            adminPanel.classList.add('active');
+            adminTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const prodTab = adminTabs.querySelector('[data-tab="products"]');
+            if (prodTab) prodTab.classList.add('active');
+            adminContent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById('tab-products');
+            if (panel) panel.classList.add('active');
+            renderAdminProducts();
+        });
+
+        drawerAdminBtn.addEventListener('click', () => {
+            closeDrawer();
+            if (!isAdmin) { toast('Admin access required', 'error'); return; }
+            adminPanel.classList.toggle('active');
+            if (adminPanel.classList.contains('active')) {
+                renderAdminPlans();
+                renderAdminTreasure();
+                renderAdminRecharge();
+                renderAdminWithdraw();
+                renderAdminInvoices();
+                renderAdminUsers();
+                renderAdminProducts();
+                renderAdminChatList();
+                updateAdminStats();
+                document.querySelectorAll('.admin-tabs .tab').forEach(t => t.classList.remove('active'));
+                document.querySelector('.admin-tabs .tab').classList.add('active');
+                document.querySelectorAll('.admin-content .tab-panel').forEach(p => p.classList.remove('active'));
+                document.querySelector('.admin-content .tab-panel').classList.add('active');
+            }
+        });
+
+        drawerBalanceManager.addEventListener('click', () => {
+            closeDrawer();
+            if (!isAdmin) { toast('Admin access required', 'error'); return; }
+            adminPanel.classList.add('active');
+            adminTabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            const balTab = adminTabs.querySelector('[data-tab="balance"]');
+            if (balTab) balTab.classList.add('active');
+            adminContent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById('tab-balance');
+            if (panel) panel.classList.add('active');
+            renderQuickUsers();
+        });
+
+        drawerSendAll.addEventListener('click', () => {
+            closeDrawer();
+            if (!isAdmin) { toast('Admin access required', 'error'); return; }
+            openModal('<i class="fas fa-bullhorn"></i> Send to All Users', `
+                    <form onsubmit="return false;" style="margin-top:10px;">
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px;"><i class="fas fa-tag"></i> Title</label>
+                            <input id="sendAllTitle" type="text" placeholder="Important Announcement" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);" />
+                        </div>
+                        <div class="form-group" style="margin-bottom:14px;">
+                            <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px;"><i class="fas fa-comment"></i> Message</label>
+                            <textarea id="sendAllMessage" rows="3" placeholder="Enter your message..." style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--text);resize:vertical;"></textarea>
+                        </div>
+                        <button type="button" class="btn-submit success" id="sendAllSubmit"><i class="fas fa-paper-plane"></i> Send to All</button>
+                    </form>
+                `);
+            document.getElementById('sendAllSubmit').addEventListener('click', async () => {
+                const title = document.getElementById('sendAllTitle').value.trim() || 'Announcement';
+                const message = document.getElementById('sendAllMessage').value.trim();
+                if (!message) { toast('Please enter a message', 'error'); return; }
+                try {
+                    const usersRef = db.ref('users');
+                    const snap = await usersRef.once('value');
+                    const users = snap.val() || {};
+                    const updates = {};
+                    Object.keys(users).forEach(uid => {
+                        const notifRef = usersRef.child(uid + '/notifications').push();
+                        updates[notifRef.toString().replace(db.ref().toString() + '/', '')] = {
+                            title: title,
+                            message: message,
+                            type: 'info',
+                            read: false,
+                            createdAt: Date.now()
+                        };
+                    });
+                    await db.ref().update(updates);
+                    toast('Notification sent to all users!', 'success');
+                    closeModal();
+                } catch (e) { toast('Error: ' + e.message, 'error'); }
+            });
+        });
+
+        drawerLogout.addEventListener('click', () => { auth.signOut();
+            closeDrawer();
+            toast('Logged out', 'info'); });
+
+        // ============================================================
+        //  PRODUCT MODAL
+        // ============================================================
+        function openProductModal() {
+            const products = productsData.length > 0 ? productsData : [
+                { id: 'prod-1', name: 'Bosch Rexroth Flow Plan', description: 'Advanced investment plan with high returns',
+                    price: '5000', image: '📈' }
+            ];
+            let html = `
+                    <div style="padding: 4px 0;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                            <span style="font-weight:600;font-size:14px;">Products</span>
+                            <span class="badge gold" style="font-size:10px;">${products.length} items</span>
+                        </div>
+                        <div style="max-height:400px;overflow-y:auto;">
+                `;
+            products.forEach(p => {
+                html += `
+                        <div class="product-card">
+                            <div class="product-top">
+                                <div class="product-icon">${p.image || '📦'}</div>
+                                <div class="product-info">
+                                    <div class="name">${p.name}</div>
+                                    <div class="desc">${p.description || 'No description'}</div>
+                                    <div class="price">${money(p.price || 0)}</div>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-sm primary" onclick="generateInvoiceForProduct('${p.id}')"><i class="fas fa-file-invoice"></i> Generate Invoice</button>
+                                ${isAdmin ? `<button class="btn-sm danger" onclick="deleteProduct('${p.id}')"><i class="fas fa-trash"></i></button>` : ''}
+                            </div>
+                        </div>
+                    `;
+            });
+            html += `
+                        </div>
+                        <div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:10px;font-size:12px;color:var(--text-muted);">
+                            <i class="fas fa-info-circle"></i> Total Invoices Generated: <strong>${generatedInvoices.length}</strong>
+                        </div>
+                    </div>
+                `;
+            openModal('<i class="fas fa-box"></i> Products', html);
+        }
+
+        window.generateInvoiceForProduct = function(productId) {
+            const product = productsData.find(p => p.id === productId) || { name: 'Product', price: 5000 };
+            const invNum = 'INV-' + String(++invoiceCounter).padStart(4, '0');
+            const invoice = {
+                id: invNum,
+                productId: productId,
+                productName: product.name,
+                amount: product.price || 5000,
+                date: Date.now(),
+                status: 'pending',
+                userId: currentUser ? currentUser.uid : 'guest'
+            };
+            generatedInvoices.push(invoice);
+            if (currentUser) {
+                db.ref('invoices/' + currentUser.uid + '/' + invNum).set(invoice);
+            }
+            toast('Invoice ' + invNum + ' generated for ' + product.name + '!', 'success');
+            updateAdminStats();
+            openProductModal();
+        };
+
+        window.deleteProduct = function(id) {
+            if (!confirm('Delete this product?')) return;
+            productsData = productsData.filter(p => p.id !== id);
+            if (currentUser) {
+                db.ref('products').set(productsData.reduce((acc, p) => { acc[p.id] = p; return acc; }, {}));
+            }
+            toast('Product deleted', 'success');
+            openProductModal();
+        };
+
+        // ============================================================
         //  PROFILE FUNCTIONS
         // ============================================================
         function openEditProfile() {
@@ -3950,7 +4805,8 @@
                 userData.displayName = name;
                 userData.phone = phone;
                 displayName.textContent = name;
-                profileName.innerHTML = `<i class="fas fa-user-circle"></i> <span id="displayName">${name}</span> <i class="fas fa-pen" style="font-size:14px;color:var(--text-muted);"></i>`;
+                profileName.innerHTML =
+                    `<i class="fas fa-user-circle"></i> <span id="displayName">${name}</span> <i class="fas fa-pen" style="font-size:14px;color:var(--text-muted);"></i>`;
                 toast('Profile updated!', 'success');
                 closeModal();
             }
@@ -4061,7 +4917,7 @@
                         <div style="text-align:center;margin-bottom:16px;">
                             <i class="fas fa-bolt" style="font-size:48px;color:var(--primary);"></i>
                             <h3 style="margin-top:8px;">Earn BD Flow</h3>
-                            <p style="color:var(--text-muted);font-size:13px;">Version 3.0</p>
+                            <p style="color:var(--text-muted);font-size:13px;">Version 4.0</p>
                         </div>
                         <p style="font-size:13px;line-height:1.8;color:var(--text);">
                             <strong>Rexroth Flow</strong> is a smart investment platform that helps you earn daily returns on your investments.
@@ -4081,7 +4937,7 @@
         }
 
         // ============================================================
-        //  HISTORY / BACK BUTTON HANDLING
+        //  HISTORY / BACK
         // ============================================================
         function pushScreen(screenId) {
             if (screenHistory.length === 0 || screenHistory[screenHistory.length - 1] !== screenId) {
@@ -4126,6 +4982,8 @@
             if (screenId === 'treasure') renderTreasure();
             if (screenId === 'leaderboard') renderLeaderboard();
             if (screenId === 'notifications') renderNotifications();
+            if (screenId === 'contact') renderContactScreen();
+            if (screenId === 'products') renderProductsScreen();
         }
 
         window.addEventListener('popstate', (e) => {
@@ -4142,6 +5000,8 @@
         document.getElementById('treasureBack')?.addEventListener('click', handleBackButton);
         document.getElementById('leaderboardBack')?.addEventListener('click', handleBackButton);
         document.getElementById('notifBack')?.addEventListener('click', handleBackButton);
+        contactBack?.addEventListener('click', handleBackButton);
+        productsBack?.addEventListener('click', handleBackButton);
 
         navItems.forEach(el => el.addEventListener('click', () => {
             const nav = el.dataset.nav;
@@ -4179,11 +5039,12 @@
         });
 
         // ============================================================
-        //  BALANCE EYE TOGGLE
+        //  BALANCE EYE & UPDATE
         // ============================================================
         function updateBalanceDisplay() {
+            const bal = userData.balance || 0;
             if (isBalanceVisible) {
-                balanceDisplay.innerHTML = money(userData.balance) + ' <i class="fas fa-eye eye-toggle" id="balanceEye"></i>';
+                balanceDisplay.innerHTML = money(bal) + ' <i class="fas fa-eye eye-toggle" id="balanceEye"></i>';
             } else {
                 balanceDisplay.innerHTML = '৳ ****** <i class="fas fa-eye-slash eye-toggle" id="balanceEye"></i>';
             }
@@ -4194,6 +5055,20 @@
                     updateBalanceDisplay();
                 });
             }
+            if (drawerBalanceAmount) {
+                drawerBalanceAmount.textContent = money(bal);
+            }
+            if ($('screen-withdraw').classList.contains('active')) {
+                withdrawBalance.textContent = money(bal);
+            }
+            const todayAct = userData.activity ? userData.activity.filter(a => {
+                if (!a.date) return false;
+                const d = new Date(a.date);
+                const now = new Date();
+                return d.toDateString() === now.toDateString() && a.positive;
+            }) : [];
+            const todayTotal = todayAct.reduce((s, a) => s + (a.amount || 0), 0);
+            todayEarn.textContent = money(todayTotal);
         }
 
         // ============================================================
@@ -4235,9 +5110,6 @@
             reader.readAsDataURL(file);
         });
 
-        // ============================================================
-        //  APP ICON UPLOAD (NEW)
-        // ============================================================
         appIconUpload.addEventListener('click', () => appIconFile.click());
         appIconFile.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -4308,6 +5180,7 @@
 
             if (statInvoices) statInvoices.textContent = invoiceData.monthlyUsed;
             if (statInvoiceLimit) statInvoiceLimit.textContent = invoiceData.monthlyLimit;
+            if (statGeneratedInvoices) statGeneratedInvoices.textContent = generatedInvoices.length;
         }
 
         closeInvoiceBanner.addEventListener('click', () => {
@@ -4349,16 +5222,16 @@
                             <span><i class="fas fa-money-bill"></i> Amount</span>
                             <span><i class="fas fa-check-circle"></i> Status</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
-                            <span>2024-01-15</span><span>INV-001</span><span>৳ 5,000</span><span style="color: #28a745;"><i class="fas fa-check-circle"></i> Paid</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
-                            <span>2024-01-20</span><span>INV-002</span><span>৳ 3,500</span><span style="color: #28a745;"><i class="fas fa-check-circle"></i> Paid</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 12px;">
-                            <span>2024-01-25</span><span>INV-003</span><span>৳ 7,200</span><span style="color: #ffc107;"><i class="fas fa-clock"></i> Pending</span>
-                        </div>
-                        <p class="text-muted fs-12 mt-8"><i class="fas fa-info-circle"></i> Showing last 3 invoices from this month</p>
+                        ${generatedInvoices.length === 0 ? '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No invoices yet</p>' :
+                        generatedInvoices.slice(-5).reverse().map(inv => `
+                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px;">
+                                <span>${formatDate(inv.date)}</span>
+                                <span>${inv.id}</span>
+                                <span>${money(inv.amount)}</span>
+                                <span style="color: ${inv.status === 'paid' ? '#28a745' : '#ffc107'};">${inv.status}</span>
+                            </div>
+                        `).join('')}
+                        <p class="text-muted fs-12 mt-8"><i class="fas fa-info-circle"></i> Showing recent invoices</p>
                     </div>
                 `);
         });
@@ -4476,6 +5349,9 @@
                 loadInvoiceData();
                 loadAllUsers();
                 loadAppSettings();
+                loadProducts();
+                loadInvoices();
+                loadAdmins();
                 screenHistory = ['home'];
                 history.replaceState({ screen: 'home' }, '', '#home');
                 showScreen('home');
@@ -4483,7 +5359,10 @@
                 const snap = await adminRef.once('value');
                 isAdmin = snap.val() === true;
                 adminToggleBtn.style.display = isAdmin ? 'grid' : 'none';
+                drawerAdminSection.style.display = isAdmin ? 'block' : 'none';
                 checkAndProcessDailyIncome();
+                updateDrawerUI();
+                startChatListener();
             } else {
                 currentUser = null;
                 authScreen.style.display = 'flex';
@@ -4491,6 +5370,10 @@
                 adminPanel.classList.remove('active');
                 setAuthMode('login');
                 screenHistory = ['home'];
+                if (chatListener) {
+                    chatListener();
+                    chatListener = null;
+                }
             }
         });
 
@@ -4570,22 +5453,50 @@
         // ============================================================
         function loadUserData() {
             if (!currentUser) return;
-            db.ref('users/' + currentUser.uid).on('value', (snap) => {
+            const userRef = db.ref('users/' + currentUser.uid);
+
+            userRef.once('value').then(snap => {
                 const data = snap.val() || {};
-                userData = data;
-                userData.balance = data.balance || 0;
+                if (data && typeof data.balance !== 'undefined') {
+                    userData.balance = data.balance;
+                } else {
+                    userData.balance = 0;
+                }
                 userData.vipLevel = data.vipLevel || 0;
                 userData.investments = data.investments ? Object.values(data.investments) : [];
                 userData.activity = data.activity ? Object.values(data.activity) : [];
                 userData.notifications = data.notifications ? Object.values(data.notifications) : [];
                 userData.displayName = data.displayName || currentUser?.displayName || currentUser?.email?.split(
-                '@')[0] || 'User';
+                    '@')[0] || 'User';
+                userData.phone = data.phone || '';
+                userData.referrals = data.referrals ? Object.values(data.referrals) : [];
+                userData.redeemedCodes = data.redeemedCodes || {};
+                if (data.avatar) avatarPreview.innerHTML = `<img src="${data.avatar}" alt="avatar" />`;
+                balanceLoaded = true;
+                updateBalanceDisplay();
+                updateDrawerUI();
+                if ($('screen-home').classList.contains('active')) renderHome();
+                if ($('screen-invest').classList.contains('active')) renderInvestments();
+                if ($('screen-activity').classList.contains('active')) renderActivity();
+                if ($('screen-withdraw').classList.contains('active')) withdrawBalance.textContent = money(userData
+                    .balance);
+            });
+
+            userRef.on('value', (snap) => {
+                const data = snap.val() || {};
+                if (data && typeof data.balance !== 'undefined') {
+                    userData.balance = data.balance;
+                }
+                userData.vipLevel = data.vipLevel || 0;
+                userData.investments = data.investments ? Object.values(data.investments) : [];
+                userData.activity = data.activity ? Object.values(data.activity) : [];
+                userData.notifications = data.notifications ? Object.values(data.notifications) : [];
+                userData.displayName = data.displayName || currentUser?.displayName || currentUser?.email?.split(
+                    '@')[0] || 'User';
                 userData.phone = data.phone || '';
                 userData.referrals = data.referrals ? Object.values(data.referrals) : [];
                 userData.redeemedCodes = data.redeemedCodes || {};
 
-                updateBalanceDisplay();
-                vipLevel.textContent = userData.vipLevel;
                 if (data.avatar) avatarPreview.innerHTML = `<img src="${data.avatar}" alt="avatar" />`;
 
                 displayName.textContent = userData.displayName;
@@ -4603,6 +5514,8 @@
                 notifCount.style.display = unread.length > 0 ? 'block' : 'none';
 
                 updateDailyIncomeDisplay(data.lastDailyIncomeAmount || 0);
+                updateBalanceDisplay();
+                updateDrawerUI();
 
                 if ($('screen-home').classList.contains('active')) renderHome();
                 if ($('screen-invest').classList.contains('active')) renderInvestments();
@@ -4610,7 +5523,34 @@
                 if ($('screen-withdraw').classList.contains('active')) withdrawBalance.textContent = money(userData
                     .balance);
                 if ($('screen-notifications').classList.contains('active')) renderNotifications();
+                if ($('screen-contact').classList.contains('active')) renderContactScreen();
             });
+        }
+
+        function updateDrawerUI() {
+            const name = userData.displayName || currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User';
+            const email = currentUser?.email || 'user@example.com';
+            drawerName.textContent = name;
+            drawerEmail.textContent = email;
+            if (userData.avatar) {
+                drawerAvatar.innerHTML = `<img src="${userData.avatar}" alt="avatar" />`;
+            } else {
+                drawerAvatar.innerHTML = `<i class="fas fa-user"></i>`;
+            }
+            drawerBalanceAmount.textContent = money(userData.balance || 0);
+
+            const invCount = userData.investments ? userData.investments.length : 0;
+            drawerInvestBadge.textContent = invCount;
+            drawerInvestBadge.style.display = invCount > 0 ? 'inline' : 'none';
+
+            const treasureCount = treasureData.filter(t => !userData.redeemedCodes || !userData.redeemedCodes[t.id])
+                .length;
+            drawerTreasureBadge.textContent = treasureCount;
+            drawerTreasureBadge.style.display = treasureCount > 0 ? 'inline' : 'none';
+
+            const notifCountVal = userData.notifications ? userData.notifications.filter(n => !n.read).length : 0;
+            drawerNotifBadge.textContent = notifCountVal;
+            drawerNotifBadge.style.display = notifCountVal > 0 ? 'inline' : 'none';
         }
 
         function loadPlans() {
@@ -4625,6 +5565,7 @@
                 updateAdminStats();
                 statActivePlans.textContent = plansData.length;
                 updateDailyIncomeDisplay(userData.lastDailyIncomeAmount || 0);
+                updateDrawerUI();
             });
         }
 
@@ -4636,6 +5577,7 @@
                 if (adminPanel.classList.contains('active') && document.querySelector('#tab-treasure .active'))
                     renderAdminTreasure();
                 updateAdminStats();
+                updateDrawerUI();
             });
         }
 
@@ -4724,12 +5666,12 @@
                 if (adminPanel.classList.contains('active') && document.querySelector('#tab-users .active'))
                     renderAdminUsers();
                 updateAdminStats();
+                renderQuickUsers();
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-chat .active'))
+                    renderAdminChatList();
             });
         }
 
-        // ============================================================
-        //  LOAD APP SETTINGS (NEW)
-        // ============================================================
         function loadAppSettings() {
             db.ref('app_settings').on('value', (snap) => {
                 const data = snap.val() || {};
@@ -4740,7 +5682,6 @@
                 const desc = data.desc || 'Download our official app for better experience';
                 const show = data.show !== false;
 
-                // Update user-facing section
                 if (show) {
                     appDownloadSection.style.display = 'block';
                 } else {
@@ -4757,20 +5698,18 @@
                     appIconWrap.innerHTML = `<i class="fas fa-mobile-alt"></i>`;
                 }
 
-                // Set download button
                 if (downloadLink) {
-                    appDownloadBtn.onclick = () => {
-                        window.open(downloadLink, '_blank');
-                    };
+                    appDownloadBtn.onclick = () => { window.open(downloadLink, '_blank'); };
                     appDownloadBtn.style.display = 'flex';
+                    appDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Download';
+                    appDownloadBtn.style.opacity = '1';
                 } else {
-                    appDownloadBtn.onclick = () => {
-                        toast('Download link not configured by admin yet.', 'info');
-                    };
+                    appDownloadBtn.onclick = () => { toast('Download link not configured by admin yet.', 'info'); };
                     appDownloadBtn.style.display = 'flex';
+                    appDownloadBtn.innerHTML = '⚠️ No Link';
+                    appDownloadBtn.style.opacity = '0.6';
                 }
 
-                // Update admin form fields
                 setAppName.value = appName;
                 setAppDownloadLink.value = downloadLink;
                 setAppIcon.value = iconBase64;
@@ -4778,7 +5717,6 @@
                 setAppDesc.value = desc;
                 setAppShow.value = show ? 'true' : 'false';
 
-                // Update admin preview
                 appPreviewName.textContent = appName;
                 appPreviewDesc.textContent = desc;
                 appPreviewVersion.textContent = version;
@@ -4789,20 +5727,51 @@
                     appPreviewIcon.innerHTML = `<i class="fas fa-mobile-alt"></i>`;
                 }
 
-                // Update upload preview if icon exists
                 if (iconBase64) {
                     appIconUpload.innerHTML = `
                             <img src="${iconBase64}" alt="App Icon Preview" style="max-width:100%;max-height:200px;border-radius:10px;" />
                             <div class="upload-text" style="margin-top:8px;">✅ Icon uploaded! Click to change</div>
                         `;
                 }
+            });
+        }
 
-                if (!downloadLink) {
-                    appDownloadBtn.textContent = '⚠️ No Link';
-                    appDownloadBtn.style.opacity = '0.6';
-                } else {
-                    appDownloadBtn.innerHTML = '<i class="fas fa-download"></i> Download';
-                    appDownloadBtn.style.opacity = '1';
+        function loadProducts() {
+            db.ref('products').on('value', (snap) => {
+                const data = snap.val() || {};
+                productsData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                if ($('screen-products').classList.contains('active')) renderProductsScreen();
+                if (adminPanel.classList.contains('active') && document.querySelector('#tab-products .active'))
+                    renderAdminProducts();
+                updateAdminStats();
+                updateDrawerUI();
+            });
+        }
+
+        function loadInvoices() {
+            if (!currentUser) return;
+            db.ref('invoices/' + currentUser.uid).on('value', (snap) => {
+                const data = snap.val() || {};
+                generatedInvoices = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                generatedInvoices.sort((a, b) => (b.date || 0) - (a.date || 0));
+                updateAdminStats();
+                updateInvoiceBanner();
+            });
+        }
+
+        function loadAdmins() {
+            db.ref('admins').on('value', (snap) => {
+                const data = snap.val() || {};
+                adminsData = Object.keys(data).map(key => ({ uid: key, ...data[key] }));
+                if ($('screen-contact').classList.contains('active')) renderContactScreen();
+                if (Object.keys(data).length === 0 && currentUser && isAdmin) {
+                    db.ref('admins/' + currentUser.uid).set({
+                        name: currentUser.displayName || 'Admin',
+                        email: currentUser.email,
+                        phone: '01836724372',
+                        photo: '',
+                        createdAt: Date.now()
+                    });
                 }
             });
         }
@@ -4860,7 +5829,6 @@
             });
             statActivePlans.textContent = plansData.length;
 
-            // Re-apply app settings visibility after render
             db.ref('app_settings').once('value', (snap) => {
                 const data = snap.val() || {};
                 if (data.show === false) {
@@ -4869,6 +5837,7 @@
                     appDownloadSection.style.display = 'block';
                 }
             });
+            updateDrawerUI();
         }
 
         function handleInvest(e) {
@@ -4905,6 +5874,20 @@
                 lastUpdated: Date.now()
             });
 
+            const invNum = 'INV-' + String(++invoiceCounter).padStart(4, '0');
+            const invoice = {
+                id: invNum,
+                productId: id,
+                productName: name,
+                amount: price,
+                date: Date.now(),
+                status: 'pending',
+                userId: currentUser.uid,
+                type: 'investment'
+            };
+            db.ref('invoices/' + currentUser.uid + '/' + invNum).set(invoice);
+            generatedInvoices.push(invoice);
+
             toast('Invested in ' + name + '! Invoice generated.', 'success');
         }
 
@@ -4940,6 +5923,7 @@
                         </div>
                     </div>
                 `).join('');
+            updateDrawerUI();
         }
 
         function renderActivity() {
@@ -4995,6 +5979,7 @@
                 }
             }
             treasureList.innerHTML = html;
+            updateDrawerUI();
         }
 
         function renderLeaderboard() {
@@ -5065,6 +6050,265 @@
                     });
                 });
             }
+            updateDrawerUI();
+        }
+
+        // ============================================================
+        //  CONTACT / CHAT
+        // ============================================================
+        function renderContactScreen() {
+            if (adminsData.length === 0) {
+                adminContactList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-spinner fa-spin"></i> Loading admins...</p>';
+            } else {
+                let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
+                adminsData.forEach(admin => {
+                    html += `
+                            <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);">
+                                <div style="width:48px;height:48px;border-radius:50%;background:var(--primary-light);display:grid;place-items:center;font-size:20px;color:var(--primary);flex-shrink:0;">
+                                    ${admin.photo ? `<img src="${admin.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />` : `<i class="fas fa-user-cog"></i>`}
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:600;">${admin.name || 'Admin'}</div>
+                                    <div style="font-size:12px;color:var(--text-muted);"><i class="fas fa-phone"></i> ${admin.phone || 'N/A'}  <i class="fas fa-envelope" style="margin-left:8px;"></i> ${admin.email || 'N/A'}</div>
+                                </div>
+                                <a href="mailto:${admin.email}" class="btn-sm info" style="text-decoration:none;"><i class="fas fa-envelope"></i></a>
+                                <a href="tel:${admin.phone}" class="btn-sm success" style="text-decoration:none;"><i class="fas fa-phone"></i></a>
+                            </div>
+                        `;
+                });
+                html += '</div>';
+                adminContactList.innerHTML = html;
+            }
+        }
+
+        function startChatListener() {
+            if (!currentUser) return;
+            if (chatListener) chatListener();
+            const chatRef = db.ref('chats/' + currentUser.uid);
+            chatListener = chatRef.on('value', (snap) => {
+                const data = snap.val() || {};
+                const messages = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                if ($('screen-contact').classList.contains('active')) {
+                    renderChatMessages(messages);
+                }
+                if (isAdmin) {}
+                const unreadAdmin = messages.filter(m => m.isAdmin && !m.read);
+                if (drawerChatBadge) {
+                    drawerChatBadge.textContent = unreadAdmin.length;
+                    drawerChatBadge.style.display = unreadAdmin.length > 0 ? 'inline' : 'none';
+                }
+            });
+        }
+
+        function renderChatMessages(messages) {
+            if (!chatMessages) return;
+            if (messages.length === 0) {
+                chatMessages.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No messages yet</p>';
+                return;
+            }
+            let html = '';
+            messages.forEach(msg => {
+                const isSent = msg.senderId === currentUser?.uid;
+                const senderName = isSent ? 'You' : (msg.senderName || 'Admin');
+                const time = msg.timestamp ? formatTime(msg.timestamp) : '';
+                html += `
+                        <div class="chat-message ${isSent ? 'sent' : 'received'}">
+                            <div class="bubble">
+                                ${!isSent ? `<span style="font-weight:600;font-size:11px;">${senderName}</span><br>` : ''}
+                                ${msg.message}
+                                ${msg.isAdmin ? '<span class="chat-admin-badge">Admin</span>' : ''}
+                                <div class="time">${time}</div>
+                            </div>
+                        </div>
+                    `;
+            });
+            chatMessages.innerHTML = html;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        chatSendBtn.addEventListener('click', sendChatMessage);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendChatMessage(); });
+
+        async function sendChatMessage() {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+            if (!currentUser) { toast('Please login', 'error'); return; }
+            try {
+                const chatRef = db.ref('chats/' + currentUser.uid);
+                await chatRef.push({
+                    senderId: currentUser.uid,
+                    senderName: userData.displayName || currentUser.displayName || 'User',
+                    message: msg,
+                    timestamp: Date.now(),
+                    isAdmin: false,
+                    read: false
+                });
+                chatInput.value = '';
+                toast('Message sent!', 'success');
+            } catch (e) { toast('Error sending message: ' + e.message, 'error'); }
+        }
+
+        // ============================================================
+        //  PRODUCTS SCREEN
+        // ============================================================
+        function renderProductsScreen() {
+            if (!productsList) return;
+            if (productsData.length === 0) {
+                productsList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No products available</p>';
+                return;
+            }
+            let html = '';
+            productsData.forEach(p => {
+                html += `
+                        <div class="product-card">
+                            <div class="product-top">
+                                <div class="product-icon">${p.image || '📦'}</div>
+                                <div class="product-info">
+                                    <div class="name">${p.name}</div>
+                                    <div class="desc">${p.description || 'No description'}</div>
+                                    <div class="price">${money(p.price || 0)}</div>
+                                </div>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-sm primary" onclick="generateInvoiceForProduct('${p.id}')"><i class="fas fa-file-invoice"></i> Generate Invoice</button>
+                            </div>
+                        </div>
+                    `;
+            });
+            productsList.innerHTML = html;
+        }
+
+        // ============================================================
+        //  ADMIN CHAT LIST
+        // ============================================================
+        function renderAdminChatList() {
+            if (!adminChatList) return;
+            db.ref('chats').once('value', (snap) => {
+                const data = snap.val() || {};
+                const userIds = Object.keys(data);
+                if (userIds.length === 0) {
+                    adminChatList.innerHTML = '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No chat messages from users yet.</p>';
+                    return;
+                }
+                let html = '';
+                let unreadCount = 0;
+                userIds.forEach(uid => {
+                    const messages = Object.values(data[uid] || {});
+                    const lastMsg = messages.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))[0];
+                    const user = allUsers.find(u => u.uid === uid);
+                    const name = user?.displayName || user?.email || 'Unknown';
+                    const unread = messages.filter(m => !m.read && !m.isAdmin).length;
+                    unreadCount += unread;
+                    html += `
+                            <div class="admin-card hover-lift" style="cursor:pointer;" onclick="openAdminChat('${uid}')">
+                                <div class="row">
+                                    <div class="info">
+                                        <div class="label"><i class="fas fa-user"></i> ${name} ${unread > 0 ? `<span class="badge-status pending">${unread} unread</span>` : ''}</div>
+                                        <div class="sub">${lastMsg ? lastMsg.message : 'No messages'} <span class="text-muted fs-12">${lastMsg ? formatDateTime(lastMsg.timestamp) : ''}</span></div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-sm primary" onclick="openAdminChat('${uid}')"><i class="fas fa-comment"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                });
+                adminChatList.innerHTML = html;
+                if (statUnreadChats) statUnreadChats.textContent = unreadCount;
+            });
+        }
+
+        window.openAdminChat = function(uid) {
+            currentChatUserId = uid;
+            const user = allUsers.find(u => u.uid === uid);
+            const name = user?.displayName || user?.email || 'Unknown';
+            db.ref('chats/' + uid).on('value', (snap) => {
+                const data = snap.val() || {};
+                const messages = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                let html = `
+                        <div style="max-height:400px;overflow-y:auto;background:var(--bg);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px;" id="adminChatMessages">
+                    `;
+                if (messages.length === 0) {
+                    html += '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No messages</p>';
+                } else {
+                    messages.forEach(msg => {
+                        const isSent = msg.isAdmin;
+                        const senderName = isSent ? 'Admin' : (msg.senderName || 'User');
+                        const time = msg.timestamp ? formatTime(msg.timestamp) : '';
+                        html += `
+                                <div class="chat-message ${isSent ? 'sent' : 'received'}">
+                                    <div class="bubble">
+                                        ${!isSent ? `<span style="font-weight:600;font-size:11px;">${senderName}</span><br>` : ''}
+                                        ${msg.message}
+                                        ${msg.isAdmin ? '<span class="chat-admin-badge">Admin</span>' : ''}
+                                        <div class="time">${time}</div>
+                                    </div>
+                                </div>
+                            `;
+                    });
+                }
+                html += `
+                        </div>
+                        <div style="display:flex;gap:8px;">
+                            <input id="adminChatInput" type="text" placeholder="Reply as admin..." style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;background:var(--card);color:var(--text);" />
+                            <button id="adminChatSendBtn" class="btn-submit" style="flex:0 0 auto;padding:10px 20px;width:auto;"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    `;
+                openModal('Chat with ' + name, html);
+                db.ref('chats/' + uid).once('value', (snap) => {
+                    const data = snap.val() || {};
+                    Object.keys(data).forEach(key => {
+                        if (data[key] && !data[key].read && !data[key].isAdmin) {
+                            db.ref('chats/' + uid + '/' + key + '/read').set(true);
+                        }
+                    });
+                });
+                setTimeout(() => {
+                    const adminChatInput = document.getElementById('adminChatInput');
+                    const adminChatSendBtn = document.getElementById('adminChatSendBtn');
+                    if (adminChatSendBtn) {
+                        adminChatSendBtn.onclick = () => sendAdminReply(uid);
+                    }
+                    if (adminChatInput) {
+                        adminChatInput.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') sendAdminReply(uid);
+                        });
+                    }
+                }, 100);
+            });
+        };
+
+        async function sendAdminReply(uid) {
+            const input = document.getElementById('adminChatInput');
+            if (!input) return;
+            const msg = input.value.trim();
+            if (!msg) return;
+            try {
+                const chatRef = db.ref('chats/' + uid);
+                await chatRef.push({
+                    senderId: currentUser.uid,
+                    senderName: 'Admin',
+                    message: msg,
+                    timestamp: Date.now(),
+                    isAdmin: true,
+                    read: true
+                });
+                input.value = '';
+                const user = allUsers.find(u => u.uid === uid);
+                if (user) {
+                    const notifRef = db.ref('users/' + uid + '/notifications').push();
+                    await notifRef.set({
+                        title: 'New Admin Reply',
+                        message: `Admin replied: ${msg}`,
+                        type: 'success',
+                        read: false,
+                        createdAt: Date.now()
+                    });
+                }
+                toast('Reply sent!', 'success');
+            } catch (e) { toast('Error: ' + e.message, 'error'); }
         }
 
         // ============================================================
@@ -5133,7 +6377,7 @@
         });
 
         // ============================================================
-        //  TREASURE REDEEM (ONE-TIME PER USER PER CODE)
+        //  TREASURE REDEEM
         // ============================================================
         treasureRedeem.addEventListener('click', async () => {
             const code = treasureCode.value.trim();
@@ -5186,6 +6430,7 @@
                     try {
                         await db.ref('users/' + currentUser.uid + '/avatar').set(base64);
                         toast('Avatar updated!', 'success');
+                        updateDrawerUI();
                     } catch (err) { toast('Error saving avatar', 'error'); }
                 }
             };
@@ -5249,7 +6494,10 @@
                 renderAdminWithdraw();
                 renderAdminInvoices();
                 renderAdminUsers();
+                renderAdminProducts();
+                renderAdminChatList();
                 updateAdminStats();
+                renderQuickUsers();
                 document.querySelectorAll('.admin-tabs .tab').forEach(t => t.classList.remove('active'));
                 document.querySelector('.admin-tabs .tab').classList.add('active');
                 document.querySelectorAll('.admin-content .tab-panel').forEach(p => p.classList.remove('active'));
@@ -5274,10 +6522,11 @@
             if (tab.dataset.tab === 'withdraw') renderAdminWithdraw();
             if (tab.dataset.tab === 'invoices') renderAdminInvoices();
             if (tab.dataset.tab === 'users') renderAdminUsers();
+            if (tab.dataset.tab === 'products') renderAdminProducts();
+            if (tab.dataset.tab === 'balance') renderQuickUsers();
+            if (tab.dataset.tab === 'chat') renderAdminChatList();
             if (tab.dataset.tab === 'dashboard') updateAdminStats();
-            if (tab.dataset.tab === 'app') {
-                loadAppSettings();
-            }
+            if (tab.dataset.tab === 'app') loadAppSettings();
         });
 
         // ===== ADMIN: PLANS =====
@@ -5307,13 +6556,9 @@
                         <div class="form-row"><div><label><i class="fas fa-crown"></i> Badge</label><input id="planBadge" type="text" placeholder="VIP0" /></div><div><label><i class="fas fa-calendar"></i> Period</label><input id="planPeriod" type="text" placeholder="22 Days" /></div></div>
                         <div class="form-row"><div><label><i class="fas fa-chart-line"></i> Daily Income</label><input id="planDaily" type="text" placeholder="35.00" /></div><div><label><i class="fas fa-chart-bar"></i> Total Income</label><input id="planTotal" type="text" placeholder="770.00" /></div></div>
                         <div class="form-row"><div><label><i class="fas fa-money-bill"></i> Price</label><input id="planPrice" type="text" placeholder="400" /></div><div><label><i class="fas fa-image"></i> Icon (emoji)</label><input id="planIcon" type="text" placeholder="📈" /></div></div>
-                        <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image (Upload)</label>
-                            <div class="image-upload-container" id="planImageUpload">
-                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                <div class="upload-text">Click to upload plan image</div>
-                                <input type="file" id="planImageFile" accept="image/*" style="display:none;" />
-                            </div>
-                            <input id="planImage" type="hidden" placeholder="data:image/..." />
+                        <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image</label>
+                            <div class="image-upload-container" id="planImageUpload"><i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload</div><input type="file" id="planImageFile" accept="image/*" style="display:none;" /></div>
+                            <input id="planImage" type="hidden" />
                         </div>
                         <div class="btn-row"><button type="button" class="btn-submit" id="savePlanBtn"><i class="fas fa-save"></i> Save Plan</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
                     </form>
@@ -5368,7 +6613,7 @@
                         <div class="form-row"><div><label><i class="fas fa-money-bill"></i> Price</label><input id="ePlanPrice" type="text" value="${p.price || ''}" /></div><div><label><i class="fas fa-image"></i> Icon</label><input id="ePlanIcon" type="text" value="${p.icon || ''}" /></div></div>
                         <div class="form-row full"><label><i class="fas fa-image"></i> Plan Image</label>
                             <div class="image-upload-container" id="editPlanImageUpload">
-                                ${p.image ? `<img src="${p.image}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />` : '<i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload plan image</div>'}
+                                ${p.image ? `<img src="${p.image}" alt="Plan Image" style="max-width:100%;max-height:200px;border-radius:10px;" />` : '<i class="fas fa-cloud-upload-alt upload-icon"></i><div class="upload-text">Click to upload</div>'}
                                 <input type="file" id="editPlanImageFile" accept="image/*" style="display:none;" />
                             </div>
                             <input id="ePlanImage" type="hidden" value="${p.image || ''}" />
@@ -5483,7 +6728,7 @@
                 .message, 'error'));
         };
 
-        // ===== ADMIN: APP DOWNLOAD SETTINGS (NEW) =====
+        // ===== ADMIN: APP SETTINGS =====
         saveAppSettingsBtn.addEventListener('click', async () => {
             const appName = setAppName.value.trim() || 'Rexroth Flow App';
             const downloadLink = setAppDownloadLink.value.trim();
@@ -5509,9 +6754,7 @@
                 });
                 toast('App settings saved!', 'success');
                 loadAppSettings();
-            } catch (e) {
-                toast('Error: ' + e.message, 'error');
-            }
+            } catch (e) { toast('Error: ' + e.message, 'error'); }
         });
 
         // ===== ADMIN: SETTINGS =====
@@ -5656,59 +6899,36 @@
 
         // ===== ADMIN: INVOICES =====
         function renderAdminInvoices() {
-            const invoices = [
-                { id: 'INV-001', user: 'user1@example.com', amount: 5000, date: Date.now() - 86400000 * 10,
-                status: 'paid' },
-                { id: 'INV-002', user: 'user2@example.com', amount: 3500, date: Date.now() - 86400000 * 5,
-                status: 'paid' },
-                { id: 'INV-003', user: 'user3@example.com', amount: 7200, date: Date.now() - 86400000 * 2,
-                status: 'pending' }
-            ];
-
-            adminInvoiceList.innerHTML = invoices.map(inv => `
+            if (generatedInvoices.length === 0) {
+                adminInvoiceList.innerHTML =
+                '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No invoices generated yet</p>';
+                return;
+            }
+            adminInvoiceList.innerHTML = generatedInvoices.slice(0, 20).map(inv => `
                     <div class="admin-card hover-lift">
                         <div class="row">
                             <div class="info">
                                 <div class="label"><i class="fas fa-file-invoice"></i> ${inv.id} <span class="badge-status ${inv.status === 'paid' ? 'approved' : 'pending'}">${inv.status}</span></div>
-                                <div class="sub"><i class="fas fa-user"></i> ${inv.user} | <i class="fas fa-money-bill"></i> ${money(inv.amount)} | <i class="fas fa-calendar"></i> ${formatDate(inv.date)}</div>
+                                <div class="sub"><i class="fas fa-box"></i> ${inv.productName || 'N/A'} | <i class="fas fa-money-bill"></i> ${money(inv.amount)} | <i class="fas fa-calendar"></i> ${formatDate(inv.date)}</div>
                             </div>
                             <div class="actions">
-                                <button class="btn-sm info" onclick="viewInvoice('${inv.id}')"><i class="fas fa-eye"></i></button>
-                                <button class="btn-sm success" onclick="markInvoicePaid('${inv.id}')"><i class="fas fa-check"></i></button>
+                                <button class="btn-sm success" onclick="markInvoicePaid('${inv.id}')"><i class="fas fa-check"></i> Pay</button>
                             </div>
                         </div>
                     </div>
                 `).join('');
         }
 
-        window.viewInvoice = function(id) {
-            openModal('<i class="fas fa-file-invoice"></i> Invoice Details', `
-                    <div style="padding: 10px;">
-                        <p class="text-muted fs-14"><i class="fas fa-file-invoice"></i> Invoice #${id}</p>
-                        <div style="margin-top: 12px;">
-                            <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
-                                <span class="text-muted fs-12"><i class="fas fa-hashtag"></i> Invoice ID</span>
-                                <span class="fw-700 fs-12">${id}</span>
-                            </div>
-                            <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
-                                <span class="text-muted fs-12"><i class="fas fa-money-bill"></i> Amount</span>
-                                <span class="fw-700 fs-12">৳ 5,000</span>
-                            </div>
-                            <div class="flex-between" style="padding: 8px 0; border-bottom: 1px solid var(--border);">
-                                <span class="text-muted fs-12"><i class="fas fa-check-circle"></i> Status</span>
-                                <span class="fw-700 fs-12" style="color: #28a745;">Paid</span>
-                            </div>
-                            <div class="flex-between" style="padding: 8px 0;">
-                                <span class="text-muted fs-12"><i class="fas fa-calendar"></i> Date</span>
-                                <span class="fw-700 fs-12">${formatDate(Date.now())}</span>
-                            </div>
-                        </div>
-                    </div>
-                `);
-        };
-
         window.markInvoicePaid = function(id) {
+            const inv = generatedInvoices.find(i => i.id === id);
+            if (!inv) return;
+            inv.status = 'paid';
+            if (inv.userId && inv.userId !== 'guest') {
+                db.ref('invoices/' + inv.userId + '/' + id + '/status').set('paid');
+            }
             toast('Invoice ' + id + ' marked as paid', 'success');
+            renderAdminInvoices();
+            updateAdminStats();
         };
 
         // ===== ADMIN: USERS =====
@@ -5731,6 +6951,7 @@
                                 </div>
                                 <div class="actions">
                                     <button class="btn-sm info" onclick="viewUser('${u.uid}')"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-sm danger" onclick="setUserBalanceZero('${u.uid}')"><i class="fas fa-times-circle"></i> Set 0</button>
                                 </div>
                             </div>
                         </div>
@@ -5752,8 +6973,172 @@
                         <p><strong>Team Members:</strong> ${u.referrals ? Object.keys(u.referrals).length : 0}</p>
                         <p><strong>Investments:</strong> ${u.investments ? Object.keys(u.investments).length : 0}</p>
                         <p><strong>Joined:</strong> ${u.createdAt ? formatDateTime(u.createdAt) : 'N/A'}</p>
+                        <button class="btn-danger" style="margin-top:14px;" onclick="setUserBalanceZero('${uid}')"><i class="fas fa-times-circle"></i> Set Balance to 0</button>
                     </div>
                 `);
+        };
+
+        // ===== ADMIN: PRODUCTS =====
+        function renderAdminProducts() {
+            if (productsData.length === 0) {
+                adminProductsList.innerHTML =
+                    '<p class="text-muted fs-12"><i class="fas fa-inbox"></i> No products added yet. Add your first product!</p>';
+                return;
+            }
+            adminProductsList.innerHTML = productsData.map(p => `
+                    <div class="admin-card hover-lift">
+                        <div class="row">
+                            <div class="info">
+                                <div class="label"><i class="fas fa-box"></i> ${p.name} <span class="badge-status" style="background:var(--gold-light);color:var(--gold);">${money(p.price)}</span></div>
+                                <div class="sub">${p.description || 'No description'}</div>
+                            </div>
+                            <div class="actions">
+                                <button class="btn-sm primary" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
+                                <button class="btn-sm danger" onclick="deleteProductAdmin('${p.id}')"><i class="fas fa-trash"></i></button>
+                                <button class="btn-sm success" onclick="generateInvoiceForProduct('${p.id}')"><i class="fas fa-file-invoice"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        addProductBtn.addEventListener('click', () => {
+            openModal('<i class="fas fa-plus"></i> Add Product', `
+                    <form class="admin-form" id="productForm" onsubmit="return false;">
+                        <div class="form-row full"><label><i class="fas fa-tag"></i> Product Name</label><input id="prodName" type="text" placeholder="Bosch Rexroth Flow Plan" /></div>
+                        <div class="form-row full"><label><i class="fas fa-comment"></i> Description</label><input id="prodDesc" type="text" placeholder="Advanced investment plan with high returns" /></div>
+                        <div class="form-row full"><label><i class="fas fa-money-bill"></i> Price</label><input id="prodPrice" type="number" placeholder="5000" /></div>
+                        <div class="form-row full"><label><i class="fas fa-image"></i> Icon (emoji or text)</label><input id="prodIcon" type="text" placeholder="📈" value="📦" /></div>
+                        <div class="btn-row"><button type="button" class="btn-submit" id="saveProductBtn"><i class="fas fa-save"></i> Save Product</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
+                    </form>
+                `);
+            document.getElementById('saveProductBtn').addEventListener('click', async () => {
+                const name = document.getElementById('prodName').value.trim();
+                const desc = document.getElementById('prodDesc').value.trim();
+                const price = document.getElementById('prodPrice').value.trim();
+                const icon = document.getElementById('prodIcon').value.trim() || '📦';
+                if (!name) { toast('Product name required', 'error'); return; }
+                try {
+                    const ref = db.ref('products').push();
+                    await ref.set({ name, description: desc, price: parseFloat(price) || 0, image: icon,
+                        createdAt: Date.now() });
+                    toast('Product added!', 'success');
+                    closeModal();
+                } catch (e) { toast('Error: ' + e.message, 'error'); }
+            });
+        });
+
+        window.editProduct = function(id) {
+            const p = productsData.find(x => x.id === id);
+            if (!p) return;
+            openModal('<i class="fas fa-edit"></i> Edit Product', `
+                    <form class="admin-form" id="editProductForm" onsubmit="return false;">
+                        <div class="form-row full"><label><i class="fas fa-tag"></i> Product Name</label><input id="eProdName" type="text" value="${p.name || ''}" /></div>
+                        <div class="form-row full"><label><i class="fas fa-comment"></i> Description</label><input id="eProdDesc" type="text" value="${p.description || ''}" /></div>
+                        <div class="form-row full"><label><i class="fas fa-money-bill"></i> Price</label><input id="eProdPrice" type="number" value="${p.price || 0}" /></div>
+                        <div class="form-row full"><label><i class="fas fa-image"></i> Icon</label><input id="eProdIcon" type="text" value="${p.image || '📦'}" /></div>
+                        <div class="btn-row"><button type="button" class="btn-submit" id="updateProductBtn"><i class="fas fa-save"></i> Update Product</button><button type="button" class="btn-submit outline" onclick="closeModal()"><i class="fas fa-times"></i> Cancel</button></div>
+                    </form>
+                `);
+            document.getElementById('updateProductBtn').addEventListener('click', async () => {
+                const name = document.getElementById('eProdName').value.trim();
+                const desc = document.getElementById('eProdDesc').value.trim();
+                const price = document.getElementById('eProdPrice').value.trim();
+                const icon = document.getElementById('eProdIcon').value.trim() || '📦';
+                if (!name) { toast('Product name required', 'error'); return; }
+                try {
+                    await db.ref('products/' + id).update({ name, description: desc, price: parseFloat(price) ||
+                            0, image: icon });
+                    toast('Product updated!', 'success');
+                    closeModal();
+                } catch (e) { toast('Error: ' + e.message, 'error'); }
+            });
+        };
+
+        window.deleteProductAdmin = function(id) {
+            if (!confirm('Delete this product?')) return;
+            db.ref('products/' + id).remove().then(() => toast('Product deleted', 'success')).catch(e => toast('Error: ' +
+                e.message, 'error'));
+        };
+
+        // ===== ADMIN: BALANCE MANAGER =====
+        function renderQuickUsers() {
+            if (!quickUserList) return;
+            const topUsers = allUsers.slice(0, 10);
+            if (topUsers.length === 0) {
+                quickUserList.innerHTML = '<p class="text-muted fs-12">No users registered yet</p>';
+                return;
+            }
+            quickUserList.innerHTML = topUsers.map(u => {
+                const name = u.displayName || (u.email ? u.email.split('@')[0] : 'User');
+                return `
+                        <button class="btn-sm outline" onclick="setBalanceUser('${u.email || ''}')" style="font-size:10px;padding:4px 10px;">
+                            ${name}
+                        </button>
+                    `;
+            }).join('');
+        }
+
+        window.setBalanceUser = function(email) {
+            if (balanceUserEmail) balanceUserEmail.value = email;
+            toast('User selected: ' + email, 'info');
+        };
+
+        setBalanceZeroBtn.addEventListener('click', async () => {
+            const email = balanceUserEmail.value.trim();
+            const newAmount = parseFloat(balanceNewAmount.value.trim()) || 0;
+
+            if (!email) { toast('Please enter a user email', 'error'); return; }
+
+            if (!confirm('⚠️ Set balance of "' + email + '" to ' + money(newAmount) +
+                    '? This action cannot be undone!')) return;
+
+            try {
+                const usersRef = db.ref('users');
+                const snap = await usersRef.once('value');
+                const users = snap.val() || {};
+                let targetUid = null;
+                let targetData = null;
+
+                for (const [uid, data] of Object.entries(users)) {
+                    if (data.email === email) {
+                        targetUid = uid;
+                        targetData = data;
+                        break;
+                    }
+                }
+
+                if (!targetUid) { toast('User not found with email: ' + email, 'error'); return; }
+
+                await db.ref('users/' + targetUid + '/balance').set(newAmount);
+
+                const actRef = db.ref('users/' + targetUid + '/activity').push();
+                await actRef.set({
+                    type: 'Admin Balance Reset',
+                    amount: newAmount,
+                    date: Date.now(),
+                    positive: newAmount > 0,
+                    note: 'Balance set to ' + money(newAmount) + ' by admin'
+                });
+
+                toast('✅ Balance of ' + email + ' set to ' + money(newAmount), 'success');
+                balanceUserEmail.value = '';
+                balanceNewAmount.value = '0';
+            } catch (e) { toast('Error: ' + e.message, 'error'); }
+        });
+
+        window.setUserBalanceZero = function(uid) {
+            const u = allUsers.find(x => x.uid === uid);
+            if (!u) return;
+            const email = u.email || 'this user';
+            if (!confirm('⚠️ Set balance of "' + email + '" to ৳ 0.00? This action cannot be undone!')) return;
+            db.ref('users/' + uid + '/balance').set(0).then(() => {
+                toast('Balance of ' + email + ' set to 0', 'success');
+                const actRef = db.ref('users/' + uid + '/activity').push();
+                actRef.set({ type: 'Admin Balance Reset', amount: 0, date: Date.now(), positive: false,
+                    note: 'Balance set to 0 by admin' });
+                renderAdminUsers();
+            }).catch(e => toast('Error: ' + e.message, 'error'));
         };
 
         // ===== ADMIN: STATS =====
@@ -5765,6 +7150,9 @@
             statInvoices.textContent = invoiceData.monthlyUsed;
             statInvoiceLimit.textContent = invoiceData.monthlyLimit;
             statUsers.textContent = allUsers.length;
+            statProducts.textContent = productsData.length;
+            statGeneratedInvoices.textContent = generatedInvoices.length;
+
             let totalDeposits = 0;
             allUsers.forEach(u => {
                 const acts = u.activity ? Object.values(u.activity) : [];
@@ -5781,6 +7169,8 @@
                     .userEmail, gateway: r.gateway }));
             withdrawRequests.forEach(r => all.push({ type: 'Withdraw', status: r.status, date: r.createdAt, user: r
                     .userEmail, method: r.method }));
+            generatedInvoices.forEach(r => all.push({ type: 'Invoice', status: r.status, date: r.date, user: r
+                    .userId || 'guest', id: r.id }));
             all.sort((a, b) => (b.date || 0) - (a.date || 0));
             const recent = all.slice(0, 10);
             if (recent.length === 0) {
@@ -5788,7 +7178,7 @@
             } else {
                 adminRecentActivity.innerHTML = recent.map(a => `
                         <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">
-                            <span><i class="fas fa-exchange-alt"></i> ${a.type} ${a.gateway ? '('+a.gateway+')' : a.method ? '('+a.method+')' : ''} <span class="badge-status ${a.status || 'pending'}">${a.status || 'pending'}</span></span>
+                            <span><i class="fas fa-exchange-alt"></i> ${a.type} ${a.gateway ? '('+a.gateway+')' : a.method ? '('+a.method+')' : a.id ? '('+a.id+')' : ''} <span class="badge-status ${a.status || 'pending'}">${a.status || 'pending'}</span></span>
                             <span class="text-muted">${a.user || 'N/A'} ${a.date ? formatDate(a.date) : ''}</span>
                         </div>
                     `).join('');
@@ -5807,19 +7197,14 @@
 
         history.replaceState({ screen: 'home' }, '', '#home');
 
-        console.log('🚀 Rexroth Flow v4.0 - Full Profile Management + App Download');
-        console.log('✅ App Download section for users with admin-configurable link and icon');
-        console.log('✅ Admin tab: "App Download" with URL, icon upload, name, version, description');
-        console.log('✅ All users see download section on home screen');
-        console.log('✅ Personal info editing (name, phone)');
-        console.log('✅ Balance Record - full transaction history');
-        console.log('✅ Recharge Record - all recharge requests');
-        console.log('✅ Withdrawal Record - all withdrawal requests');
-        console.log('✅ My Team - referral team members');
-        console.log('✅ About Us - app info');
-        console.log('✅ Login background image from base64 (admin settings)');
-        console.log('✅ Profile name edit with live update');
-        console.log('✅ Auto-Invest toggle');
+        console.log('🚀 Rexroth Flow v7.0 - Full CRUD Admin + Products + Advanced Drawer');
+        console.log('✅ WhatsApp/Email/Call buttons fixed with 40px height');
+        console.log('✅ Admin can Add/Edit/Delete: Plans, Treasure, Products, Users');
+        console.log('✅ Products screen for users to view and generate invoices');
+        console.log('✅ Glass drawer with all navigation and admin tools');
+        console.log('✅ Balance manager with set to 0 functionality');
+        console.log('✅ Live chat system between users and admins');
+        console.log('✅ All features fully functional');
     </script>
 </body>
 </html>
